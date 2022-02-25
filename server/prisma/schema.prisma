@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Student {
+  id         Int    @id @default(autoincrement())
+  first_name String
+  last_name  String
+  class      Class  @relation(fields: [classId], references: [id])
+  classId    Int
+}
+
+model Teacher {
+  id        Int      @id @default(autoincrement())
+  name      String
+  last_name String
+  Course    Course[]
+}
+
+model Class {
+  id         Int       @id @default(autoincrement())
+  name       String
+  population Int
+  students   Student[]
+  Course     Course[]
+}
+
+model Course {
+  id         Int          @id @default(autoincrement())
+  name       String
+  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  teacherId  Int
+  class      Class        @relation(fields: [classId], references: [id])
+  classId    Int
+  subject    Subject      @relation(fields: [subjectId], references: [id])
+  subjectId  Int
+  Assignment Assignment[]
+}
+
+model Assignment {
+  id                Int      @id @default(autoincrement())
+  name              String
+  deadline_datetime DateTime
+  course            Course   @relation(fields: [courseId], references: [id])
+  courseId          Int
+}
+
+model Subject {
+  id          Int      @id @default(autoincrement())
+  name        String
+  coefficient Float
+  Course      Course[]
+}
+
+model SubjectMaterial {
+  id        Int    @id @default(autoincrement())
+  name      String
+  file_type String
+  url       String
+}
+
+model Attachment {
+  id   Int    @id @default(autoincrement())
+  name String
+
+}
