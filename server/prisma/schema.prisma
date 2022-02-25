@@ -12,18 +12,22 @@ datasource db {
 }
 
 model Student {
-  id         Int    @id @default(autoincrement())
-  first_name String
-  last_name  String
-  class      Class  @relation(fields: [classId], references: [id])
-  classId    Int
+  id                   Int                    @id @default(autoincrement())
+  first_name           String
+  last_name            String
+  class                Class                  @relation(fields: [classId], references: [id])
+  classId              Int
+  AssignmentSubmission AssignmentSubmission[]
+  StudentAttendance    StudentAttendance[]
+  StudentAccount       StudentAccount[]
 }
 
 model Teacher {
-  id        Int      @id @default(autoincrement())
-  name      String
-  last_name String
-  Course    Course[]
+  id             Int              @id @default(autoincrement())
+  name           String
+  last_name      String
+  Course         Course[]
+  TeacherAccount TeacherAccount[]
 }
 
 model Class {
@@ -35,23 +39,27 @@ model Class {
 }
 
 model Course {
-  id         Int          @id @default(autoincrement())
-  name       String
-  teacher    Teacher      @relation(fields: [teacherId], references: [id])
-  teacherId  Int
-  class      Class        @relation(fields: [classId], references: [id])
-  classId    Int
-  subject    Subject      @relation(fields: [subjectId], references: [id])
-  subjectId  Int
-  Assignment Assignment[]
+  id          Int           @id @default(autoincrement())
+  name        String
+  teacher     Teacher       @relation(fields: [teacherId], references: [id])
+  teacherId   Int
+  class       Class         @relation(fields: [classId], references: [id])
+  classId     Int
+  subject     Subject       @relation(fields: [subjectId], references: [id])
+  subjectId   Int
+  Assignment  Assignment[]
+  Conference  Conference[]
+  TeacherPost TeacherPost[]
 }
 
 model Assignment {
-  id                Int      @id @default(autoincrement())
-  name              String
-  deadline_datetime DateTime
-  course            Course   @relation(fields: [courseId], references: [id])
-  courseId          Int
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  deadline_datetime     DateTime
+  course                Course                  @relation(fields: [courseId], references: [id])
+  courseId              Int
+  AssignmentSubmission  AssignmentSubmission[]
+  AssignmentAttachement AssignmentAttachement[]
 }
 
 model Subject {
@@ -62,14 +70,151 @@ model Subject {
 }
 
 model SubjectMaterial {
-  id        Int    @id @default(autoincrement())
-  name      String
-  file_type String
-  url       String
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  file_type           String
+  url                 String
+  MaterialAttachement MaterialAttachement[]
 }
 
 model Attachment {
   id   Int    @id @default(autoincrement())
   name String
 
+  AssignmentAttachement AssignmentAttachement[]
+  PostAttachement       PostAttachement[]
+  MaterialAttachement   MaterialAttachement[]
+  SubmissionAttachement SubmissionAttachement[]
+}
+
+model Conference {
+  id                   Int                 @id @default(autoincrement())
+  title                String
+  status               String
+  scheduled_start_time DateTime
+  scheduled_end_time   DateTime
+  stats                String[]
+  course               Course              @relation(fields: [courseId], references: [id])
+  courseId             Int
+  StudentAttendance    StudentAttendance[]
+}
+
+model AssignmentSubmission {
+  id                 Int        @id @default(autoincrement())
+  Assignment         Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId       Int
+  Student            Student    @relation(fields: [studentId], references: [id])
+  studentId          Int
+  submission_date    DateTime
+  respected_deadline Boolean
+
+  SubmissionAttachement SubmissionAttachement[]
+}
+
+model TeacherPost {
+  id              Int               @id @default(autoincrement())
+  post_text       String
+  publish_date    DateTime
+  course          Course            @relation(fields: [courseId], references: [id])
+  courseId        Int
+  PostAttachement PostAttachement[]
+}
+
+model Admin {
+  id            Int             @id @default(autoincrement())
+  FirstName     String
+  LastName      String
+  Announcements Announcements[]
+  AdminAccount  AdminAccount[]
+}
+
+model Announcements {
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime
+  topic     String
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  adminId   Int
+}
+
+model Account {
+  id             Int              @id @default(autoincrement())
+  UserName       String
+  Password_salt  String
+  password_hash  String
+  relateduser_ID Int
+  AdminAccount   AdminAccount[]
+  TeacherAccount TeacherAccount[]
+  StudentAccount StudentAccount[]
+}
+
+model StudentAttendance {
+  id           Int        @id @default(autoincrement())
+  student      Student    @relation(fields: [studentId], references: [id])
+  studentId    Int
+  ratio        Float
+  conference   Conference @relation(fields: [conferenceId], references: [id])
+  conferenceId Int
+}
+
+model AssignmentAttachement {
+  Assignment    Assignment @relation(fields: [AssignmentId], references: [id])
+  AssignmentId  Int
+  Attachement   Attachment @relation(fields: [AttachementId], references: [id])
+  AttachementId Int
+
+  @@id([AssignmentId, AttachementId])
+}
+
+model PostAttachement {
+  Post          TeacherPost @relation(fields: [PostId], references: [id])
+  PostId        Int
+  Attachement   Attachment  @relation(fields: [AttachementId], references: [id])
+  AttachementId Int
+
+  @@id([PostId, AttachementId])
+}
+
+model MaterialAttachement {
+  Material      SubjectMaterial @relation(fields: [MaterialId], references: [id])
+  MaterialId    Int
+  Attachement   Attachment      @relation(fields: [AttachementId], references: [id])
+  AttachementId Int
+
+  @@id([MaterialId, AttachementId])
+}
+
+model SubmissionAttachement {
+  Submission    AssignmentSubmission @relation(fields: [SubmissionId], references: [id])
+  SubmissionId  Int
+  Attachement   Attachment           @relation(fields: [AttachementId], references: [id])
+  AttachementId Int
+
+  @@id([SubmissionId, AttachementId])
+}
+
+model AdminAccount {
+  Admin     Admin   @relation(fields: [AdminId], references: [id])
+  AdminId   Int
+  Account   Account @relation(fields: [AccountId], references: [id])
+  AccountId Int
+
+  @@id([AdminId, AccountId])
+}
+
+model TeacherAccount {
+  Teacher   Teacher @relation(fields: [TeacherId], references: [id])
+  TeacherId Int
+  Account   Account @relation(fields: [AccountId], references: [id])
+  AccountId Int
+
+  @@id([TeacherId, AccountId])
+}
+
+model StudentAccount {
+  Student   Student @relation(fields: [StudentId], references: [id])
+  StudentId Int
+  Account   Account @relation(fields: [AccountId], references: [id])
+  AccountId Int
+
+  @@id([StudentId, AccountId])
 }
