@@ -39,17 +39,18 @@ model Class {
 }
 
 model Course {
-  id          Int           @id @default(autoincrement())
-  name        String
-  teacher     Teacher       @relation(fields: [teacherId], references: [id])
-  teacherId   Int
-  class       Class         @relation(fields: [classId], references: [id])
-  classId     Int
-  subject     Subject       @relation(fields: [subjectId], references: [id])
-  subjectId   Int
-  Assignment  Assignment[]
-  Conference  Conference[]
-  TeacherPost TeacherPost[]
+  id             Int              @id @default(autoincrement())
+  name           String
+  teacher        Teacher          @relation(fields: [teacherId], references: [id])
+  teacherId      Int
+  class          Class            @relation(fields: [classId], references: [id])
+  classId        Int
+  subject        Subject          @relation(fields: [subjectId], references: [id])
+  subjectId      Int
+  Assignment     Assignment[]
+  Conference     Conference[]
+  TeacherPost    TeacherPost[]
+  CourseMaterial CourseMaterial[]
 }
 
 model Assignment {
@@ -69,18 +70,21 @@ model Subject {
   Course      Course[]
 }
 
-model SubjectMaterial {
+model CourseMaterial {
   id                  Int                   @id @default(autoincrement())
   name                String
   file_type           String
   url                 String
   MaterialAttachement MaterialAttachement[]
+  Course              Course?               @relation(fields: [courseId], references: [id])
+  courseId            Int?
 }
 
 model Attachment {
-  id   Int    @id @default(autoincrement())
-  name String
-
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  type                  String
+  size                  String
   AssignmentAttachement AssignmentAttachement[]
   PostAttachement       PostAttachement[]
   MaterialAttachement   MaterialAttachement[]
@@ -106,8 +110,9 @@ model AssignmentSubmission {
   Student            Student    @relation(fields: [studentId], references: [id])
   studentId          Int
   submission_date    DateTime
+  latest_timestamp   DateTime
+  submissions_count  Int
   respected_deadline Boolean
-
   SubmissionAttachement SubmissionAttachement[]
 }
 
@@ -115,6 +120,7 @@ model TeacherPost {
   id              Int               @id @default(autoincrement())
   post_text       String
   publish_date    DateTime
+  last_modified   DateTime
   course          Course            @relation(fields: [courseId], references: [id])
   courseId        Int
   PostAttachement PostAttachement[]
@@ -175,9 +181,9 @@ model PostAttachement {
 }
 
 model MaterialAttachement {
-  Material      SubjectMaterial @relation(fields: [MaterialId], references: [id])
+  Material      CourseMaterial @relation(fields: [MaterialId], references: [id])
   MaterialId    Int
-  Attachement   Attachment      @relation(fields: [AttachementId], references: [id])
+  Attachement   Attachment     @relation(fields: [AttachementId], references: [id])
   AttachementId Int
 
   @@id([MaterialId, AttachementId])
