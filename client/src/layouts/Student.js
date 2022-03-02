@@ -1,31 +1,17 @@
-import React, { Fragment } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import StudentSidebar from "../components/Sidebars/StudentSidebar";
-import CoursesPage from "../views/student/courses/CoursesPage";
-import MaterialsPage from "../views/student/materials/MaterialsPage";
-import Blank from "../views/student/Blank";
-import StudentDashboard from "../views/student/dashboard/StudentDashboard";
+import React from "react";
+import { Outlet } from "react-router-dom";
+
 import DefaultHeader from "../components/Headers/DefaultHeader";
+import NewSidebar from "../components/Sidebars/StudentSidebar";
 function Student() {
   return (
     <>
-      <StudentSidebar />
+      <NewSidebar />
       <div className="relative md:ml-64 bg-blueGray-100">
-        <Routes>
-          <Route path="/student/dashboard" exact element={StudentDashboard} />
-          <Fragment>
-            <DefaultHeader />
-            <Route path="/student/courses" exact element={CoursesPage} />
-            <Route
-              path="/student/materials"
-              exact
-              element={<MaterialsPage />}
-            />
-            <Route path="/student/calendar" exact element={Blank} />
-            <Route path="/student/attendance" exact element={Blank} />
-          </Fragment>
-          <Navigate from="/student" to="/student/dashboard" />
-        </Routes>
+        <DefaultHeader />
+        <div className="px-4 md:px-10 mx-auto w-full -m-24">
+          <Outlet />
+        </div>
       </div>
     </>
   );

@@ -1,7 +1,9 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
-function DefaultHeader() {
-  return <div>DefaultHeader</div>;
-}
+const DefaultHeader = () => {
+  var location = useLocation().pathname;
+  return location.includes("dashboard") ? null : <div> default header</div>;
+};
 
 export default DefaultHeader;

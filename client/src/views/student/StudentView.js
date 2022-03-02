@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import StudentSidebar from "../../components/Sidebars/StudentSidebar";
+import StudentSidebar from "../../components/Sidebars/OldSidebar";
 
 const StudentView = () => {
   return (
