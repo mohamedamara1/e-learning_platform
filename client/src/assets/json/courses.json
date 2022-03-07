@@ -1,0 +1,63 @@
+ [
+    {
+      "courseId": 50,
+      "courseName": "Mathematics",
+      "className": "8EME B2",
+      "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 60,
+        "courseName": "French",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    }
+    ,
+    {
+        "courseId": 70,
+        "courseName": "English",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 80,
+        "courseName": "Physics",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 90,
+        "courseName": "Arabic",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 100,
+        "courseName": "Philosophy",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 110,
+        "courseName": "philosophy",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 120,
+        "courseName": "philosophy",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 130,
+        "courseName": "Philosophy",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    },
+    {
+        "courseId": 140,
+        "courseName": "Philosophy",
+        "className": "8EME B2",
+        "teacherName": "Flen Foulani"
+    }
+  ]

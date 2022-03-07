@@ -9,9 +9,9 @@ import CustomizedTimeline from "./CustomizedTimeline";
 
 const StudentDashboard = () => {
   return (
-    <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-8">
+    <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-8 pl-8">
       <div className="grid md:col-span-2 md:grid-cols-1 lg:col-span-4 lg:grid-cols-4 gap-4 lg:gap-8 mb-4">
-        <DashboardHeader  positionInGrid="col-span-1 lg:col-span-4" />
+        <DashboardHeader positionInGrid="col-span-1 lg:col-span-4" />
         <CustomizedTimeline positionInGrid=" lg:col-span-2 lg:row-span-2" />
         <AnnouncementsList positionInGrid="lg:col-span-2" />
         {/*   <CalendarBrief positionInGrid="xl:col-span-3" />*/}

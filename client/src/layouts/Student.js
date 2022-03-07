@@ -7,7 +7,7 @@ function Student() {
   return (
     <>
       <StudentSidebar />
-      <div className="relative min-h-screen md:ml-60 pl-4 md:pl-10 bg-white-kids">
+      <div className="relative min-h-screen md:ml-52 pl-4 md:pl-10 bg-white-kids">
         <Outlet />
       </div>
     </>
