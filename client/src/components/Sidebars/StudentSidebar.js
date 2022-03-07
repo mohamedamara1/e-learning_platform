@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 
 import { MdDashboard } from "react-icons/md";
 import { AiFillBook } from "react-icons/ai";
 import { MdAssignment } from "react-icons/md";
 import { BsFillCalendarDateFill } from "react-icons/bs";
 import { BsClockFill } from "react-icons/bs";
-import { AiOutlineLeft } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import SchoolLogo from "../../assets/img/school_logo.png";
+
 const sidebarNavItems = [
   {
     display: "Dashboard",
@@ -24,51 +24,15 @@ const sidebarNavItems = [
     section: "courses",
   },
   {
-    display: "Materials",
-    icon: <MdAssignment size={"28"} />,
-    to: "/student/materials",
-    section: "materials",
-  },
-  {
     display: "Calendar",
     icon: <BsFillCalendarDateFill size={"28"} />,
     to: "/student/calendar",
     section: "calendar",
   },
-  {
-    display: "Attendance",
-    icon: <BsClockFill size={"28"} />,
-    to: "/student/attendance",
-    section: "attendance",
-  },
 ];
 const StudentSidebar = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [stepHeight, setStepHeight] = useState(0);
-  const sidebarRef = useRef();
-  const indicatorRef = useRef();
-  const location = useLocation();
-
   // const [showSidebar, setShowSidebar] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const sidebarItem = sidebarRef.current.querySelector(
-        ".sidebar__menu__item"
-      );
-      indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
-      setStepHeight(sidebarItem.clientHeight);
-    }, 50);
-  }, []);
-
-  // change active index
-  useEffect(() => {
-    const curPath = window.location.pathname.split("/")[1];
-    const activeItem = sidebarNavItems.findIndex(
-      (item) => item.section === curPath
-    );
-    setActiveIndex(curPath.length === 0 ? 0 : activeItem);
-  }, [location]);
   const [collapseShow, setCollapseShow] = React.useState("hidden");
 
   return (

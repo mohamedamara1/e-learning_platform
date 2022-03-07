@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-import DefaultHeader from "../components/Headers/DefaultHeader";
 import StudentSidebar from "../components/Sidebars/StudentSidebar";
 function Student() {
   return (
