@@ -67,6 +67,13 @@ const prisma = new PrismaClient();
     return course;
 }
 
+async function getCoursesByCriteria(Criteria){
+    const Courses = await prisma.course.findMany({
+        where : Criteria
+    });
+    return Courses;
+}
+
  async function getAllCourses(){
     const Courses = await prisma.course.findMany();
     return Courses;
@@ -99,6 +106,14 @@ const prisma = new PrismaClient();
  async function getAllAssignments(){
     const Assignments = await prisma.assignment.findMany();
     return Assignments;
+}
+
+async function getAssignmentsByCriteria(Criteria, Includes){
+    const Assignments = await prisma.assignment.findMany({
+        where : Criteria,
+        include : Includes
+    })
+    return Assignments
 }
 
  async function addAssignment(Assignment){
@@ -188,6 +203,13 @@ const prisma = new PrismaClient();
     return Attachements;
 }
 
+async function getAttachementsByCriteria(Criteria){
+    const Attachements = await prisma.attachment.findMany({
+        where : Criteria
+    });
+    return Attachements;   
+}
+
  async function addAttachement(Attachement){
     const CreateAttachement = await prisma.attachment.create({data : Attachement});
 }
@@ -273,6 +295,14 @@ const prisma = new PrismaClient();
  async function getAllPosts(){
     const Posts = await prisma.teacherpost.findMany();
     return Posts;
+}
+
+async function getPostsByCriteria(Criteria, includes){
+    const Posts = await prisma.teacherPost.findMany({
+        where : Criteria,
+        include : includes
+    });
+    return Posts
 }
 
  async function addPost(Post){
@@ -420,12 +450,14 @@ module.exports.addTeacher = addTeacher;
 module.exports.updateTeacher = updateTeacher;
 module.exports.deleteTeacher = deleteTeacher;
 module.exports.getCourse = getCourse;
+module.exports.getCoursesByCriteria = getCoursesByCriteria;
 module.exports.getAllCourses = getAllCourses;
 module.exports.addCourse = addCourse;
 module.exports.updateCourse = updateCourse;
 module.exports.deleteCourse = deleteCourse;
 module.exports.getAssignment = getAssignment;
 module.exports.getAllAssignments = getAllAssignments;
+module.exports.getAssignmentsByCriteria = getAssignmentsByCriteria;
 module.exports.addAssignment = addAssignment;
 module.exports.updateAssignment = updateAssignment;
 module.exports.deleteAssignment = deleteAssignment;
@@ -441,6 +473,7 @@ module.exports.updateMaterial = updateMaterial;
 module.exports.deleteMaterial = deleteMaterial;
 module.exports.getAttachement = getAttachement;
 module.exports.getAllAttachements = getAllAttachements;
+module.exports.getAttachementsByCriteria = getAttachementsByCriteria;
 module.exports.addAttachement = addAttachement;
 module.exports.updateAttachement = updateAttachement;
 module.exports.deleteAttachement = deleteAttachement;
@@ -456,6 +489,7 @@ module.exports.updateSubmission = updateSubmission;
 module.exports.deleteSubmission = deleteSubmission;
 module.exports.getPost = getPost;
 module.exports.getAllPosts = getAllPosts;
+module.exports.getPostsByCriteria = getPostsByCriteria
 module.exports.addPost = addPost;
 module.exports.updatePost = updatePost;
 module.exports.deletePost = deletePost;
