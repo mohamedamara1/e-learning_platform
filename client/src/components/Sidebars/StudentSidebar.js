@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 
 import { MdDashboard } from "react-icons/md";
 import { AiFillBook } from "react-icons/ai";
-import { MdAssignment } from "react-icons/md";
 import { BsFillCalendarDateFill } from "react-icons/bs";
-import { BsClockFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import SchoolLogo from "../../assets/img/school_logo.png";
@@ -101,7 +99,11 @@ const StudentSidebar = () => {
               {sidebarNavItems.map((item, index) => {
                 return (
                   <li className="items-center">
-                    <Link to={item.to} key={index}>
+                    <Link
+                      to={item.to}
+                      key={index}
+                      onClick={() => setCollapseShow("hidden")}
+                    >
                       <div
                         className="flex items-center place-content-start p-4
               font-medium text-xl  transition duration-300 ease-in-out
