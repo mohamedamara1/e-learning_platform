@@ -3,10 +3,10 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function getAnnouncements(Criteria) {
-  const Annoucement = await prisma.announcements.findUnique({
+  const Announcement = await prisma.announcements.findUnique({
     where: Criteria,
   });
-  return Annoucement;
+  return Announcement;
 }
 
 async function getAllAnnouncements() {
@@ -14,9 +14,9 @@ async function getAllAnnouncements() {
   return Announcements;
 }
 
-async function addAnnouncement(Annoucement) {
+async function addAnnouncement(Announcement) {
   const CreateAnnouncement = await prisma.announcements.create({
-    data: Annoucement,
+    data: Announcement,
   });
 }
 
