@@ -13,8 +13,11 @@ async function getAllSubjects() {
   return Subjects;
 }
 
-async function addSubject(Subject) {
-  const CreateSubject = await prisma.subject.create({ data: Subject });
+async function addSubject(name, coefficient) {
+  const CreatedSubject = await prisma.subject.create({
+    data: { name, coefficient },
+  });
+  return CreatedSubject;
 }
 
 async function updateSubject(Criteria, SubjectData) {
