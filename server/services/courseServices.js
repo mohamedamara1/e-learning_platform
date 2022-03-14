@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-
+var courses_json = require("../db/courses.json");
 const prisma = new PrismaClient();
 
 async function getCourse(Criteria) {
@@ -17,8 +17,8 @@ async function getCoursesByCriteria(Criteria) {
 }
 
 async function getAllCourses() {
-  const Courses = await prisma.course.findMany();
-  return Courses;
+  // const Courses = await prisma.course.findMany();
+  return courses_json;
 }
 
 module.exports.getCourse = getCourse;
