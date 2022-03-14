@@ -98,7 +98,7 @@ const StudentSidebar = () => {
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               {sidebarNavItems.map((item, index) => {
                 return (
-                  <li className="items-center">
+                  <li className="items-center" key={index}>
                     <Link
                       to={item.to}
                       key={index}
