@@ -4,7 +4,7 @@ import DashboardHeader from "../../../components/Headers/DashboardHeader";
 import AnnouncementsList from "./AnnouncementsList";
 import StudentInfo from "./StudentInfo";
 import TodoList from "./TodoList";
-import Calendar from "./Calendar/Calendar";
+import Calendar from "./Calendar";
 import CustomizedTimeline from "./CustomizedTimeline";
 
 const StudentDashboard = () => {

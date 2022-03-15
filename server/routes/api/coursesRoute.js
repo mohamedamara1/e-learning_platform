@@ -10,7 +10,6 @@ const courseServices = require("../../services/courseServices");
 router.get("/get_courses", (req, res) => {
   // const { user_who_requested_id } = req.query;
 
-
   courseServices
     .getAllCourses()
     .then((courses) => {

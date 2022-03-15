@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import materials_items from "../../../assets/json/materials_items.json";
 import Post from "./Post";
 import MaterialsList from "./MaterialsList";
+import practice_items from "../../../assets/json/assignments.json";
+import PracticeSection from "./PracticeSection";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,6 +64,7 @@ export default function TabComponent(props) {
         <Tabs value={value} onChange={handleChange} centered>
           <Tab label="Timeline" {...a11yProps(0)} />
           <Tab label="Materials" {...a11yProps(1)} />
+          <Tab label="Practice" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -84,6 +87,13 @@ export default function TabComponent(props) {
         <div className=" flex justify-center">
           <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
             <MaterialsList materials_items={materials_items} />
+          </div>
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <div className=" flex justify-center">
+          <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
+            <PracticeSection practice_items={practice_items} />
           </div>
         </div>
       </TabPanel>
