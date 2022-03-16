@@ -17,8 +17,30 @@ async function getCoursesByCriteria(Criteria) {
 }
 
 async function getAllCourses() {
-  // const Courses = await prisma.course.findMany();
-  return courses_json;
+  console.log(prisma.course);
+  const Courses = await prisma.course.findMany({
+    select: {
+      id: true,
+      name: true,
+      teacher: {
+        select: {
+          fullName: true,
+        },
+      },
+      class: {
+        select: {
+          name: true,
+        },
+      },
+      subject: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  // return courses_json;
+  return Courses;
 }
 
 module.exports.getCourse = getCourse;
