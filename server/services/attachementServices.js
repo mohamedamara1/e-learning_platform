@@ -40,9 +40,30 @@ async function deleteAttachement(Criteria) {
   });
 }
 
+async function getPostAttachementsByCourseId(courseId) {
+ // console.log(courseId);
+  const postAttachements = await prisma.postAttachement.findMany({
+    select: {
+      attachement: true,
+      post: {
+        select: {
+          courseId: true,
+        },
+      },
+    },
+    where: {
+      post: {
+        courseId: courseId,
+      },
+    },
+  });
+  return postAttachements;
+}
+
 module.exports.getAttachement = getAttachement;
 module.exports.getAllAttachements = getAllAttachements;
 module.exports.getAttachementsByCriteria = getAttachementsByCriteria;
 module.exports.addAttachement = addAttachement;
 module.exports.updateAttachement = updateAttachement;
 module.exports.deleteAttachement = deleteAttachement;
+module.exports.getPostAttachementsByCourseId = getPostAttachementsByCourseId;

@@ -1,12 +1,39 @@
 const { PrismaClient } = require("@prisma/client");
-
 const prisma = new PrismaClient();
+var materials_json = require("../db/materials_items.json");
 
 async function getCourseMaterial(Criteria) {
   const Material = await prisma.coursematerial.findUnique({
     where: Criteria,
   });
   return Material;
+}
+async function getMaterialUnitsByCourseIdIncludingMaterials(courseId) {
+  const materialUnits = await prisma.materialUnit.findMany({
+    where: {
+      courseId: courseId,
+    },
+    include: {
+      courseMaterials: true,
+    },
+  });
+  return materialUnits;
+}
+async function getMaterialUnitsByCourseId(courseId) {
+  const materialUnits = await prisma.materialUnit.findMany({
+    where: {
+      courseId: courseId,
+    },
+  });
+  return materialUnits;
+}
+async function getMaterialsByMaterialUnitId(materialUnitId) {
+  const materials = await prisma.courseMaterial.findMany({
+    where: {
+      materialUnitId: materialUnitId,
+    },
+  });
+  return materials;
 }
 
 async function getAllMaterials() {
@@ -36,3 +63,7 @@ module.exports.getAllMaterials = getAllMaterials;
 module.exports.addMaterial = addMaterial;
 module.exports.updateMaterial = updateMaterial;
 module.exports.deleteMaterial = deleteMaterial;
+module.exports.getMaterialUnitsByCourseIdIncludingMaterials =
+  getMaterialUnitsByCourseIdIncludingMaterials;
+module.exports.getMaterialUnitsByCourseId = getMaterialUnitsByCourseId;
+module.exports.getMaterialsByMaterialUnitId = getMaterialsByMaterialUnitId;
