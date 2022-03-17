@@ -5,6 +5,25 @@ const prisma = new PrismaClient();
 async function getCourse(Criteria) {
   const course = await prisma.course.findUnique({
     where: Criteria,
+    include: {
+      teacher: true,
+      posts: true,
+      teacher: {
+        select: {
+          fullName: true,
+        },
+      },
+      posts: {
+        include: {
+          postAttachements: true,
+          postAttachements: {
+            select: {
+              attachement: true,
+            },
+          },
+        },
+      },
+    },
   });
   return course;
 }
@@ -17,7 +36,6 @@ async function getCoursesByCriteria(Criteria) {
 }
 
 async function getAllCourses() {
-  console.log(prisma.course);
   const Courses = await prisma.course.findMany({
     select: {
       id: true,

@@ -22,7 +22,7 @@ export default function Post(props) {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {props.author[0]}
+              {props.teacherFullName[0]}
             </Avatar>
           }
           action={
@@ -30,8 +30,8 @@ export default function Post(props) {
               <MoreVertIcon />
             </IconButton>
           }
-          title={props.author}
-          subheader={props.created_at}
+          title={props.teacherFullName}
+          subheader={props.publishDate}
         />
         <CardContent>
           <Typography variant="body3" color="text.secondary">
@@ -40,15 +40,15 @@ export default function Post(props) {
         </CardContent>
         <CardContent>
           <Typography variant="body3" color="text.secondary">
-            {props.attachments ? (
+            {props.attachements ? (
               <div>
                 <hr></hr>
                 <div className="flex flex-row flex-wrap">
-                  {props.attachments.map((attachment, index) => {
+                  {props.attachements.map((attachement, index) => {
                     return (
                       <Attachment
-                        name={attachment.name}
-                        type={attachment.type}
+                        name={attachement.attachement.name}
+                        fileExtension={attachement.attachement.fileExtension}
                       />
                     );
                   })}

@@ -1,19 +1,14 @@
 // Need to use the React-specific entry point to import createApi
 import { mainApi } from "./mainApi";
 // Define a service using a base URL and expected endpoints
-export const coursesApi = mainApi.injectEndpoints({
-  reducerPath: "coursesApi",
+export const postsApi = mainApi.injectEndpoints({
+  reducerPath: "postsApi",
   endpoints: (builder) => ({
-    getCourses: builder.query({
-      query: (userId) => ({
-        url: `courses/get_courses`,
-      }),
-    }),
-    getCourse: builder.query({
+    getPosts: builder.query({
       query: (args) => {
         const { courseId } = args;
         return {
-          url: `courses/get_course`,
+          url: `posts/get_posts/`,
           params: { courseId },
         };
       },
@@ -23,4 +18,4 @@ export const coursesApi = mainApi.injectEndpoints({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetCoursesQuery, useGetCourseQuery } = coursesApi;
+export const { useGetPostsQuery } = postsApi;

@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DefaultHeader from "../../../components/Headers/DefaultHeader";
 import CourseCard from "./CourseCard";
-//import courses from "../../../assets/json/courses.json";
 import { useGetCoursesQuery } from "../../../api/coursesApi";
 
 function CoursesPage() {
@@ -18,10 +17,10 @@ function CoursesPage() {
             courses.map((course, index) => {
               return (
                 <CourseCard
-                  courseId={course.courseId}
-                  courseName={course.courseName}
-                  className={course.className}
-                  teacherName={course.teacherName}
+                  courseId={course.id}
+                  courseName={course.name}
+                  className={course.class.name}
+                  teacherName={course.teacher.fullName}
                   key={index}
                 />
               );

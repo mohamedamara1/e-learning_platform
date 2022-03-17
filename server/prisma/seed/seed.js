@@ -11,6 +11,8 @@ const PracticeUnits = require("./data/practiceUnits");
 const Exercices = require("./data/exercices");
 const CourseMaterials = require("./data/courseMaterials");
 const MaterialUnits = require("./data/materialUnits");
+const Attachements = require("./data/attachements");
+const PostAttachements = require("./data/postAttachements");
 
 async function runSeeders() {
   // Classes
@@ -102,7 +104,8 @@ async function runSeeders() {
         create: materialUnit,
       })
     )
-  ); // CourseMaterials
+  );
+  // CourseMaterials
   await Promise.all(
     CourseMaterials.map(async (courseMaterial) =>
       prisma.courseMaterial.upsert({
@@ -111,6 +114,32 @@ async function runSeeders() {
         create: courseMaterial,
       })
     )
+  );
+  // Attachements
+  await Promise.all(
+    Attachements.map(async (attachement) => {
+      var attachementId = attachement.id;
+      return prisma.attachement.upsert({
+        where: { id: attachementId },
+        update: {},
+        create: attachement,
+      });
+    })
+  );
+  // PostAttachements
+  await Promise.all(
+    PostAttachements.map(async (postAttachement) => {
+      var postId = postAttachement.postId;
+      var attachementId = postAttachement.attachementId;
+
+      return prisma.postAttachement.upsert({
+        where: {
+          postId_attachementId: { postId, attachementId },
+        },
+        update: {},
+        create: postAttachement,
+      });
+    })
   );
 }
 
