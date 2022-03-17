@@ -89,4 +89,20 @@ module.exports = [
     isAssignment: true,
     deadlineTimestamp: new Date("1970-01-01 00:00:00"),
   },
+  {
+    id: 12,
+    name: "chapitre f",
+    practiceUnitId: 4,
+    description: "lorem ipsum hey test there this is for testing",
+    isAssignment: true,
+    deadlineTimestamp: new Date("1970-01-01 00:00:00"),
+  },
+  {
+    id: 13,
+    name: "chapitre f",
+    practiceUnitId: 4,
+    description: "lorem ipsum hey test there this is for testing",
+    isAssignment: true,
+    deadlineTimestamp: new Date("1970-01-01 00:00:00"),
+  },
 ];

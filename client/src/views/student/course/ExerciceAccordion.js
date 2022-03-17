@@ -32,7 +32,7 @@ export default function ExerciceAccordion(props) {
         >
           <Typography className="flex justify-between w-full align-middle ">
             <div className="flex flex-col">
-              {props.title}
+              {props.name}
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">
                   Added at: {props.publishDate}
@@ -56,17 +56,17 @@ export default function ExerciceAccordion(props) {
         <AccordionDetails>
           <Typography>
             <div>
-              <div>{props.text}</div>
+              <div>{props.description}</div>
             </div>
           </Typography>
-          {props.attachments.length != 0 ? (
+          {props.attachements.length != 0 ? (
             <div>
-              {props.text ? <hr className="mt-4"></hr> : null}
+              {props.description ? <hr className="mt-4"></hr> : null}
 
               <div className="flex flex-row gap-4 flex-wrap">
-                {props.attachments.map((attachment, index) => {
+                {props.attachements.map((attachement, index) => {
                   return (
-                    <Attachment name={attachment.name} type={attachment.type} />
+                    <Attachment name={attachement.name} type={attachement.type} />
                   );
                 })}
               </div>

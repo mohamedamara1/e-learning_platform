@@ -8,6 +8,38 @@ async function getExercice(Criteria) {
   });
   return Exercice;
 }
+async function getPracticeUnitsByCourseIdIncludingExercices(courseId) {
+  const practiceUnits = await prisma.practiceUnit.findMany({
+    where: {
+      courseId: courseId,
+    },
+    include: {
+      exercices: true,
+      exercices: {
+        include: {
+          exerciceAttachements: true,
+        },
+      },
+    },
+  });
+  return practiceUnits;
+}
+async function getPracticeUnitsByCourseId(courseId) {
+  const practiceUnits = await prisma.practiceUnit.findMany({
+    where: {
+      courseId: courseId,
+    },
+  });
+  return practiceUnits;
+}
+async function getExercicesByPracticeUnitId(practiceUnitId) {
+  const exercices = await prisma.exercice.findMany({
+    where: {
+      practiceUnitId: practiceUnitId,
+    },
+  });
+  return exercices;
+}
 
 async function getAllExercices() {
   const Exercices = await prisma.exercice.findMany({
@@ -55,3 +87,8 @@ module.exports.addExercice = addExercice;
 module.exports.updateExercice = updateExercice;
 module.exports.deleteExercice = deleteExercice;
 module.exports.getAllExerciceUnits = getAllExerciceUnits;
+
+module.exports.getPracticeUnitsByCourseIdIncludingExercices =
+  getPracticeUnitsByCourseIdIncludingExercices;
+module.exports.getExercicesByPracticeUnitId = getExercicesByPracticeUnitId;
+module.exports.getPracticeUnitsByCourseId = getPracticeUnitsByCourseId;
