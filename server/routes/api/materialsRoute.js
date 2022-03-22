@@ -9,7 +9,7 @@ const materialServices = require("../../services/materialServices");
 
 router.get("/get_materialUnits_by_courseId_include_materials/", (req, res) => {
   // const { user_who_requested_id } = req.query;
-  let courseId = parseInt(req.query.courseId);
+  let courseId = req.query.courseId;
   materialServices
     .getMaterialUnitsByCourseIdIncludingMaterials(courseId)
     .then((materials) => {
@@ -29,7 +29,7 @@ router.get("/get_materialUnits_by_courseId_include_materials/", (req, res) => {
 
 router.get("/get_materialUnits_by_courseId/", (req, res) => {
   // const { user_who_requested_id } = req.query;
-  let courseId = parseInt(req.query.courseId);
+  let courseId = req.query.courseId;
   materialServices
     .getMaterialUnitsByCourseId(courseId)
     .then((materialUnits) => {
@@ -49,7 +49,7 @@ router.get("/get_materialUnits_by_courseId/", (req, res) => {
 
 router.get("/get_materials_by_materialUnitId/", (req, res) => {
   // const { user_who_requested_id } = req.query;
-  let materialUnitId = parseInt(req.query.materialUnitId);
+  let materialUnitId = req.query.materialUnitId;
   materialServices
     .getMaterialsByMaterialUnitId(materialUnitId)
     .then((materials) => {

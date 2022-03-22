@@ -10,7 +10,7 @@ const attachementServices = require("../../services/attachementServices");
 router.get("/get_postAttachements/", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
-  let courseId = parseInt(req.query.courseId);
+  let courseId = req.query.courseId;
   attachementServices
     .getPostAttachementsByCourseId(courseId)
     .then((postAttachements) => {

@@ -10,7 +10,7 @@ const postServices = require("../../services/postServices");
 router.get("/get_posts/", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
-  let courseId = parseInt(req.query.courseId);
+  let courseId = req.query.courseId;
 
   postServices
     .getPostsByCourseId(courseId)

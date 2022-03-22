@@ -10,7 +10,7 @@ const exerciceServices = require("../../services/exerciceServices");
 router.get("/get_practiceUnits_by_courseId_include_exercices", (req, res) => {
   // const { user_who_requested_id } = req.query;
   // const { courseId } = req.params.courseId;
-  let courseId = parseInt(req.query.courseId);
+  let courseId = req.query.courseId;
 
   exerciceServices
     .getPracticeUnitsByCourseIdIncludingExercices(courseId)
@@ -31,7 +31,7 @@ router.get("/get_practiceUnits_by_courseId_include_exercices", (req, res) => {
 
 router.get("/get_practiceUnits_by_courseId/", (req, res) => {
   // const { user_who_requested_id } = req.query;
-  let courseId = parseInt(req.query.courseId);
+  let courseId = req.query.courseId;
   exerciceServices
     .getPracticeUnitsByCourseId(courseId)
     .then((practiceUnits) => {
@@ -51,7 +51,7 @@ router.get("/get_practiceUnits_by_courseId/", (req, res) => {
 
 router.get("/get_exercices_by_practiceUnitId/", (req, res) => {
   // const { user_who_requested_id } = req.query;
-  let practiceUnitId = parseInt(req.query.practiceUnitId);
+  let practiceUnitId = req.query.practiceUnitId;
   exerciceServices
     .getExercicesByPracticeUnitId(practiceUnitId)
     .then((exercices) => {

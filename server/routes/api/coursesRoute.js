@@ -29,7 +29,7 @@ router.get("/get_courses", (req, res) => {
 
 router.get("/get_course", (req, res) => {
   // const { user_who_requested_id } = req.query;
-  let courseId = parseInt(req.query.courseId);
+  let courseId = req.query.courseId;
 
   courseServices
     .getCourse({ id: courseId })
