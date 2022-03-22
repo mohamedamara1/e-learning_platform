@@ -24,7 +24,7 @@ supertokens.init({
     websiteDomain: "http://localhost:3000",
     apiDomain: "http://localhost:5000",
     apiBasePath: "api/v1/auth",
-    //  websiteBasePath: "http://localhost:3000",
+    websiteBasePath: "/auth",
   },
   recipeList: [EmailPassword.init(), Session.init()],
 });
