@@ -12,100 +12,118 @@ datasource db {
 }
 
 model Student {
-  id                   Int                    @id @default(autoincrement())
+  id                   String                 @id @default(uuid())
   firstName            String
   lastName             String
   fullName             String
   class                Class                  @relation(fields: [classId], references: [id])
-  classId              Int
+  classId              String
   AssignmentSubmission AssignmentSubmission[]
   studentAttendance    StudentAttendance[]
   studentAccount       StudentAccount[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
 }
 
 model Teacher {
-  id             Int              @id @default(autoincrement())
+  id             String           @id @default(uuid())
   firstName      String
   lastName       String
   fullName       String
   course         Course[]
   teacherAccount TeacherAccount[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model Class {
-  id         Int       @id @default(autoincrement())
+  id         String    @id @default(uuid())
   name       String
   population Int
   students   Student[]
   courses    Course[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Course {
-  id            Int            @id @default(autoincrement())
+  id            String         @id @default(uuid())
   name          String
   imageUrl      String?
   teacher       Teacher        @relation(fields: [teacherId], references: [id])
-  teacherId     Int
+  teacherId     String
   class         Class          @relation(fields: [classId], references: [id])
-  classId       Int
+  classId       String
   subject       Subject        @relation(fields: [subjectId], references: [id])
-  subjectId     Int
+  subjectId     String
   conferences   Conference[]
   posts         Post[]
   materialUnits MaterialUnit[]
-  mracticeUnits PracticeUnit[]
+  practiceUnits PracticeUnit[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Exercice {
-  id                   Int                   @id @default(autoincrement())
+  id                   String                @id @default(uuid())
   name                 String
   practiceUnit         PracticeUnit          @relation(fields: [practiceUnitId], references: [id])
-  practiceUnitId       Int
+  practiceUnitId       String
   exerciceAttachements ExerciceAttachement[]
   description          String
 
   isAssignment          Boolean
   deadlineTimestamp     DateTime?
   assignmentSubmissions AssignmentSubmission[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
 
 }
 
 model PracticeUnit {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(uuid())
   title    String
   course   Course @relation(fields: [courseId], references: [id])
-  courseId Int
+  courseId String
 
   exercices Exercice[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Subject {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   name        String
   coefficient Float
   courses     Course[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model CourseMaterial {
-  id                   Int                   @id @default(autoincrement())
+  id                   String                @id @default(uuid())
   name                 String
   url                  String
   materialAttachements MaterialAttachement[]
   materialUnit         MaterialUnit?         @relation(fields: [materialUnitId], references: [id])
-  materialUnitId       Int?
+  materialUnitId       String?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
 }
 
 model MaterialUnit {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(uuid())
   title    String
   course   Course @relation(fields: [courseId], references: [id])
-  courseId Int
+  courseId String
 
   courseMaterials CourseMaterial[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
 
 model Attachement {
-  id                     Int                     @id @default(autoincrement())
+  id                     String                  @id @default(uuid())
   name                   String
   fileExtension          String
   size                   String
@@ -113,60 +131,72 @@ model Attachement {
   postAttachements       PostAttachement[]
   materialAttachements   MaterialAttachement[]
   submissionAttachements SubmissionAttachement[]
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
 }
 
 model Conference {
-  id                 Int                 @id @default(autoincrement())
+  id                 String              @id @default(uuid())
   title              String
   status             String
   scheduledStartTime DateTime
   scheduledEndTime   DateTime
   stats              Json
   course             Course              @relation(fields: [courseId], references: [id])
-  courseId           Int
+  courseId           String
   studentAttendances StudentAttendance[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }
 
 model AssignmentSubmission {
-  id                        Int                     @id @default(autoincrement())
+  id                        String                  @id @default(uuid())
   exercice                  Exercice                @relation(fields: [exerciceId], references: [id])
-  exerciceId                Int
+  exerciceId                String
   student                   Student                 @relation(fields: [studentId], references: [id])
-  studentId                 Int
+  studentId                 String
   firstSubmissionTimestamp  DateTime
   latestSubmissionTimestamp DateTime?
   submissionsCount          Int
   submissionAttachements    SubmissionAttachement[]
+  createdAt                 DateTime                @default(now())
+  updatedAt                 DateTime                @updatedAt
 }
 
 model Post {
-  id               Int               @id @default(autoincrement())
-  text             String
-  publishDate      DateTime
-  lastModified     DateTime?
+  id   String @id @default(uuid())
+  text String
+
   course           Course            @relation(fields: [courseId], references: [id])
-  courseId         Int
+  courseId         String
   postAttachements PostAttachement[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 }
 
 model Admin {
-  id            Int             @id @default(autoincrement())
+  id            String          @id @default(uuid())
   firstName     String
   lastName      String
   announcements Announcements[]
   adminAccounts AdminAccount[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 model Announcements {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   timestamp DateTime
   topic     String
   admin     Admin    @relation(fields: [adminId], references: [id])
-  adminId   Int
+  adminId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 }
 
 model Account {
-  id              Int              @id @default(autoincrement())
+  id              String           @id @default(uuid())
   userName        String
   passwordSalt    String
   passwordHash    String
@@ -174,76 +204,94 @@ model Account {
   adminAccounts   AdminAccount[]
   teacherAccounts TeacherAccount[]
   studentAccounts StudentAccount[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
 
 model StudentAttendance {
-  id           Int        @id @default(autoincrement())
+  id           String     @id @default(uuid())
   student      Student    @relation(fields: [studentId], references: [id])
-  studentId    Int
+  studentId    String
   ratio        Float
   conference   Conference @relation(fields: [conferenceId], references: [id])
-  conferenceId Int
+  conferenceId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model ExerciceAttachement {
   exercice      Exercice    @relation(fields: [exerciceId], references: [id])
-  exerciceId    Int
+  exerciceId    String
   attachement   Attachement @relation(fields: [attachementId], references: [id])
-  attachementId Int
+  attachementId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@id([exerciceId, attachementId])
 }
 
 model PostAttachement {
   post          Post        @relation(fields: [postId], references: [id])
-  postId        Int
+  postId        String
   attachement   Attachement @relation(fields: [attachementId], references: [id])
-  attachementId Int
+  attachementId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@id([postId, attachementId])
 }
 
 model MaterialAttachement {
   material      CourseMaterial @relation(fields: [materialId], references: [id])
-  materialId    Int
+  materialId    String
   attachement   Attachement    @relation(fields: [attachementId], references: [id])
-  attachementId Int
+  attachementId String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@id([materialId, attachementId])
 }
 
 model SubmissionAttachement {
   submission    AssignmentSubmission @relation(fields: [submissionId], references: [id])
-  submissionId  Int
+  submissionId  String
   attachement   Attachement          @relation(fields: [attachementId], references: [id])
-  attachementId Int
+  attachementId String
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
 
   @@id([submissionId, attachementId])
 }
 
 model AdminAccount {
-  admin     Admin   @relation(fields: [adminId], references: [id])
-  adminId   Int
-  account   Account @relation(fields: [accountId], references: [id])
-  accountId Int
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  adminId   String
+  account   Account  @relation(fields: [accountId], references: [id])
+  accountId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([adminId, accountId])
 }
 
 model TeacherAccount {
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
-  teacherId Int
-  account   Account @relation(fields: [accountId], references: [id])
-  accountId Int
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String
+  account   Account  @relation(fields: [accountId], references: [id])
+  accountId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([teacherId, accountId])
 }
 
 model StudentAccount {
-  student   Student @relation(fields: [studentId], references: [id])
-  studentId Int
-  account   Account @relation(fields: [accountId], references: [id])
-  accountId Int
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+  account   Account  @relation(fields: [accountId], references: [id])
+  accountId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([studentId, accountId])
 }

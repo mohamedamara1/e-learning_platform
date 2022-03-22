@@ -35,7 +35,7 @@ export default function ExerciceAccordion(props) {
               {props.name}
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">
-                  Added at: {props.publishDate}
+                  Added at: {props.createdAt}
                 </span>
 
                 {props.isAssignment == true ? (
@@ -66,7 +66,10 @@ export default function ExerciceAccordion(props) {
               <div className="flex flex-row gap-4 flex-wrap">
                 {props.attachements.map((attachement, index) => {
                   return (
-                    <Attachment name={attachement.name} type={attachement.type} />
+                    <Attachment
+                      name={attachement.name}
+                      type={attachement.type}
+                    />
                   );
                 })}
               </div>

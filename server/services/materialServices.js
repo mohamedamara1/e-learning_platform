@@ -1,6 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-var materials_json = require("../db/materials_items.json");
 
 async function getCourseMaterial(Criteria) {
   const Material = await prisma.coursematerial.findUnique({

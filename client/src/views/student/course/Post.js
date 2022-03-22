@@ -31,7 +31,7 @@ export default function Post(props) {
             </IconButton>
           }
           title={props.teacherFullName}
-          subheader={props.publishDate}
+          subheader={props.createdAt}
         />
         <CardContent>
           <Typography variant="body3" color="text.secondary">

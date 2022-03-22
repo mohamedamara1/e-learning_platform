@@ -15,7 +15,7 @@ function Timeline(props) {
           return (
             <Post
               /* {/*author={post.author} */
-              publishDate={post.publishDate}
+              createdAt={post.createdAt}
               text={post.text}
               attachements={post.postAttachements}
               teacherFullName={props.teacherFullName}

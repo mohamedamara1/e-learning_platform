@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-var courses_json = require("../db/courses.json");
 const prisma = new PrismaClient();
 
 async function getCourse(Criteria) {

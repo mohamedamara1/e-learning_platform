@@ -6,7 +6,7 @@
         "exerciceId": "1",
         "exerciceTitle": "TD1",
         "exerciceText": "lorem kazorjkazirj iazrj azàrjazrja ziorjazirjazi razjir az",
-        "publishDate": "02/01/2019",
+        "createdAt": "02/01/2019",
         "isAssignment": true,
         "deadlineDate": "10/01/2019",
         "submissionState": "Missed",
@@ -16,7 +16,7 @@
         "exerciceId": "2",
         "exerciceTitle": "TD2",
         "exerciceText": "",
-        "publishDate": "02/01/2019",
+        "createdAt": "02/01/2019",
 
         "isAssignment": false,
         "attachments": [
@@ -28,7 +28,7 @@
         "exerciceId": "TD1",
         "exerciceTitle": "TD3",
         "exerciceText": "lorem kazorjkazirj iazrj azàrjazrja ziorjazirjazi razjir az",
-        "publishDate": "02/01/2019",
+        "createdAt": "02/01/2019",
 
         "isAssignment": true,
         "deadlineDate": "10/01/2019",
@@ -48,7 +48,7 @@
         "exerciceId": "1",
         "exerciceTitle": "TD4",
         "exerciceText": "lorem kazorjkazirj iazrj azàrjazrja ziorjazirjazi razjir az",
-        "publishDate": "02/01/2019",
+        "createdAt": "02/01/2019",
 
         "isAssignment": false,
         "attachments": []
@@ -57,7 +57,7 @@
         "exerciceId": "2",
         "exerciceTitle": "TD5",
         "exerciceText": "",
-        "publishDate": "02/01/2019",
+        "createdAt": "02/01/2019",
 
         "attachments": [
           { "id": "1", "name": "Chapitre 1.pdf", "type": "pdf" },
@@ -68,7 +68,7 @@
         "exerciceId": "TD1",
         "exerciceTitle": "TD8",
         "exerciceText": "lorem kazorjkazirj iazrj azàrjazrja ziorjazirjazi razjir az",
-        "publishDate": "02/01/2019",
+        "createdAt": "02/01/2019",
 
         "isAssignment": true,
         "deadlineDate": "10/01/2019",

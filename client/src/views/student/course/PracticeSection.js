@@ -47,7 +47,7 @@ export default function PracticeSection(props) {
                     id={exercice.exerciceId}
                     name={exercice.name}
                     description={exercice.description}
-                    publishDate="default date "
+                    createdAt="default date "
                     isAssignment={exercice.isAssignment}
                     submissionState={exercice.isAssignment ? "Missed" : null}
                     deadlineDate={exercice.deadlineTimestamp}
