@@ -23,7 +23,7 @@ import UsersPage from "./views/admin/users/UsersPage";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
 import CreateUser from "./views/admin/users/CreateUser";
-
+import HomePage from "./components/HomePage";
 async function getRole() {
   if (await Session.doesSessionExist()) {
     // we use the key "role" here since that's what we
@@ -160,15 +160,37 @@ function App() {
       <Routes>
         {/*This renders the login UI on the /auth route*/}
         {getSuperTokensRoutesForReactRouterDom(reactRouterDom)}
+        <Route
+          path="/"
+          element={
+            <EmailPasswordAuth>
+              <HomePage />
+            </EmailPasswordAuth>
+          }
+        />
 
-        <Route path="student" element={<StudentLayout />}>
+        <Route
+          path="student"
+          element={
+            <EmailPasswordAuth>
+              <StudentLayout />
+            </EmailPasswordAuth>
+          }
+        >
           <Route index element={<StudentDashboard />} />
           <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="courses" exact element={<CoursesPage />} />
           <Route path="course/:courseId" element={<Course />} />
         </Route>
 
-        <Route path="admin" element={<AdminLayout />}>
+        <Route
+          path="admin"
+          element={
+            <EmailPasswordAuth>
+              <AdminLayout />
+            </EmailPasswordAuth>
+          }
+        >
           <Route index element={<AdminDashboard />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" exact element={<UsersPage />}>
