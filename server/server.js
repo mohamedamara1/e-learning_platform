@@ -5,6 +5,7 @@ const cors = require("cors");
 const supertokens = require("supertokens-node");
 const Session = require("supertokens-node/recipe/session");
 const EmailPassword = require("supertokens-node/recipe/emailpassword");
+const userServices = require("./services/userServices");
 
 const errorHandler = require("supertokens-node/framework/express").errorHandler;
 const middleware = require("supertokens-node/framework/express").middleware;
@@ -26,7 +27,76 @@ supertokens.init({
     apiBasePath: "api/v1/auth",
     websiteBasePath: "/auth",
   },
-  recipeList: [EmailPassword.init(), Session.init()],
+  recipeList: [
+    EmailPassword.init({
+      signUpFeature: {
+        formFields: [
+          {
+            id: "email",
+          },
+          {
+            id: "password",
+          },
+          {
+            id: "role",
+          },
+        ],
+      },
+      override: {
+        apis: (originalImplementation) => {
+          return {
+            ...originalImplementation,
+
+            // here we only override the sign up API logic
+            signUpPOST: async function (input) {
+              if (originalImplementation.signUpPOST === undefined) {
+                throw Error("Should never come here");
+              }
+              // TODO: some custom logic
+
+              // or call the default behaviour as show below
+              const response = await originalImplementation.signUpPOST(input);
+              if (!response.user) {
+                return response;
+              }
+
+              // console.log("signUpPOST response: ", response.user.id);
+              let userId = response.user.id;
+              let role = input.formFields.filter((f) => f.id === "role")[0]
+                .value;
+              console.log(input.formFields);
+              const result = await userServices.assignRole(userId, role);
+              console.log(result);
+              return response;
+            },
+            // ...
+            // TODO: override more apis
+          };
+        },
+      },
+    }),
+    Session.init({
+      override: {
+        functions: (originalImplementation) => {
+          return {
+            ...originalImplementation,
+            createNewSession: async function (input) {
+              let userId = input.userId;
+              let role = await userServices.getRoleByUserId(userId); // TODO: fetch role based on userId
+              console.log(role);
+
+              input.accessTokenPayload = {
+                ...input.accessTokenPayload,
+                role,
+              };
+
+              return originalImplementation.createNewSession(input);
+            },
+          };
+        },
+      },
+    }),
+  ],
 });
 
 app.use(
