@@ -1,6 +1,9 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "node prisma/seed/seed.js"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,10 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^3.10.0",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "pg": "^8.7.3"
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.3",
+    "supertokens-node": "^9.0.1"
   },
   "devDependencies": {
     "prisma": "^3.10.0"
