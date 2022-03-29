@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 
 import StudentSidebar from "../components/Sidebars/StudentSidebar";
-function Student() {
+function StudentLayout() {
   return (
     <>
       <StudentSidebar />
@@ -13,4 +13,4 @@ function Student() {
   );
 }
 
-export default Student;
+export default StudentLayout;
