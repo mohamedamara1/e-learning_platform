@@ -24,6 +24,7 @@ import UsersPage from "./views/admin/users/UsersPage";
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
 import CreateUser from "./views/admin/users/CreateUser";
 import HomePage from "./components/HomePage";
+import TeachersCrudTable from "./views/admin/users/TeachersCrudTable";
 async function getRole() {
   if (await Session.doesSessionExist()) {
     // we use the key "role" here since that's what we
@@ -194,7 +195,7 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" exact element={<UsersPage />}>
-            <Route path="create" element={<CreateUser />} />
+            <Route path="teachers" element={<TeachersCrudTable />} />
             {/*          <Route path=":userId" element={<UsersPage />} />*/}
           </Route>
         </Route>

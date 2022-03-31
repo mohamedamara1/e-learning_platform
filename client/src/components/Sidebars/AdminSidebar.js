@@ -18,7 +18,7 @@ const sidebarNavItems = [
   {
     display: "Users",
     icon: <AiFillBook size={"28"} />,
-    to: "/admin/users",
+    to: "/admin/users/teachers",
     section: "users",
   },
   {

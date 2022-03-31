@@ -6,7 +6,7 @@ function UsersPage() {
   return (
     <div className=" flex flex-col min-h-screen bg-dark-electric-blue p-2">
       <AdminHeader title="Users Management" background="bg-white-kids" />
-      <div className=" min-h-full  m-2 flex-grow rounded-xl p-3 bg-white">
+      <div className=" min-h-full  m-2 flex-grow rounded-xl p-3 bg-slate-400">
         <Outlet />
       </div>
     </div>
