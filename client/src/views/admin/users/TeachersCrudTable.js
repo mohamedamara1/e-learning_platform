@@ -15,14 +15,16 @@ import {
   TableContainer,
   TablePagination,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import TeacherListHead from "./TeacherListHead";
 
 import USERLIST from "../../../assets/json/teachers";
 import TeacherListToolbar from "./TeacherListToolbar";
 import MoreMenu from "./MoreMenu";
-
+import RegularRow from "./RegularRow";
+import fieldsArr from "./fields";
+import EditableRow from "./EditableRow";
 //
 const TABLE_HEAD = [
   { id: "name", label: "Name", alignRight: false },
@@ -46,37 +48,51 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
+  console.count("applySortFilter executed");
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
+    const order = comparator(a[0].rowData, b[0].rowData);
     if (order !== 0) return order;
-    return a[1] - b[1];
+    return a[1].rowData - b[1].rowData;
   });
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) =>
+        _user.rowData.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
 }
-const TeachersCrudTable = () => {
+
+export const TeachersCrudTable = () => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  const [isAdding, setIsAdding] = useState(false);
+  const [isEditingTable, setIsEditingTable] = useState(false);
+  const [allRowsData, setAllRowsData] = useState(
+    (USERLIST || []).map((item) => ({
+      isEditing: false,
+      rowData: item,
+    }))
+  );
+  const [editingIndex, setEditingIndex] = useState(null);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+    setAllRowsData(
+      applySortFilter(allRowsData, getComparator(order, orderBy), filterName)
+    );
   };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = allRowsData.map((row) => row.rowData.name);
       setSelected(newSelecteds);
       return;
     }
@@ -116,13 +132,86 @@ const TeachersCrudTable = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(
+  /*  const filteredUsers = applySortFilter(
     USERLIST,
     getComparator(order, orderBy),
     filterName
-  );
-  const isUserNotFound = filteredUsers.length === 0;
+  );*/
+  useEffect(() => {
+    if (filterName === "") {
+      setAllRowsData(
+        (USERLIST || []).map((item) => ({
+          isEditing: false,
+          rowData: item,
+        }))
+      );
+    } else {
+      setAllRowsData(
+        applySortFilter(allRowsData, getComparator(order, orderBy), filterName)
+      );
+    }
+  }, [filterName]);
 
+  useEffect(() => {
+    console.log("render");
+  });
+  // const isUserNotFound = filteredUsers.length === 0;
+
+  const handleSave = (row) => {
+    if (isEditingTable) {
+      const arr = allRowsData.map((item, i) => {
+        if (i === editingIndex) {
+          return {
+            isEditing: false,
+            rowData: row,
+          };
+        } else return item;
+      });
+      setAllRowsData(arr);
+      setEditingIndex(null);
+      setIsEditingTable(false);
+    } else {
+      setAllRowsData([...allRowsData, { isEditing: false, rowData: row }]);
+      setIsAdding(false);
+    }
+  };
+
+  const handleCancel = (index) => {
+    if (isEditingTable) {
+      const arr = allRowsData.map((item, i) => {
+        if (i === index) {
+          return {
+            isEditing: false,
+            rowData: item.rowData,
+          };
+        } else return item;
+      });
+      setAllRowsData(arr);
+      setEditingIndex(null);
+      setIsEditingTable(false);
+    } else {
+      setIsAdding(false);
+    }
+  };
+
+  const handleDeleteRow = (index) => {
+    const arr = allRowsData.filter((item, i) => i !== index);
+    setAllRowsData(arr);
+  };
+
+  const handleEditRow = (index) => {
+    const arr = allRowsData.map((item, i) => {
+      if (i === index) {
+        return {
+          isEditing: true,
+          rowData: item.rowData,
+        };
+      } else return item;
+    });
+    setAllRowsData(arr);
+    setEditingIndex(index);
+    setIsEditingTable(true);
+  };
   return (
     <Container>
       <Stack
@@ -151,47 +240,39 @@ const TeachersCrudTable = () => {
               order={order}
               orderBy={orderBy}
               headLabel={TABLE_HEAD}
-              rowCount={USERLIST.length}
+              rowCount={allRowsData.length}
               numSelected={selected.length}
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllClick}
             />
             <TableBody>
-              {filteredUsers
+              {allRowsData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { id, name, email, phoneNumber, avatarUrl } = row;
+                .map(({ isEditing, rowData }, i) => {
+                  const { name } = rowData;
                   const isItemSelected = selected.indexOf(name) !== -1;
-                  return (
-                    <TableRow
-                      hover
-                      key={id}
-                      tabIndex={-1}
-                      role="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
-                        />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar alt={name} src={avatarUrl} />
-                          <Typography variant="subtitle2" noWrap>
-                            {name}
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align="left">{email}</TableCell>
-                      <TableCell align="left">{phoneNumber}</TableCell>
-
-                      <TableCell align="right">
-                        <MoreMenu />
-                      </TableCell>
-                    </TableRow>
+                  return isEditing ? (
+                    <EditableRow
+                      isEditing={isEditing}
+                      editingIndex={editingIndex}
+                      allRowsData={allRowsData}
+                      editData={rowData}
+                      handleSave={handleSave}
+                      handleCancel={handleCancel}
+                      fieldsArr={fieldsArr}
+                    />
+                  ) : (
+                    <RegularRow
+                      key={i}
+                      index={i}
+                      rowData={rowData}
+                      isAdding={isAdding}
+                      isEditingTable={isEditingTable}
+                      handleEditRow={handleEditRow}
+                      handleDeleteRow={handleDeleteRow}
+                      handleClick={handleClick}
+                      isItemSelected={isItemSelected}
+                    />
                   );
                 })}
               {emptyRows > 0 && (

@@ -15,13 +15,22 @@ import { MdModeEdit } from "react-icons/md";
 
 // ----------------------------------------------------------------------
 
-export default function MoreMenu() {
+export default function MoreMenu({
+  isAdding,
+  isEditingTable,
+  handleEditRow,
+  handleDeleteRow,
+}) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <IconButton ref={ref} onClick={() => setIsOpen(true)}>
+      <IconButton
+        disabled={isAdding || isEditingTable}
+        ref={ref}
+        onClick={() => setIsOpen(true)}
+      >
         <HiDotsVertical />
       </IconButton>
 
@@ -35,7 +44,11 @@ export default function MoreMenu() {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <MenuItem sx={{ color: "text.secondary" }}>
+        <MenuItem
+          disabled={isAdding || isEditingTable}
+          onClick={handleDeleteRow}
+          sx={{ color: "text.secondary" }}
+        >
           <ListItemIcon>
             <IoTrashOutline width={24} height={24} />
           </ListItemIcon>
@@ -46,8 +59,8 @@ export default function MoreMenu() {
         </MenuItem>
 
         <MenuItem
-          component={RouterLink}
-          to="#"
+          disabled={isAdding || isEditingTable}
+          onClick={handleEditRow}
           sx={{ color: "text.secondary" }}
         >
           <ListItemIcon>
