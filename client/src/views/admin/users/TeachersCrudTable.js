@@ -171,7 +171,7 @@ export const TeachersCrudTable = () => {
       setEditingIndex(null);
       setIsEditingTable(false);
     } else {
-      setAllRowsData([...allRowsData, { isEditing: false, rowData: row }]);
+      setAllRowsData([{ isEditing: false, rowData: row }, ...allRowsData]);
       setIsAdding(false);
     }
   };
@@ -199,6 +199,14 @@ export const TeachersCrudTable = () => {
     setAllRowsData(arr);
   };
 
+  const handleDeleteSelected = () => {
+    //  const arr = allRowsData.filter((item, i) => i !== index);
+    const arr = allRowsData.filter(
+      (item) => !selected.includes(item.rowData.name)
+    );
+    setAllRowsData(arr);
+    setSelected([]);
+  };
   const handleEditRow = (index) => {
     const arr = allRowsData.map((item, i) => {
       if (i === index) {
@@ -223,7 +231,12 @@ export const TeachersCrudTable = () => {
         <Typography variant="h4" gutterBottom>
           Teachers
         </Typography>
-        <Button variant="contained" startIcon={<AiOutlinePlus />}>
+        <Button
+          disabled={isAdding || isEditingTable}
+          onClick={() => setIsAdding(true)}
+          variant="contained"
+          startIcon={<AiOutlinePlus />}
+        >
           Add Teacher
         </Button>
       </Stack>
@@ -233,6 +246,7 @@ export const TeachersCrudTable = () => {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          handleDeleteSelected={handleDeleteSelected}
         />
         <TableContainer sx={{ minwidth: 800 }}>
           <Table>
@@ -246,6 +260,14 @@ export const TeachersCrudTable = () => {
               onSelectAllClick={handleSelectAllClick}
             />
             <TableBody>
+              {isAdding && (
+                <EditableRow
+                  allRowsData={allRowsData}
+                  handleSave={handleSave}
+                  handleCancel={handleCancel}
+                  fieldsArr={fieldsArr}
+                />
+              )}
               {allRowsData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(({ isEditing, rowData }, i) => {
@@ -253,6 +275,7 @@ export const TeachersCrudTable = () => {
                   const isItemSelected = selected.indexOf(name) !== -1;
                   return isEditing ? (
                     <EditableRow
+                      key={i}
                       isEditing={isEditing}
                       editingIndex={editingIndex}
                       allRowsData={allRowsData}

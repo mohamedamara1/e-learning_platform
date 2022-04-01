@@ -132,7 +132,7 @@ export const EditableRow = ({
     }
   };
   return (
-    <TableRow>
+    <TableRow className="bg-gray-400">
       <TableCell padding="checkbox">
         <Checkbox />
       </TableCell>

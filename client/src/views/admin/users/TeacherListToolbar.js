@@ -40,6 +40,7 @@ export default function TeacherListToolbar({
   numSelected,
   filterName,
   onFilterName,
+  handleDeleteSelected,
 }) {
   return (
     <RootStyle
@@ -69,7 +70,7 @@ export default function TeacherListToolbar({
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDeleteSelected}>
             <IoTrashOutline />
           </IconButton>
         </Tooltip>
