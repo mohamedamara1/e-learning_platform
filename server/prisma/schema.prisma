@@ -12,25 +12,33 @@ model Student {
   id                   String                 @id @default(uuid())
   firstName            String
   lastName             String
-  classId              String
   fullName             String
+  phone                String
+  address              String
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
+  classId              String
   class                Class                  @relation(fields: [classId], references: [id])
   AssignmentSubmission AssignmentSubmission[]
-  studentAccount       StudentAccount[]
   studentAttendance    StudentAttendance[]
+  account              emailpassword_users    @relation(fields: [user_id], references: [user_id])
+  user_id              String                 @unique
 }
 
 model Teacher {
-  id             String           @id @default(uuid())
-  firstName      String
-  lastName       String
-  fullName       String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  course         Course[]
-  teacherAccount TeacherAccount[]
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  fullName  String
+  phone     String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courses   Course[]
+
+  account emailpassword_users @relation(fields: [user_id], references: [user_id])
+  user_id String              @unique
+
 }
 
 model Class {
@@ -170,9 +178,10 @@ model Admin {
   id            String          @id @default(uuid())
   firstName     String
   lastName      String
+  phone         String?
+  address       String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  adminAccounts AdminAccount[]
   announcements Announcements[]
 }
 
@@ -184,19 +193,6 @@ model Announcements {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   admin     Admin    @relation(fields: [adminId], references: [id])
-}
-
-model Account {
-  id              String           @id @default(uuid())
-  userName        String
-  passwordSalt    String
-  passwordHash    String
-  relatedUserId   Int
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  adminAccounts   AdminAccount[]
-  studentAccounts StudentAccount[]
-  teacherAccounts TeacherAccount[]
 }
 
 model StudentAttendance {
@@ -254,39 +250,6 @@ model SubmissionAttachement {
   @@id([submissionId, attachementId])
 }
 
-model AdminAccount {
-  adminId   String
-  accountId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  account   Account  @relation(fields: [accountId], references: [id])
-  admin     Admin    @relation(fields: [adminId], references: [id])
-
-  @@id([adminId, accountId])
-}
-
-model TeacherAccount {
-  teacherId String
-  accountId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  account   Account  @relation(fields: [accountId], references: [id])
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
-
-  @@id([teacherId, accountId])
-}
-
-model StudentAccount {
-  studentId String
-  accountId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  account   Account  @relation(fields: [accountId], references: [id])
-  student   Student  @relation(fields: [studentId], references: [id])
-
-  @@id([studentId, accountId])
-}
-
 model all_auth_recipe_users {
   user_id     String @id @db.Char(36)
   recipe_id   String @db.VarChar(128)
@@ -312,6 +275,8 @@ model emailpassword_users {
   time_joined                     BigInt
   role                            String?
   emailpassword_pswd_reset_tokens emailpassword_pswd_reset_tokens[]
+  teacher                         Teacher?
+  student                         Student?
 }
 
 model emailverification_tokens {
