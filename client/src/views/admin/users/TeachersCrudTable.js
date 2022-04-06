@@ -25,9 +25,14 @@ import MoreMenu from "./MoreMenu";
 import RegularRow from "./RegularRow";
 import fieldsArr from "./fields";
 import EditableRow from "./EditableRow";
+import {
+  useAddTeacherMutation,
+  useGetTeachersQuery,
+} from "../../../api/usersApi";
 //
 const TABLE_HEAD = [
-  { id: "name", label: "Name", alignRight: false },
+  { id: "firstName", label: "First Name", alignRight: false },
+  { id: "lastName", label: "Last Name", alignRight: false },
   { id: "email", label: "Email Address", alignRight: false },
   { id: "phoneNumber", label: "Phone Number", alignRight: false },
   { id: "" },
@@ -66,6 +71,13 @@ function applySortFilter(array, comparator, query) {
 }
 
 export const TeachersCrudTable = () => {
+  const {
+    data: teachers,
+    error,
+    isLoading: loadingTeachers,
+  } = useGetTeachersQuery();
+  const [addTeacher, { isLoading }] = useAddTeacherMutation();
+
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
@@ -75,12 +87,13 @@ export const TeachersCrudTable = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditingTable, setIsEditingTable] = useState(false);
   const [allRowsData, setAllRowsData] = useState(
-    (USERLIST || []).map((item) => ({
+    (loadingTeachers ? [] : teachers).map((item) => ({
       isEditing: false,
       rowData: item,
     }))
   );
   const [editingIndex, setEditingIndex] = useState(null);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -92,17 +105,17 @@ export const TeachersCrudTable = () => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = allRowsData.map((row) => row.rowData.name);
+      const newSelecteds = allRowsData.map((row) => row.rowData.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -130,7 +143,7 @@ export const TeachersCrudTable = () => {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - teachers.length) : 0;
 
   /*  const filteredUsers = applySortFilter(
     USERLIST,
@@ -140,7 +153,7 @@ export const TeachersCrudTable = () => {
   useEffect(() => {
     if (filterName === "") {
       setAllRowsData(
-        (USERLIST || []).map((item) => ({
+        (teachers || []).map((item) => ({
           isEditing: false,
           rowData: item,
         }))
@@ -151,7 +164,15 @@ export const TeachersCrudTable = () => {
       );
     }
   }, [filterName]);
-
+  useEffect(() => {
+    if (teachers)
+      setAllRowsData(
+        (teachers || []).map((item) => ({
+          isEditing: false,
+          rowData: item,
+        }))
+      );
+  }, [teachers]);
   useEffect(() => {
     console.log("render");
   });
@@ -171,6 +192,21 @@ export const TeachersCrudTable = () => {
       setEditingIndex(null);
       setIsEditingTable(false);
     } else {
+      const entries = Object.entries(row).map(([key, value]) => {
+        return {
+          id: key,
+          value,
+        };
+      });
+      entries.push({ id: "role", value: "teacher" });
+      entries.push({ id: "password", value: "pass1234" });
+      entries.push({ id: "address", value: "" });
+
+      console.log(entries);
+      const body = {
+        formFields: entries,
+      };
+      addTeacher(body);
       setAllRowsData([{ isEditing: false, rowData: row }, ...allRowsData]);
       setIsAdding(false);
     }
@@ -202,7 +238,7 @@ export const TeachersCrudTable = () => {
   const handleDeleteSelected = () => {
     //  const arr = allRowsData.filter((item, i) => i !== index);
     const arr = allRowsData.filter(
-      (item) => !selected.includes(item.rowData.name)
+      (item) => !selected.includes(item.rowData.id)
     );
     setAllRowsData(arr);
     setSelected([]);
@@ -259,51 +295,55 @@ export const TeachersCrudTable = () => {
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllClick}
             />
-            <TableBody>
-              {isAdding && (
-                <EditableRow
-                  allRowsData={allRowsData}
-                  handleSave={handleSave}
-                  handleCancel={handleCancel}
-                  fieldsArr={fieldsArr}
-                />
-              )}
-              {allRowsData
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(({ isEditing, rowData }, i) => {
-                  const { name } = rowData;
-                  const isItemSelected = selected.indexOf(name) !== -1;
-                  return isEditing ? (
-                    <EditableRow
-                      key={i}
-                      isEditing={isEditing}
-                      editingIndex={editingIndex}
-                      allRowsData={allRowsData}
-                      editData={rowData}
-                      handleSave={handleSave}
-                      handleCancel={handleCancel}
-                      fieldsArr={fieldsArr}
-                    />
-                  ) : (
-                    <RegularRow
-                      key={i}
-                      index={i}
-                      rowData={rowData}
-                      isAdding={isAdding}
-                      isEditingTable={isEditingTable}
-                      handleEditRow={handleEditRow}
-                      handleDeleteRow={handleDeleteRow}
-                      handleClick={handleClick}
-                      isItemSelected={isItemSelected}
-                    />
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
+            {loadingTeachers ? (
+              <h1>loading</h1>
+            ) : (
+              <TableBody>
+                {isAdding && (
+                  <EditableRow
+                    allRowsData={allRowsData}
+                    handleSave={handleSave}
+                    handleCancel={handleCancel}
+                    fieldsArr={fieldsArr}
+                  />
+                )}
+                {allRowsData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(({ isEditing, rowData }, i) => {
+                    const { id } = rowData;
+                    const isItemSelected = selected.indexOf(id) !== -1;
+                    return isEditing ? (
+                      <EditableRow
+                        key={i}
+                        isEditing={isEditing}
+                        editingIndex={editingIndex}
+                        allRowsData={allRowsData}
+                        editData={rowData}
+                        handleSave={handleSave}
+                        handleCancel={handleCancel}
+                        fieldsArr={fieldsArr}
+                      />
+                    ) : (
+                      <RegularRow
+                        key={i}
+                        index={i}
+                        rowData={rowData}
+                        isAdding={isAdding}
+                        isEditingTable={isEditingTable}
+                        handleEditRow={handleEditRow}
+                        handleDeleteRow={handleDeleteRow}
+                        handleClick={handleClick}
+                        isItemSelected={isItemSelected}
+                      />
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            )}
           </Table>
         </TableContainer>
         <TablePagination

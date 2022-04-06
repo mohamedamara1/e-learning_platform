@@ -7,7 +7,9 @@ import { BsFillCalendarDateFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import SchoolLogo from "../../assets/img/school_logo.png";
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { TreeItem, TreeView } from "@mui/lab";
 const sidebarNavItems = [
   {
     display: "Dashboard",
@@ -103,6 +105,47 @@ const AdminSidebar = () => {
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               {sidebarNavItems.map((item, index) => {
+                if (item.display == "Users") {
+                  return (
+                    <li className="items-center" key={index}>
+                      <div
+                        className="flex items-center place-content-start p-4
+              font-medium text-xl  transition duration-300 ease-in-out
+              hover:bg-bluu-1"
+                      >
+                        <div className=" mr-4 text-white-kids">{item.icon}</div>
+                        <TreeView
+                          aria-label="file system navigator"
+                          defaultCollapseIcon={<ExpandMoreIcon />}
+                          defaultExpandIcon={<ChevronRightIcon />}
+                          sx={{
+                            height: 60,
+                            fontWeight: 500,
+                            fontSize: "1.25rem",
+                            lineHeight: "1.75rem",
+                            width: "100%",
+                          }}
+                        >
+                          <TreeItem
+                            nodeId="1"
+                            label="Users"
+                            className="text-white-kids font-medium text-xl "
+                          >
+                            <Link
+                              to={item.to}
+                              key={index}
+                              onClick={() => setCollapseShow("hidden")}
+                            >
+                              {" "}
+                              <TreeItem nodeId="2" label="Teachers" />
+                            </Link>
+                            <TreeItem nodeId="3" label="Students" />
+                          </TreeItem>
+                        </TreeView>
+                      </div>
+                    </li>
+                  );
+                }
                 return (
                   <li className="items-center" key={index}>
                     <Link

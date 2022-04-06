@@ -25,7 +25,7 @@ const RegularRow = ({
   isItemSelected,
   handleClick,
 }) => {
-  const { id, name, email, phoneNumber, avatarUrl } = rowData;
+  const { id, firstName, lastName, email, phone, avatarUrl } = rowData;
   return (
     <TableRow
       hover
@@ -38,19 +38,20 @@ const RegularRow = ({
       <TableCell padding="checkbox">
         <Checkbox
           checked={isItemSelected}
-          onChange={(event) => handleClick(event, name)}
+          onChange={(event) => handleClick(event, id)}
         />
       </TableCell>
       <TableCell component="th" scope="row" padding="none">
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar alt={name} src={avatarUrl} />
           <Typography variant="subtitle2" noWrap>
-            {name}
+            {firstName}
           </Typography>
         </Stack>
       </TableCell>
+      <TableCell align="left">{lastName}</TableCell>
+
       <TableCell align="left">{email}</TableCell>
-      <TableCell align="left">{phoneNumber}</TableCell>
+      <TableCell align="left">{phone}</TableCell>
 
       <TableCell align="right">
         <MoreMenu
