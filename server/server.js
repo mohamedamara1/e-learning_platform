@@ -96,7 +96,9 @@ supertokens.init({
                   input.formFields,
                   userId
                 );
-                console.log("result: ", createdTeacher);
+                console.log("created Teacher: ", createdTeacher);
+                response.user = createdTeacher;
+
                 return response;
               }
               if (role === "student") {

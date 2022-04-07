@@ -2,6 +2,7 @@ const fieldsArr = [
   {
     label: "First Name",
     name: "firstName",
+    type: "text",
     validation: (e) => {
       const name = e.target.value;
       if (name.length > 6) {
@@ -15,6 +16,7 @@ const fieldsArr = [
   {
     label: "Last Name",
     name: "lastName",
+    type: "text",
     validation: (e) => {
       const name = e.target.value;
       if (name.length > 6) {
@@ -28,6 +30,7 @@ const fieldsArr = [
   {
     label: "Email Address",
     name: "email",
+    type: "email",
     validation: (e) => {
       const name = e.target.value;
       if (name.length < 6) {
@@ -41,6 +44,7 @@ const fieldsArr = [
   {
     label: "Phone Number",
     name: "phone",
+    type: "text",
     validation: (e) => {
       const name = e.target.value;
       if (name.length < 6) {

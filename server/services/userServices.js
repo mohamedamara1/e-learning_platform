@@ -54,6 +54,21 @@ async function getTeachers() {
   return teachers;
 }
 
+async function getTeacherById(Criteria) {
+  const teacher = await prisma.teacher.findUnique({
+    where: Criteria,
+    include: {
+      account: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
+  teacher.email = teacher.account.email;
+  delete teacher.account;
+  return teacher;
+}
 async function getTeachersDetailled() {
   const teachers = await prisma.teacher.findMany({
     include: {
@@ -92,8 +107,42 @@ async function createTeacher(formFields, userId) {
         },
       },
     },
+    include: {
+      account: true,
+      account: {
+        select: {
+          email: true,
+        },
+      },
+    },
   });
+  createdTeacher.email = createdTeacher.account.email;
+  delete createdTeacher.account;
   return createdTeacher;
+}
+async function updateTeacher(criteria, userData) {
+  let email = userData.email;
+  delete userData.email;
+  const updatedTeacher = await prisma.teacher.update({
+    where: criteria,
+    data: userData,
+    include: {
+      account: true,
+      account: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
+  updatedTeacher.email = updatedTeacher.account.email;
+  delete updatedTeacher.account;
+  return updatedTeacher;
+}
+async function deleteTeacher(Criteria) {
+  const deletedTeacher = await prisma.teacher.delete({
+    where: Criteria,
+  });
 }
 async function createStudent(formFields, userId) {
   const student = {
@@ -135,4 +184,7 @@ module.exports.getRoleByUserId = getRoleByUserId;
 module.exports.getTeachers = getTeachers;
 module.exports.getTeachersDetailled = getTeachersDetailled;
 module.exports.createTeacher = createTeacher;
+module.exports.updateTeacher = updateTeacher;
+module.exports.deleteTeacher = deleteTeacher;
+
 module.exports.createStudent = createStudent;

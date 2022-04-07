@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import AdminHeader from "../../../components/Headers/AdminHeader";
-import CreateUser from "./CreateUser";
 function UsersPage() {
   return (
     <div className=" flex flex-col min-h-screen bg-dark-electric-blue p-2">

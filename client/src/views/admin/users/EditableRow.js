@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 const Input = ({
   name,
+  type,
   error,
   validation,
   childHasError,
@@ -35,7 +36,12 @@ const Input = ({
   return (
     <>
       <div>
-        <input name={name} value={value || ""} onChange={handleOnChange} />
+        <input
+          type={type}
+          name={name}
+          value={value || ""}
+          onChange={handleOnChange}
+        />
         <p>{hasError && error}</p>
       </div>
     </>

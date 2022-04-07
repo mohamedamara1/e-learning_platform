@@ -27,8 +27,16 @@ import fieldsArr from "./fields";
 import EditableRow from "./EditableRow";
 import {
   useAddTeacherMutation,
-  useGetTeachersQuery,
-} from "../../../api/usersApi";
+  useAddTestMutation,
+} from "../../../api/mainApi";
+import {
+  useAddTeacher,
+  useDeleteTeacher,
+  useGetTeachers,
+  useUpdateTeacher,
+} from "../../../api/usersApiV2";
+
+import CRUDTable, { CreateForm, Field, Fields } from "react-crud-table";
 //
 const TABLE_HEAD = [
   { id: "firstName", label: "First Name", alignRight: false },
@@ -72,11 +80,20 @@ function applySortFilter(array, comparator, query) {
 
 export const TeachersCrudTable = () => {
   const {
+    status,
+    data: teachers,
+    error,
+    isFetching,
+    isLoading: loadingTeachers,
+  } = useGetTeachers();
+  /* const {
     data: teachers,
     error,
     isLoading: loadingTeachers,
-  } = useGetTeachersQuery();
-  const [addTeacher, { isLoading }] = useAddTeacherMutation();
+  } = useGetTeachersQuery();*/
+  const addTeacher = useAddTeacher();
+  const updateTeacher = useUpdateTeacher();
+  const deleteTeacher = useDeleteTeacher();
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -178,19 +195,24 @@ export const TeachersCrudTable = () => {
   });
   // const isUserNotFound = filteredUsers.length === 0;
 
-  const handleSave = (row) => {
+  const handleSave = async (row) => {
     if (isEditingTable) {
-      const arr = allRowsData.map((item, i) => {
-        if (i === editingIndex) {
-          return {
-            isEditing: false,
-            rowData: row,
-          };
-        } else return item;
+      updateTeacher.mutate(row, {
+        onSuccess: (updatedTeacher) => {
+          const newAllRowsData = allRowsData.map((item, i) => {
+            if (i === editingIndex) {
+              return {
+                isEditing: false,
+                rowData: updatedTeacher.data,
+              };
+            }
+            return item;
+          });
+          setAllRowsData(newAllRowsData);
+          setEditingIndex(null);
+          setIsEditingTable(false);
+        },
       });
-      setAllRowsData(arr);
-      setEditingIndex(null);
-      setIsEditingTable(false);
     } else {
       const entries = Object.entries(row).map(([key, value]) => {
         return {
@@ -202,13 +224,18 @@ export const TeachersCrudTable = () => {
       entries.push({ id: "password", value: "pass1234" });
       entries.push({ id: "address", value: "" });
 
-      console.log(entries);
       const body = {
         formFields: entries,
       };
-      addTeacher(body);
-      setAllRowsData([{ isEditing: false, rowData: row }, ...allRowsData]);
-      setIsAdding(false);
+      addTeacher.mutate(body, {
+        onSuccess: (response) => {
+          setAllRowsData([
+            { isEditing: false, rowData: response.data.user },
+            ...allRowsData,
+          ]);
+          setIsAdding(false);
+        },
+      });
     }
   };
 
@@ -231,8 +258,15 @@ export const TeachersCrudTable = () => {
   };
 
   const handleDeleteRow = (index) => {
-    const arr = allRowsData.filter((item, i) => i !== index);
-    setAllRowsData(arr);
+    deleteTeacher.mutate(allRowsData[index].rowData.id, {
+      onSuccess: () => {
+        const arr = allRowsData.filter((item, i) => i !== index);
+        setAllRowsData(arr);
+      },
+    });
+
+    /*const arr = allRowsData.filter((item, i) => i !== index);
+    setAllRowsData(arr);*/
   };
 
   const handleDeleteSelected = () => {
@@ -267,6 +301,34 @@ export const TeachersCrudTable = () => {
         <Typography variant="h4" gutterBottom>
           Teachers
         </Typography>
+        <CRUDTable
+          caption="Tasks"
+          fetchItems={(payload) => console.log("fetching items")}
+        >
+          <Fields>
+            <Field name="id" label="Id" hideInCreateForm />
+            <Field name="title" label="Title" placeholder="Title" />
+          </Fields>
+          <CreateForm
+            title="Task Creation"
+            message="Create a new task!"
+            trigger="Create Task"
+            onSubmit={(task) => console.log("hi")}
+            submitText="Create"
+            validate={(values) => {
+              const errors = {};
+              if (!values.title) {
+                errors.title = "Please, provide task's title";
+              }
+
+              if (!values.description) {
+                errors.description = "Please, provide task's description";
+              }
+
+              return errors;
+            }}
+          />
+        </CRUDTable>
         <Button
           disabled={isAdding || isEditingTable}
           onClick={() => setIsAdding(true)}

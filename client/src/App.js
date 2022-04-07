@@ -22,9 +22,12 @@ import Course from "./views/student/course/Course";
 import UsersPage from "./views/admin/users/UsersPage";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
-import CreateUser from "./views/admin/users/CreateUser";
 import HomePage from "./components/HomePage";
 import TeachersCrudTable from "./views/admin/users/TeachersCrudTable";
+
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
 async function getRole() {
   if (await Session.doesSessionExist()) {
     // we use the key "role" here since that's what we
@@ -154,63 +157,67 @@ SuperTokens.init({
     Session.init(),
   ],
 });
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <BrowserRouter basename="/">
-      <Routes>
-        {/*This renders the login UI on the /auth route*/}
-        {getSuperTokensRoutesForReactRouterDom(reactRouterDom)}
-        <Route
-          path="/"
-          element={
-            <EmailPasswordAuth>
-              <HomePage />
-            </EmailPasswordAuth>
-          }
-        />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter basename="/">
+        <Routes>
+          {/*This renders the login UI on the /auth route*/}
+          {getSuperTokensRoutesForReactRouterDom(reactRouterDom)}
+          <Route
+            path="/"
+            element={
+              <EmailPasswordAuth>
+                <HomePage />
+              </EmailPasswordAuth>
+            }
+          />
 
-        <Route
-          path="student"
-          element={
-            <EmailPasswordAuth>
-              <StudentLayout />
-            </EmailPasswordAuth>
-          }
-        >
-          <Route index element={<StudentDashboard />} />
-          <Route path="dashboard" element={<StudentDashboard />} />
-          <Route path="courses" exact element={<CoursesPage />} />
-          <Route path="course/:courseId" element={<Course />} />
-        </Route>
-
-        <Route
-          path="admin"
-          element={
-            <EmailPasswordAuth>
-              <AdminLayout />
-            </EmailPasswordAuth>
-          }
-        >
-          <Route index element={<AdminDashboard />} />
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="users" exact element={<UsersPage />}>
-            <Route path="teachers" element={<TeachersCrudTable />} />
-            {/*          <Route path=":userId" element={<UsersPage />} />*/}
+          <Route
+            path="student"
+            element={
+              <EmailPasswordAuth>
+                <StudentLayout />
+              </EmailPasswordAuth>
+            }
+          >
+            <Route index element={<StudentDashboard />} />
+            <Route path="dashboard" element={<StudentDashboard />} />
+            <Route path="courses" exact element={<CoursesPage />} />
+            <Route path="course/:courseId" element={<Course />} />
           </Route>
-        </Route>
 
-        <Route path="*" element={<div>404 not found</div>} />
-        {/* we want to render the sign in component in /signin.
+          <Route
+            path="admin"
+            element={
+              <EmailPasswordAuth>
+                <AdminLayout />
+              </EmailPasswordAuth>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="users" exact element={<UsersPage />}>
+              <Route path="teachers" element={<TeachersCrudTable />} />
+              {/*          <Route path=":userId" element={<UsersPage />} />*/}
+            </Route>
+          </Route>
+
+          <Route path="*" element={<div>404 not found</div>} />
+          {/* we want to render the sign in component in /signin.
         We will override the <SignInAndUp> component to only show the sign in
         UI on this route. See the init function call above for how to do this*/}
-        <Route path="/signin" element={<EmailPassword.SignInAndUp />} />
+          <Route path="/signin" element={<EmailPassword.SignInAndUp />} />
 
-        {/* we want to render the sign up component in /signup.
+          {/* we want to render the sign up component in /signup.
         We will override the <SignInAndUp> component to only show the sign up
         UI on this route. See the init function call above for how to do this*/}
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 

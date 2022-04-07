@@ -1,5 +1,5 @@
 // Need to use the React-specific entry point to import createApi
-import { mainApi } from "./mainApi";
+/*import { mainApi } from "./mainApi";
 // Define a service using a base URL and expected endpoints
 export const usersApi = mainApi.injectEndpoints({
   reducerPath: "usersApi",
@@ -15,11 +15,20 @@ export const usersApi = mainApi.injectEndpoints({
         return {
           url: `auth/signup`,
           method: "POST",
-          //      headers: { "content-type": "application/json" },
-          /*     headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },*/
           body,
+        };
+      },
+    }),
+    addTest: builder.mutation({
+      query: (data) => {
+        //  console.log(typeof body);
+        return {
+          url: `subjects/add_subject`,
+          method: "POST",
+          body: JSON.stringify({
+            name: "physics",
+            coefficient: 3,
+          }),
         };
       },
     }),
@@ -28,4 +37,9 @@ export const usersApi = mainApi.injectEndpoints({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetTeachersQuery, useAddTeacherMutation } = usersApi;
+export const {
+  useGetTeachersQuery,
+  useAddTeacherMutation,
+  useAddTestMutation,
+} = usersApi;
+*/
