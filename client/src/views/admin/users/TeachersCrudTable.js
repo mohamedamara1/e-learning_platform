@@ -301,34 +301,7 @@ export const TeachersCrudTable = () => {
         <Typography variant="h4" gutterBottom>
           Teachers
         </Typography>
-        <CRUDTable
-          caption="Tasks"
-          fetchItems={(payload) => console.log("fetching items")}
-        >
-          <Fields>
-            <Field name="id" label="Id" hideInCreateForm />
-            <Field name="title" label="Title" placeholder="Title" />
-          </Fields>
-          <CreateForm
-            title="Task Creation"
-            message="Create a new task!"
-            trigger="Create Task"
-            onSubmit={(task) => console.log("hi")}
-            submitText="Create"
-            validate={(values) => {
-              const errors = {};
-              if (!values.title) {
-                errors.title = "Please, provide task's title";
-              }
 
-              if (!values.description) {
-                errors.description = "Please, provide task's description";
-              }
-
-              return errors;
-            }}
-          />
-        </CRUDTable>
         <Button
           disabled={isAdding || isEditingTable}
           onClick={() => setIsAdding(true)}
