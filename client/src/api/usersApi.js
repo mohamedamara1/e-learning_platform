@@ -1,45 +1,64 @@
-// Need to use the React-specific entry point to import createApi
-/*import { mainApi } from "./mainApi";
-// Define a service using a base URL and expected endpoints
-export const usersApi = mainApi.injectEndpoints({
-  reducerPath: "usersApi",
-  endpoints: (builder) => ({
-    getTeachers: builder.query({
-      query: () => ({
-        url: `users/get_teachers_detailled`,
-      }),
-    }),
-    addTeacher: builder.mutation({
-      query: (body) => {
-        //  console.log(typeof body);
-        return {
-          url: `auth/signup`,
-          method: "POST",
-          body,
-        };
-      },
-    }),
-    addTest: builder.mutation({
-      query: (data) => {
-        //  console.log(typeof body);
-        return {
-          url: `subjects/add_subject`,
-          method: "POST",
-          body: JSON.stringify({
-            name: "physics",
-            coefficient: 3,
-          }),
-        };
-      },
-    }),
-  }),
-});
+import { useQuery, useMutation } from "react-query";
+import axios from "axios";
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const {
-  useGetTeachersQuery,
-  useAddTeacherMutation,
-  useAddTestMutation,
-} = usersApi;
+export function useGetTeachers() {
+  return useQuery(
+    ["teachers"],
+    async () => {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/v1/users/get_teachers_detailled`
+      );
+      return data;
+    },
+    { refetchOnWindowFocus: false }
+  );
+}
+export function useAddTeacher() {
+  return useMutation(["teachers"], (teacher) => {
+    return axios({
+      url: "http://localhost:5000/api/v1/auth/signup",
+      method: "POST",
+      data: teacher,
+    });
+  });
+}
+export function useUpdateTeacher() {
+  return useMutation(["teachers"], (updatedTeacher) => {
+    return axios({
+      url: "http://localhost:5000/api/v1/users/teacher",
+      method: "PUT",
+      data: updatedTeacher,
+      params: {
+        teacherId: updatedTeacher.id,
+      },
+    });
+  });
+}
+export function useDeleteTeacher() {
+  return useMutation(["teachers"], (teacherId) => {
+    return axios({
+      url: "http://localhost:5000/api/v1/users/teacher",
+      method: "DELETE",
+      params: {
+        teacherId,
+      },
+    });
+  });
+}
+
+/*const getTeachers = async () => {
+  const { data } = await axios.get(
+    `http://localhost:5000/api/v1/users/get_teachers_detailled`
+  );
+  return data;
+};
+
+const addTeacher = async (body) => {
+  const result = await axios({
+    url: "http://localhost:5000/api/v1/auth/signup",
+    method: "POST",
+    data: body,
+  });
+  console.log(result);
+};
 */

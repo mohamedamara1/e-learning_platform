@@ -3,7 +3,7 @@ import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
-import { useGetMaterialUnitsByCourseIdIncludeMaterialsQuery } from "../../../api/materialsApi";
+import { useGetMaterialUnitsByCourseIdIncludeMaterials } from "../../../api/materialsApi";
 
 export default function MaterialsList(props) {
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function MaterialsList(props) {
     data: materialUnits,
     error,
     isLoading,
-  } = useGetMaterialUnitsByCourseIdIncludeMaterialsQuery({
+  } = useGetMaterialUnitsByCourseIdIncludeMaterials({
     courseId: props.courseId,
   });
 
