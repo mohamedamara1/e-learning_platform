@@ -8,8 +8,7 @@ import MaterialsList from "./MaterialsList";
 import practice_items from "../../../assets/json/assignments.json";
 import PracticeSection from "./PracticeSection";
 import Timeline from "./Timeline";
-import { useGetCourseQuery } from "../../../api/coursesApi";
-
+import { useGetCourse } from "../../../api/coursesApi";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -46,12 +45,14 @@ function a11yProps(index) {
   };
 }
 
-export default function TabComponent(props) {
+export const TabComponent = (props) => {
   const {
     data: course,
     error,
     isLoading,
-  } = useGetCourseQuery({ courseId: props.courseId });
+  } = useGetCourse({ courseId: props.courseId });
+  console.log(course);
+  console.log("courseId", props.courseId);
 
   const [value, setValue] = useState(0);
 
@@ -103,4 +104,4 @@ export default function TabComponent(props) {
       </TabPanel>
     </Box>
   );
-}
+};

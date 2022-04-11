@@ -26,15 +26,11 @@ import RegularRow from "./RegularRow";
 import fieldsArr from "./fields";
 import EditableRow from "./EditableRow";
 import {
-  useAddTeacherMutation,
-  useAddTestMutation,
-} from "../../../api/mainApi";
-import {
   useAddTeacher,
   useDeleteTeacher,
   useGetTeachers,
   useUpdateTeacher,
-} from "../../../api/usersApiV2";
+} from "../../../api/usersApi";
 
 import CRUDTable, { CreateForm, Field, Fields } from "react-crud-table";
 //

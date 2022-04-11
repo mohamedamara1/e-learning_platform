@@ -1,22 +1,21 @@
-// Need to use the React-specific entry point to import createApi
-import { mainApi } from "./mainApi";
-// Define a service using a base URL and expected endpoints
-export const exercicesApi = mainApi.injectEndpoints({
-  reducerPath: "exercicesApi",
-  endpoints: (builder) => ({
-    getExerciceUnitsByCourseIdIncludeExercices: builder.query({
-      query: (args) => {
-        const { courseId } = args;
-        return {
-          url: `exercices/get_practiceUnits_by_courseId_include_exercices/`,
-          params: { courseId },
-        };
-      },
-    }),
-  }),
-});
+import { useQuery, useMutation } from "react-query";
+import axios from "axios";
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useGetExerciceUnitsByCourseIdIncludeExercicesQuery } =
-  exercicesApi;
+export function useGetExerciceUnitsByCourseIdIncludeExercices(args) {
+  const { courseId } = args;
+  return useQuery(
+    ["exercices", courseId],
+    async () => {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/v1/exercices/get_practiceUnits_by_courseId_include_exercices`,
+        {
+          params: {
+            courseId,
+          },
+        }
+      );
+      return data;
+    },
+    { refetchOnWindowFocus: false }
+  );
+}
