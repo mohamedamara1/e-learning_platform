@@ -19,7 +19,7 @@ import StudentLayout from "./layouts/StudentLayout";
 import StudentDashboard from "./views/student/dashboard/StudentDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import Course from "./views/student/course/Course";
-import UsersPage from "./views/admin/users/UsersPage";
+import UsersManagementPage from "./views/admin/users/UsersManagementPage";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
 import HomePage from "./components/HomePage";
@@ -199,7 +199,7 @@ function App() {
           >
             <Route index element={<AdminDashboard />} />
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="users" exact element={<UsersPage />}>
+            <Route path="users" exact element={<UsersManagementPage />}>
               <Route path="teachers" element={<TeachersCrudTable />} />
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
             </Route>

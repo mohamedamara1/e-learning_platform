@@ -4,6 +4,7 @@ import {
   Card,
   Table,
   Stack,
+  Chip,
   Avatar,
   Button,
   Checkbox,
@@ -25,7 +26,7 @@ const RegularRow = ({
   isItemSelected,
   handleClick,
 }) => {
-  const { id, firstName, lastName, email, phone, avatarUrl } = rowData;
+  const { id, firstName, lastName, email, phone, courses, avatarUrl } = rowData;
   return (
     <TableRow
       hover
@@ -52,6 +53,19 @@ const RegularRow = ({
 
       <TableCell align="left">{email}</TableCell>
       <TableCell align="left">{phone}</TableCell>
+      <TableCell align="left">
+        <Stack direction="row" spacing={1}>
+          {courses.length !== 0
+            ? courses.map((course) => (
+                <Chip
+                  key={course.id}
+                  label={course.name + " - " + course.class.name}
+                  variant="outlined"
+                />
+              ))
+            : "No courses"}
+        </Stack>
+      </TableCell>
 
       <TableCell align="right">
         <MoreMenu

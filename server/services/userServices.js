@@ -78,6 +78,20 @@ async function getTeachersDetailled() {
           email: true,
         },
       },
+      courses: true,
+
+      courses: {
+        select: {
+          id: true,
+          name: true,
+          class: true,
+          class: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
   teachers.forEach((teacher) => {
@@ -93,6 +107,7 @@ async function createTeacher(formFields, userId) {
     email: formFields.filter((f) => f.id === "email")[0].value,
     phone: formFields.filter((f) => f.id === "phone")[0].value,
     address: formFields.filter((f) => f.id === "address")[0].value,
+    courses: formFields.filter((f) => f.id === "courses")[0].value,
   };
   const createdTeacher = await prisma.teacher.create({
     data: {
@@ -101,6 +116,12 @@ async function createTeacher(formFields, userId) {
       fullName: teacher.firstName + " " + teacher.lastName,
       phone: teacher.phone,
       address: teacher.address,
+      courses: {
+        connect:
+          teacher.courses.length != 0
+            ? teacher.courses.map((courseId) => ({ id: courseId }))
+            : [],
+      },
       account: {
         connect: {
           user_id: userId,
@@ -114,6 +135,19 @@ async function createTeacher(formFields, userId) {
           email: true,
         },
       },
+      courses: true,
+      courses: {
+        select: {
+          id: true,
+          name: true,
+          class: true,
+          class: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
   createdTeacher.email = createdTeacher.account.email;
@@ -123,14 +157,33 @@ async function createTeacher(formFields, userId) {
 async function updateTeacher(criteria, userData) {
   let email = userData.email;
   delete userData.email;
+  // const dataWithoutCourses = (({ courses, ...rest }) => rest)(userData);
   const updatedTeacher = await prisma.teacher.update({
     where: criteria,
-    data: userData,
+    data: {
+      ...userData,
+      courses: {
+        connect: userData.courses.map((courseId) => ({ id: courseId })),
+      },
+    },
     include: {
       account: true,
       account: {
         select: {
           email: true,
+        },
+      },
+      courses: true,
+      courses: {
+        select: {
+          id: true,
+          name: true,
+          class: true,
+          class: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },

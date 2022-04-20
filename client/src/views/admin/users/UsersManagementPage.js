@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import AdminHeader from "../../../components/Headers/AdminHeader";
-function UsersPage() {
+function UsersManagementPage() {
   return (
     <div className=" flex flex-col min-h-screen bg-dark-electric-blue p-2">
       <AdminHeader title="Users Management" background="bg-white-kids" />
@@ -12,4 +12,4 @@ function UsersPage() {
   );
 }
 
-export default UsersPage;
+export default UsersManagementPage;

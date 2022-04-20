@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TableRow,
   TableCell,
@@ -8,7 +8,25 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Chip,
+  Box,
+  OutlinedInput,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { useGetCourses } from "../../../api/coursesApi";
+import { maxWidth } from "@mui/system";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 const Input = ({
   name,
   type,
@@ -16,11 +34,30 @@ const Input = ({
   validation,
   childHasError,
   columnDataArr,
-  value,
+  previousData,
   tableName,
+  setRowData,
   ...props
 }) => {
+  function getStyles(name, coursesId, theme) {
+    return {
+      fontWeight:
+        coursesId.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
+  const {
+    data: courses,
+    error: coursesError,
+    isLoading: loadingCourses,
+  } = useGetCourses({ userId: "test" });
+
   const [hasError, setError] = useState(false);
+  const theme = useTheme();
+
+  const [coursesId, setCoursesId] = React.useState([]);
+
   const handleOnChange = (e) => {
     const hasError = validation(e, columnDataArr);
     if (!hasError) {
@@ -32,77 +69,93 @@ const Input = ({
     }
     props.onChange(e);
   };
+  const handleSelectChange = (event) => {
+    console.log(event);
+    const {
+      target: { value },
+    } = event;
+    setCoursesId(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+    props.onChange(event);
+  };
+
+  useEffect(() => {
+    if (previousData && type === "select") {
+      console.log(previousData);
+      setCoursesId(previousData.map((course) => course.id));
+      console.count("render input select");
+      props.onChange({
+        target: {
+          name: "courses",
+          value: previousData.map((course) => course.id),
+        },
+      });
+    }
+  }, []);
 
   return (
     <>
-      <div>
+      {type === "select" ? (
+        <FormControl sx={{ m: 1, width: "50%" }}>
+          <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+          <Select
+            labelId="select-courses"
+            id="select-courses-id"
+            name="courses"
+            multiple
+            value={coursesId}
+            onChange={handleSelectChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Courses" />}
+            renderValue={(selected) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 0.5,
+                  width: "100%",
+                }}
+              >
+                {!loadingCourses
+                  ? selected.map((selectedCourseId) => (
+                      <Chip
+                        key={selectedCourseId}
+                        label={
+                          courses.find(
+                            (course) => course.id === selectedCourseId
+                          )?.name
+                        }
+                        sx={{}}
+                      />
+                    ))
+                  : null}
+              </Box>
+            )}
+            MenuProps={MenuProps}
+          >
+            {!loadingCourses ? (
+              courses.map((course) => (
+                <MenuItem key={course.id} value={course.id}>
+                  {`${course.name}-${course.class.name}`}
+                </MenuItem>
+              ))
+            ) : (
+              <div>loading courses</div>
+            )}
+          </Select>
+        </FormControl>
+      ) : (
         <input
           type={type}
           name={name}
-          value={value || ""}
+          value={previousData || ""}
           onChange={handleOnChange}
         />
-        <p>{hasError && error}</p>
-      </div>
+      )}
     </>
   );
 };
-
-/*const OurSelect = ({
-  name,
-  value,
-  selectMessage,
-  options,
-  classes,
-  tableName,
-  ...props
-}) => {
-  const handleSelect = (e) => {
-    props.onChange(e);
-  };
-  return (
-    <FormControl
-      className={classNames(
-        classes.selectFormControl,
-        `selectFormControl_${tableName}`
-      )}
-    >
-      <InputLabel
-        className={classNames(
-          classes.selectInputLabel,
-          `selectInputLabel_${tableName}`
-        )}
-        htmlFor={name}
-      >
-        {selectMessage}
-      </InputLabel>
-      <Select
-        className={classNames(classes.select, `select_${tableName}`)}
-        value={value || ""}
-        onChange={handleSelect}
-        inputProps={{
-          name: name,
-          id: name,
-        }}
-      >
-        {(options || []).map((item) => {
-          return (
-            <MenuItem
-              className={classNames(
-                classes.selectMenuItem,
-                `selectMenutItem_${tableName}`
-              )}
-              key={item.value}
-              value={item.value}
-            >
-              {item.label}
-            </MenuItem>
-          );
-        })}
-      </Select>
-    </FormControl>
-  );
-};*/
 
 export const EditableRow = ({
   fieldsArr = [],
@@ -169,11 +222,12 @@ export const EditableRow = ({
               type={item.type}
               name={item.name}
               onChange={handleOnChange}
-              value={rowData[item.name]}
+              previousData={rowData[item.name]}
               item={item.name}
               childHasError={(bool) => setRowHasError(bool)}
               error={item.error}
               validation={item.validation}
+              setRowData={setRowData}
             />
             {/*)}*/}
           </TableCell>

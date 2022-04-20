@@ -55,6 +55,13 @@ const fieldsArr = [
     },
     error: "Haha",
   },
+  {
+    label: "Courses",
+    name: "courses",
+    type: "select",
+
+    error: "Haha",
+  },
 ];
 
 export default fieldsArr;

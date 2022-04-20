@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 
 export function useGetTeachers() {
@@ -23,16 +23,26 @@ export function useAddTeacher() {
   });
 }
 export function useUpdateTeacher() {
-  return useMutation(["teachers"], (updatedTeacher) => {
-    return axios({
-      url: "http://localhost:5000/api/v1/users/teacher",
-      method: "PUT",
-      data: updatedTeacher,
-      params: {
-        teacherId: updatedTeacher.id,
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ["teachers"],
+    (updatedTeacher) => {
+      return axios({
+        url: "http://localhost:5000/api/v1/users/teacher",
+        method: "PUT",
+        data: updatedTeacher,
+        params: {
+          teacherId: updatedTeacher.id,
+        },
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["teachers"]);
       },
-    });
-  });
+    }
+  );
 }
 export function useDeleteTeacher() {
   return useMutation(["teachers"], (teacherId) => {

@@ -53,6 +53,10 @@ supertokens.init({
             id: "address",
             optional: true,
           },
+          {
+            id: "courses",
+            optional: true,
+          },
         ],
       },
       override: {

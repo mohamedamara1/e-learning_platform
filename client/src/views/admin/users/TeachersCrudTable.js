@@ -35,10 +35,11 @@ import {
 import CRUDTable, { CreateForm, Field, Fields } from "react-crud-table";
 //
 const TABLE_HEAD = [
-  { id: "firstName", label: "First Name", alignRight: false },
-  { id: "lastName", label: "Last Name", alignRight: false },
-  { id: "email", label: "Email Address", alignRight: false },
-  { id: "phoneNumber", label: "Phone Number", alignRight: false },
+  { id: "firstName", label: "First Name", align: "left" },
+  { id: "lastName", label: "Last Name", align: "left" },
+  { id: "email", label: "Email Address", align: "left" },
+  { id: "phoneNumber", label: "Phone Number", align: "left" },
+  { id: "courses", label: "Courses", align: "center" },
   { id: "" },
 ];
 function getComparator(order, orderBy) {
@@ -204,6 +205,7 @@ export const TeachersCrudTable = () => {
             }
             return item;
           });
+          console.log(newAllRowsData);
           setAllRowsData(newAllRowsData);
           setEditingIndex(null);
           setIsEditingTable(false);
