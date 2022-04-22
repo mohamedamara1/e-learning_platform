@@ -63,4 +63,34 @@ router.get("/get_materials_by_materialUnitId/", (req, res) => {
     });
 });
 
+
+router.post("/add_material", (req, res) => {
+  materialServices
+  .addMaterial(req.Material)
+  .then(() => { res.status(200); })
+  .catch((error) => {
+    console.log(error);
+    res.status(400).json({message: "There was a problem adding the material."});
+  });
+});
+
+router.put("/update_material", (req, res) => {
+  materialServices
+  .updateMaterial({id: req.materialId}, req.Material)
+  .then(() => { res.status(200); })
+  .catch((error) => {
+    console.log(error);
+    res.status(400).json({message: "There was a problem updating the material."})
+  });
+});
+
+router.delete("/delete_material", (req, res) => {
+  materialServices
+  .deleteMaterial({id: materialId})
+  .then(() => {res.status(200);})
+  .catch((error)=>{
+    console.log(error);
+    res.status(400).json({message: "There was a problem deleting the material."})
+  })
+});
 module.exports = router;
