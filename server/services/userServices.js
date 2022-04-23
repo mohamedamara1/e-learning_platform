@@ -197,6 +197,47 @@ async function deleteTeacher(Criteria) {
     where: Criteria,
   });
 }
+
+//******************************************************************************* */
+
+async function getStudents() {
+  const students = await prisma.student.findMany();
+  return students;
+}
+
+async function getStudentById(Criteria) {
+  const student = await prisma.student.findUnique({
+    where: Criteria,
+    include: {
+      account: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
+  student.email = student.account.email;
+  delete student.account;
+  return student;
+}
+async function getStudentsDetailled() {
+  const students = await prisma.student.findMany({
+    include: {
+      account: true,
+      account: {
+        select: {
+          email: true,
+        },
+      },
+      class: true,
+    },
+  });
+  students.forEach((student) => {
+    student.email = student.account.email;
+    delete student.account;
+  });
+  return students;
+}
 async function createStudent(formFields, userId) {
   const student = {
     firstName: formFields.filter((f) => f.id === "firstName")[0].value,
@@ -204,6 +245,7 @@ async function createStudent(formFields, userId) {
     email: formFields.filter((f) => f.id === "email")[0].value,
     phone: formFields.filter((f) => f.id === "phone")[0].value,
     address: formFields.filter((f) => f.id === "address")[0].value,
+    class: formFields.filter((f) => f.id === "class")[0].value,
   };
   const createdStudent = await prisma.student.create({
     data: {
@@ -212,21 +254,58 @@ async function createStudent(formFields, userId) {
       fullName: student.firstName + " " + student.lastName,
       phone: student.phone,
       address: student.address,
+      courses: {
+        connect: student.class,
+      },
       account: {
         connect: {
           user_id: userId,
         },
       },
-      class: {
-        create: {
-          name: "7b1",
-          population: 8,
+    },
+    include: {
+      account: true,
+      account: {
+        select: {
+          email: true,
         },
       },
+      class: true,
     },
   });
+  createdStudent.email = createdStudent.account.email;
+  delete createdStudent.account;
   return createdStudent;
 }
+async function updateStudent(criteria, userData) {
+  let email = userData.email;
+  delete userData.email;
+  // const dataWithoutCourses = (({ courses, ...rest }) => rest)(userData);
+  const updatedStudent = await prisma.student.update({
+    where: criteria,
+    data: {
+      ...userData,
+    },
+    include: {
+      account: true,
+      account: {
+        select: {
+          email: true,
+        },
+      },
+      class: true,
+    },
+  });
+  updatedStudent.email = updatedStudent.account.email;
+  delete updatedStudent.account;
+  return updatedStudent;
+}
+async function deleteStudent(Criteria) {
+  const deletedStudent = await prisma.student.delete({
+    where: Criteria,
+  });
+}
+
 module.exports.getUser = getUser;
 module.exports.getAllUsers = getAllUsers;
 module.exports.addUser = addUser;
@@ -234,10 +313,16 @@ module.exports.updateUser = updateUser;
 module.exports.deleteUser = deleteUser;
 module.exports.assignRole = assignRole;
 module.exports.getRoleByUserId = getRoleByUserId;
+
 module.exports.getTeachers = getTeachers;
 module.exports.getTeachersDetailled = getTeachersDetailled;
 module.exports.createTeacher = createTeacher;
 module.exports.updateTeacher = updateTeacher;
 module.exports.deleteTeacher = deleteTeacher;
 
+module.exports.getStudents = getStudents;
+module.exports.getStudentsDetailled = getStudentsDetailled;
 module.exports.createStudent = createStudent;
+module.exports.updateStudent = updateStudent;
+module.exports.deleteStudent = deleteStudent;
+

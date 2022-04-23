@@ -56,19 +56,57 @@ export function useDeleteTeacher() {
   });
 }
 
-/*const getTeachers = async () => {
-  const { data } = await axios.get(
-    `http://localhost:5000/api/v1/users/get_teachers_detailled`
+export function useGetStudents() {
+  return useQuery(
+    ["students"],
+    async () => {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/v1/users/get_students_detailled`
+      );
+      return data;
+    },
+    { refetchOnWindowFocus: false }
   );
-  return data;
-};
-
-const addTeacher = async (body) => {
-  const result = await axios({
-    url: "http://localhost:5000/api/v1/auth/signup",
-    method: "POST",
-    data: body,
+}
+export function useAddStudent() {
+  return useMutation(["students"], (student) => {
+    return axios({
+      url: "http://localhost:5000/api/v1/auth/signup",
+      method: "POST",
+      data: student,
+    });
   });
-  console.log(result);
-};
-*/
+}
+export function useUpdateStudent() {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ["students"],
+    (updatedStudent) => {
+      return axios({
+        url: "http://localhost:5000/api/v1/users/student",
+        method: "PUT",
+        data: updatedStudent,
+        params: {
+          teacherId: updatedStudent.id,
+        },
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["students"]);
+      },
+    }
+  );
+}
+export function useDeleteStudent() {
+  return useMutation(["students"], (studentId) => {
+    return axios({
+      url: "http://localhost:5000/api/v1/users/student",
+      method: "DELETE",
+      params: {
+        studentId,
+      },
+    });
+  });
+}

@@ -132,14 +132,19 @@ const AdminSidebar = () => {
                             className="text-white-kids font-medium text-xl "
                           >
                             <Link
-                              to={item.to}
+                              to="/admin/users/teachers"
                               key={index}
                               onClick={() => setCollapseShow("hidden")}
                             >
-                              {" "}
                               <TreeItem nodeId="2" label="Teachers" />
                             </Link>
-                            <TreeItem nodeId="3" label="Students" />
+                            <Link
+                              to="/admin/users/students"
+                              key={index}
+                              onClick={() => setCollapseShow("hidden")}
+                            >
+                              <TreeItem nodeId="3" label="Students" />
+                            </Link>
                           </TreeItem>
                         </TreeView>
                       </div>
