@@ -98,8 +98,8 @@ router.get("/get_students", (req, res) => {
 
   userServices
     .getStudents()
-    .then((teachers) => {
-      res.status(200).json(teachers);
+    .then((students) => {
+      res.status(200).json(students);
     })
     .catch((error) => {
       console.log(error);
@@ -120,8 +120,8 @@ router.get("/get_students_detailled", (req, res) => {
 
   userServices
     .getStudentsDetailled()
-    .then((teachers) => {
-      res.status(200).send(teachers);
+    .then((students) => {
+      res.status(200).send(students);
     })
     .catch((error) => {
       console.log(error);
@@ -138,11 +138,11 @@ router.get("/get_students_detailled", (req, res) => {
 router.put("/student", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
-  let teacherId = req.query.teacherId;
-  console.log(teacherId);
+  let studentId = req.query.studentId;
+  console.log(studentId);
   let data = req.body;
   userServices
-    .updateStudent({ id: teacherId }, data)
+    .updateStudent({ id: studentId }, data)
     .then((teacher) => {
       res.status(200).send(teacher);
     })
@@ -161,9 +161,9 @@ router.put("/student", (req, res) => {
 router.delete("/student", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
-  let teacherId = req.query.teacherId;
+  let studentId = req.query.studentId;
   userServices
-    .deleteStudent({ id: teacherId })
+    .deleteStudent({ id: studentId })
     .then(() => {
       res.status(200).send("deleted");
     })

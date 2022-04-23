@@ -206,6 +206,7 @@ export const StudentsCrudTable = () => {
         },
       });
     } else {
+      
       const entries = Object.entries(row).map(([key, value]) => {
         return {
           id: key,
@@ -215,6 +216,7 @@ export const StudentsCrudTable = () => {
       entries.push({ id: "role", value: "student" });
       entries.push({ id: "password", value: "pass1234" });
       entries.push({ id: "address", value: "" });
+      entries.push({ id: "courses", value: "" });
 
       const body = {
         formFields: entries,

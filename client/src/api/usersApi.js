@@ -88,7 +88,7 @@ export function useUpdateStudent() {
         method: "PUT",
         data: updatedStudent,
         params: {
-          teacherId: updatedStudent.id,
+          studentId: updatedStudent.id,
         },
       });
     },

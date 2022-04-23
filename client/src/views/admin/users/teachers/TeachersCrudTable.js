@@ -220,6 +220,7 @@ export const TeachersCrudTable = () => {
       entries.push({ id: "role", value: "teacher" });
       entries.push({ id: "password", value: "pass1234" });
       entries.push({ id: "address", value: "" });
+      entries.push({ id: "class", value: "" });
 
       const body = {
         formFields: entries,

@@ -230,6 +230,12 @@ async function getStudentsDetailled() {
         },
       },
       class: true,
+      class: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
     },
   });
   students.forEach((student) => {
@@ -254,8 +260,10 @@ async function createStudent(formFields, userId) {
       fullName: student.firstName + " " + student.lastName,
       phone: student.phone,
       address: student.address,
-      courses: {
-        connect: student.class,
+      class: {
+        connect: {
+          id: student.class,
+        },
       },
       account: {
         connect: {
@@ -281,10 +289,20 @@ async function updateStudent(criteria, userData) {
   let email = userData.email;
   delete userData.email;
   // const dataWithoutCourses = (({ courses, ...rest }) => rest)(userData);
+  console.log(userData);
   const updatedStudent = await prisma.student.update({
     where: criteria,
     data: {
-      ...userData,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      fullName: userData.firstName + " " + userData.lastName,
+      phone: userData.phone,
+      address: userData.address,
+      class: {
+        connect: {
+          id: userData.class,
+        },
+      },
     },
     include: {
       account: true,
@@ -325,4 +343,3 @@ module.exports.getStudentsDetailled = getStudentsDetailled;
 module.exports.createStudent = createStudent;
 module.exports.updateStudent = updateStudent;
 module.exports.deleteStudent = deleteStudent;
-

@@ -7,14 +7,16 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Select,
   Chip,
   Box,
   OutlinedInput,
 } from "@mui/material";
+import Select from "@mui/material/Select";
+
+import { merge } from "lodash";
+
 import { useTheme } from "@mui/material/styles";
 import { useGetClasses } from "../../../../api/classesApi";
-import { maxWidth } from "@mui/system";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -56,7 +58,7 @@ const Input = ({
   const [hasError, setError] = useState(false);
   const theme = useTheme();
 
-  const [classesId, setClassesId] = React.useState([]);
+  const [classId, setClassId] = React.useState("");
 
   const handleOnChange = (e) => {
     const hasError = validation(e, columnDataArr);
@@ -74,22 +76,19 @@ const Input = ({
     const {
       target: { value },
     } = event;
-    setClassesId(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setClassId(value);
     props.onChange(event);
   };
 
   useEffect(() => {
     if (previousData && type === "select") {
       console.log(previousData);
-      setClassesId(previousData.map((studentsClass) => studentsClass.id));
+      setClassId(previousData.id);
       console.count("render input select");
       props.onChange({
         target: {
-          name: "classes",
-          value: previousData.map((studentsClass) => studentsClass.id),
+          name: "class",
+          value: previousData.id,
         },
       });
     }
@@ -98,47 +97,19 @@ const Input = ({
   return (
     <>
       {type === "select" ? (
-        <FormControl sx={{ m: 1, width: "50%" }}>
-          <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+        <FormControl sx={{ m: 1, width: "100%" }}>
+          <InputLabel id="demo-simple-select-label">Class</InputLabel>
           <Select
-            labelId="select-classes"
-            id="select-classes-id"
-            name="classes"
-            multiple
-            value={classesId}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            name="class"
+            value={classId}
             onChange={handleSelectChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Classes" />}
-            renderValue={(selected) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 0.5,
-                  width: "100%",
-                }}
-              >
-                {!loadingClasses
-                  ? selected.map((selectedClassId) => (
-                      <Chip
-                        key={selectedClassId}
-                        label={
-                          classes.find(
-                            (studentsClass) =>
-                              studentsClass.id === selectedClassId
-                          )?.name
-                        }
-                        sx={{}}
-                      />
-                    ))
-                  : null}
-              </Box>
-            )}
-            MenuProps={MenuProps}
           >
             {!loadingClasses ? (
               classes.map((studentsClass) => (
                 <MenuItem key={studentsClass.id} value={studentsClass.id}>
-                  {`${studentsClass.name}-${studentsClass.studentsClass.name}`}
+                  {`${studentsClass.name}`}
                 </MenuItem>
               ))
             ) : (
@@ -173,7 +144,8 @@ export const EditableRow = ({
   });
   const [rowHasError, setRowHasError] = useState(false);
   const [rowData, setRowData] = useState(
-    editData ? Object.assign({}, initializeObj, editData) : initializeObj
+    // editData ? Object.assign({}, initializeObj, editData) : initializeObj
+    editData ? merge(initializeObj, editData) : initializeObj
   );
   const handleSave = () => {
     props.handleSave(rowData);

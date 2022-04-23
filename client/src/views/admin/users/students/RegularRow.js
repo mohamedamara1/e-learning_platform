@@ -26,8 +26,15 @@ const RegularRow = ({
   isItemSelected,
   handleClick,
 }) => {
-  const { id, firstName, lastName, email, phone, studentsClass, avatarUrl } =
-    rowData;
+  const {
+    id,
+    firstName,
+    lastName,
+    email,
+    phone,
+    class: studentsClass,
+    avatarUrl,
+  } = rowData;
   return (
     <TableRow
       hover

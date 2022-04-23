@@ -57,6 +57,10 @@ supertokens.init({
             id: "courses",
             optional: true,
           },
+          {
+            id: "class",
+            optional: true,
+          },
         ],
       },
       override: {
@@ -110,7 +114,8 @@ supertokens.init({
                   input.formFields,
                   userId
                 );
-                console.log("result: ", createdStudent);
+                console.log("created Teacher: ", createdStudent);
+                response.user = createdStudent;
                 return response;
               }
 
@@ -162,6 +167,7 @@ const materials = require("./routes/api/materialsRoute");
 const exercices = require("./routes/api/exercicesRoute");
 const attachements = require("./routes/api/attachementsRoute");
 const users = require("./routes/api/usersRoute");
+const classes = require("./routes/api/classesRoute");
 
 app.use("/api/v1/courses", courses);
 app.use("/api/v1/subjects", subjects);
@@ -170,6 +176,7 @@ app.use("/api/v1/materials", materials);
 app.use("/api/v1/exercices", exercices);
 app.use("/api/v1/attachements", attachements);
 app.use("/api/v1/users", users);
+app.use("/api/v1/classes", classes);
 
 app.use(errorHandler());
 
