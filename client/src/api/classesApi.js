@@ -16,7 +16,7 @@ export function useGetClasses() {
 export function useAddClass() {
   return useMutation(["classes"], (studentClass) => {
     return axios({
-      url: "http://localhost:5000/api/v1/auth/signup",
+      url: "http://localhost:5000/api/v1/classes/add_class",
       method: "POST",
       data: studentClass,
     });
@@ -29,7 +29,7 @@ export function useUpdateClass() {
     ["classes"],
     (updatedStudentClass) => {
       return axios({
-        url: "http://localhost:5000/api/v1/users/teacher",
+        url: "http://localhost:5000/api/v1/classes/update_class",
         method: "PUT",
         data: updatedStudentClass,
         params: {
@@ -47,7 +47,7 @@ export function useUpdateClass() {
 export function useDeleteClass() {
   return useMutation(["classes"], (studentClassId) => {
     return axios({
-      url: "http://localhost:5000/api/v1/users/teacher",
+      url: "http://localhost:5000/api/v1/classes/delete_class",
       method: "DELETE",
       params: {
         studentClassId,
