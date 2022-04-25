@@ -20,6 +20,10 @@ import StudentDashboard from "./views/student/dashboard/StudentDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import Course from "./views/student/course/Course";
 import UsersPage from "./views/admin/users/UsersPage";
+import TeacherCoursesPage from "./views/teacher/courses/TeacherCoursesPage";
+import TeacherLayout from "./layouts/TeacherLayout";
+import TeacherDashboard from "./views/teacher/dashboard/TeacherDashboard";
+import TeacherCourse from "./views/teacher/course/TeacherCourse";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
 import CreateUser from "./views/admin/users/CreateUser";
@@ -81,6 +85,8 @@ SuperTokens.init({
               return "/admin";
             } else if (role == "student") {
               return "/student";
+            } else if (role === "teacher"){
+              return "/teacher"
             } else {
               return undefined;
             }
@@ -181,6 +187,20 @@ function App() {
           <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="courses" exact element={<CoursesPage />} />
           <Route path="course/:courseId" element={<Course />} />
+        </Route>
+
+        <Route
+          path="teacher"
+          element={
+            <EmailPasswordAuth>
+              <TeacherLayout />
+            </EmailPasswordAuth>
+          }
+        >
+          <Route index element={<TeacherDashboard />} />
+          <Route path="dashboard" element={<TeacherDashboard />} />
+          <Route path="courses" exact element={<TeacherCoursesPage />} />
+          <Route path="course/:courseId" element={<TeacherCourse />} />
         </Route>
 
         <Route
