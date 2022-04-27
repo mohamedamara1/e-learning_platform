@@ -15,6 +15,46 @@ const Attachements = require("./data/attachements");
 const PostAttachements = require("./data/postAttachements");
 
 async function runSeeders() {
+  await Promise.all(
+    Classes.map(async (students_class) =>
+      prisma.class.create({
+        data: students_class,
+      })
+    )
+  );
+  const classes = await prisma.class.findMany();
+
+  // Subjects
+  await Promise.all(
+    Subjects.map(async (subject) =>
+      prisma.subject.create({
+        data: subject,
+      })
+    )
+  );
+  const subjects = await prisma.class.findMany();
+
+  /* // Teachers
+  await Promise.all(
+    Teachers.map(async (teacher) =>
+      prisma.teacher.create({
+        data: teacher,
+      })
+    )
+  );*/
+  const teachers = await prisma.teacher.findMany();
+  console.log("teachers", teachers);
+
+  /* // Students
+  await Promise.all(
+    Students.map(async (student) =>
+      prisma.student.create({
+        data: student,
+      })
+    )
+  );
+  const classes = await prisma.class.findMany();*/
+
   // Courses
   await Promise.all(
     Courses.map(async (course, index) =>
@@ -22,7 +62,11 @@ async function runSeeders() {
         data: {
           name: course.name,
           imageUrl: course.imageUrl,
-          teacher: { create: Teachers[index] },
+          teacher: {
+            connect: {
+              id: teachers[0].id,
+            },
+          },
           class: { create: Classes[index] },
           subject: { create: Subjects[index] },
           posts: {
@@ -139,40 +183,9 @@ async function runSeeders() {
     )
   );
 
-  /*
   // Classes
-  await Promise.all(
-    Classes.map(async (students_class) =>
-      prisma.class.create({
-        data: students_class,
-      })
-    )
-  );
-  // Subjects
-  await Promise.all(
-    Subjects.map(async (subject) =>
-      prisma.subject.create({
-        data: subject,
-      })
-    )
-  );
-  // Teachers
-  await Promise.all(
-    Teachers.map(async (teacher) =>
-      prisma.teacher.create({
-        data: teacher,
-      })
-    )
-  );
-  // Students
-  await Promise.all(
-    Students.map(async (student) =>
-      prisma.student.create({
-        data: student,
-      })
-    )
-  );
 
+  /*
   // Posts
   await Promise.all(
     Posts.map(async (post) =>

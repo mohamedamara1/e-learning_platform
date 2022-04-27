@@ -4,7 +4,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import ExerciceAccordion from "./ExerciceAccordion";
-import { useGetExerciceUnitsByCourseIdIncludeExercicesQuery } from "../../../api/exercicesApi";
+import { useGetExerciceUnitsByCourseIdIncludeExercices } from "../../../api/exercicesApi";
 
 export default function PracticeSection(props) {
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function PracticeSection(props) {
     data: practiceUnits,
     error,
     isLoading,
-  } = useGetExerciceUnitsByCourseIdIncludeExercicesQuery({
+  } = useGetExerciceUnitsByCourseIdIncludeExercices({
     courseId: props.courseId,
   });
   return (
