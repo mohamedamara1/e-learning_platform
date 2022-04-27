@@ -7,14 +7,16 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Select,
   Chip,
   Box,
   OutlinedInput,
 } from "@mui/material";
+import Select from "@mui/material/Select";
+
+import { merge } from "lodash";
+
 import { useTheme } from "@mui/material/styles";
-import { useGetCourses } from "../../../api/coursesApi";
-import { maxWidth } from "@mui/system";
+import { useGetClasses } from "../../../../api/classesApi";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -39,24 +41,24 @@ const Input = ({
   setRowData,
   ...props
 }) => {
-  function getStyles(name, coursesId, theme) {
+  function getStyles(name, classesId, theme) {
     return {
       fontWeight:
-        coursesId.indexOf(name) === -1
+        classesId.indexOf(name) === -1
           ? theme.typography.fontWeightRegular
           : theme.typography.fontWeightMedium,
     };
   }
   const {
-    data: courses,
-    error: coursesError,
-    isLoading: loadingCourses,
-  } = useGetCourses({ userId: "test" });
+    data: classes,
+    error: classesError,
+    isLoading: loadingClasses,
+  } = useGetClasses({ userId: "test" });
 
   const [hasError, setError] = useState(false);
   const theme = useTheme();
 
-  const [coursesId, setCoursesId] = React.useState([]);
+  const [classId, setClassId] = React.useState("");
 
   const handleOnChange = (e) => {
     const hasError = validation(e, columnDataArr);
@@ -74,22 +76,19 @@ const Input = ({
     const {
       target: { value },
     } = event;
-    setCoursesId(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setClassId(value);
     props.onChange(event);
   };
 
   useEffect(() => {
     if (previousData && type === "select") {
       console.log(previousData);
-      setCoursesId(previousData.map((course) => course.id));
+      setClassId(previousData.id);
       console.count("render input select");
       props.onChange({
         target: {
-          name: "courses",
-          value: previousData.map((course) => course.id),
+          name: "class",
+          value: previousData.id,
         },
       });
     }
@@ -98,50 +97,23 @@ const Input = ({
   return (
     <>
       {type === "select" ? (
-        <FormControl sx={{ m: 1, width: "50%" }}>
-          <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+        <FormControl sx={{ m: 1, width: "100%" }}>
+          <InputLabel id="demo-simple-select-label">Class</InputLabel>
           <Select
-            labelId="select-courses"
-            id="select-courses-id"
-            name="courses"
-            multiple
-            value={coursesId}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            name="class"
+            value={classId}
             onChange={handleSelectChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Courses" />}
-            renderValue={(selected) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 0.5,
-                  width: "100%",
-                }}
-              >
-                {!loadingCourses
-                  ? selected.map((selectedCourseId) => (
-                      <Chip
-                        key={selectedCourseId}
-                        label={
-                          courses.find(
-                            (course) => course.id === selectedCourseId
-                          )?.name
-                        }
-                        sx={{}}
-                      />
-                    ))
-                  : null}
-              </Box>
-            )}
-            MenuProps={MenuProps}
           >
-            {!loadingCourses ? (
-              courses.map((course) => (
-                <MenuItem key={course.id} value={course.id}>
-                  {`${course.name}-${course.class.name}`}
+            {!loadingClasses ? (
+              classes.map((studentsClass) => (
+                <MenuItem key={studentsClass.id} value={studentsClass.id}>
+                  {`${studentsClass.name}`}
                 </MenuItem>
               ))
             ) : (
-              <div>loading courses</div>
+              <div>loading classes</div>
             )}
           </Select>
         </FormControl>
@@ -172,7 +144,8 @@ export const EditableRow = ({
   });
   const [rowHasError, setRowHasError] = useState(false);
   const [rowData, setRowData] = useState(
-    editData ? Object.assign({}, initializeObj, editData) : initializeObj
+    // editData ? Object.assign({}, initializeObj, editData) : initializeObj
+    editData ? merge(initializeObj, editData) : initializeObj
   );
   const handleSave = () => {
     props.handleSave(rowData);

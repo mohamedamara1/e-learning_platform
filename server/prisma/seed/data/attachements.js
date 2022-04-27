@@ -52,7 +52,7 @@ module.exports = [
     fileExtension: "pdf",
     size: "",
   },
-  ,
+
   {
     name: "chapitre f",
     fileExtension: "docx",

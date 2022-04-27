@@ -25,4 +25,34 @@ router.get("/get_posts/", (req, res) => {
     });
 });
 
+router.post("/add_post", (req, res) => {
+  postServices
+    .addPost(req.post)
+    .then(() => { res.status(200); })
+    .catch((error) =>{
+      console.log(error);
+      res.status(400).json({message: "There was a problem adding the post."})
+    });
+
+});
+
+router.put("/edit_post", (req, res) => {
+  postServices
+    .updatePost({id : req.postId}, req.post)
+    .then(() => { res.status(200); })
+    .catch((error) =>{
+      console.log(error);
+      res.status(400).json({message: "There was a problem updating the post."})
+    });
+});
+
+router.delete("/delete_post", (req, res) => {
+  postServices
+    .deletePost({Id: req.postId})
+    .then(() => {req.status(200); })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({message: "There was a problem deleting the post."})
+    })
+});
 module.exports = router;

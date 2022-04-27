@@ -21,10 +21,12 @@ import UsersManagementPage from "./views/admin/users/UsersManagementPage";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
 import HomePage from "./components/HomePage";
-import TeachersCrudTable from "./views/admin/users/TeachersCrudTable";
+import TeachersCrudTable from "./views/admin/users/teachers/TeachersCrudTable";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
+import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
 
 async function getRole() {
   if (await Session.doesSessionExist()) {
@@ -199,6 +201,9 @@ function App() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="users" exact element={<UsersManagementPage />}>
               <Route path="teachers" element={<TeachersCrudTable />} />
+              <Route path="students" element={<StudentsCrudTable />} />
+              <Route path="classes" element={<ClassesCrudTable />} />
+
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
             </Route>
           </Route>

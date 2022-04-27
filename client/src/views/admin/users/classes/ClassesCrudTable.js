@@ -17,28 +17,24 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import TeacherListHead from "./TeacherListHead";
+import ClassListHead from "./ClassListHead";
 
-import USERLIST from "../../../assets/json/teachers";
-import TeacherListToolbar from "./TeacherListToolbar";
+import ClassListToolbar from "./ClassListToolbar";
 import MoreMenu from "./MoreMenu";
 import RegularRow from "./RegularRow";
 import fieldsArr from "./fields";
 import EditableRow from "./EditableRow";
 import {
-  useAddTeacher,
-  useDeleteTeacher,
-  useGetTeachers,
-  useUpdateTeacher,
-} from "../../../api/usersApi";
+  useAddClass,
+  useDeleteClass,
+  useGetClasses,
+  useUpdateClass,
+} from "../../../../api/classesApi";
 
-import CRUDTable, { CreateForm, Field, Fields } from "react-crud-table";
 //
 const TABLE_HEAD = [
-  { id: "firstName", label: "First Name", align: "left" },
-  { id: "lastName", label: "Last Name", align: "left" },
-  { id: "email", label: "Email Address", align: "left" },
-  { id: "phoneNumber", label: "Phone Number", align: "left" },
+  { id: "name", label: "Name", align: "left" },
+  { id: "population", label: "Population", align: "left" },
   { id: "courses", label: "Courses", align: "center" },
   { id: "" },
 ];
@@ -75,22 +71,22 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export const TeachersCrudTable = () => {
+export const ClassesCrudTable = () => {
   const {
     status,
-    data: teachers,
+    data: classes,
     error,
     isFetching,
-    isLoading: loadingTeachers,
-  } = useGetTeachers();
+    isLoading: loadingClasses,
+  } = useGetClasses();
   /* const {
-    data: teachers,
+    data: classes,
     error,
     isLoading: loadingTeachers,
   } = useGetTeachersQuery();*/
-  const addTeacher = useAddTeacher();
-  const updateTeacher = useUpdateTeacher();
-  const deleteTeacher = useDeleteTeacher();
+  const addClass = useAddClass();
+  const updateClass = useUpdateClass();
+  const deleteClass = useDeleteClass();
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -101,7 +97,7 @@ export const TeachersCrudTable = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditingTable, setIsEditingTable] = useState(false);
   const [allRowsData, setAllRowsData] = useState(
-    (loadingTeachers ? [] : teachers).map((item) => ({
+    (loadingClasses ? [] : classes).map((item) => ({
       isEditing: false,
       rowData: item,
     }))
@@ -157,7 +153,7 @@ export const TeachersCrudTable = () => {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - teachers.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - classes.length) : 0;
 
   /*  const filteredUsers = applySortFilter(
     USERLIST,
@@ -167,7 +163,7 @@ export const TeachersCrudTable = () => {
   useEffect(() => {
     if (filterName === "") {
       setAllRowsData(
-        (teachers || []).map((item) => ({
+        (classes || []).map((item) => ({
           isEditing: false,
           rowData: item,
         }))
@@ -179,14 +175,14 @@ export const TeachersCrudTable = () => {
     }
   }, [filterName]);
   useEffect(() => {
-    if (teachers)
+    if (classes)
       setAllRowsData(
-        (teachers || []).map((item) => ({
+        (classes || []).map((item) => ({
           isEditing: false,
           rowData: item,
         }))
       );
-  }, [teachers]);
+  }, [classes]);
   useEffect(() => {
     console.log("render");
   });
@@ -194,13 +190,13 @@ export const TeachersCrudTable = () => {
 
   const handleSave = async (row) => {
     if (isEditingTable) {
-      updateTeacher.mutate(row, {
-        onSuccess: (updatedTeacher) => {
+      updateClass.mutate(row, {
+        onSuccess: (updatedClass) => {
           const newAllRowsData = allRowsData.map((item, i) => {
             if (i === editingIndex) {
               return {
                 isEditing: false,
-                rowData: updatedTeacher.data,
+                rowData: updatedClass.data,
               };
             }
             return item;
@@ -212,23 +208,10 @@ export const TeachersCrudTable = () => {
         },
       });
     } else {
-      const entries = Object.entries(row).map(([key, value]) => {
-        return {
-          id: key,
-          value,
-        };
-      });
-      entries.push({ id: "role", value: "teacher" });
-      entries.push({ id: "password", value: "pass1234" });
-      entries.push({ id: "address", value: "" });
-
-      const body = {
-        formFields: entries,
-      };
-      addTeacher.mutate(body, {
+      addClass.mutate(row, {
         onSuccess: (response) => {
           setAllRowsData([
-            { isEditing: false, rowData: response.data.user },
+            { isEditing: false, rowData: response.data },
             ...allRowsData,
           ]);
           setIsAdding(false);
@@ -256,7 +239,7 @@ export const TeachersCrudTable = () => {
   };
 
   const handleDeleteRow = (index) => {
-    deleteTeacher.mutate(allRowsData[index].rowData.id, {
+    deleteClass.mutate(allRowsData[index].rowData.id, {
       onSuccess: () => {
         const arr = allRowsData.filter((item, i) => i !== index);
         setAllRowsData(arr);
@@ -297,7 +280,7 @@ export const TeachersCrudTable = () => {
         mb={5}
       >
         <Typography variant="h4" gutterBottom>
-          Teachers
+          Classes
         </Typography>
 
         <Button
@@ -306,12 +289,12 @@ export const TeachersCrudTable = () => {
           variant="contained"
           startIcon={<AiOutlinePlus />}
         >
-          Add Teacher
+          Add Class
         </Button>
       </Stack>
 
       <Card>
-        <TeacherListToolbar
+        <ClassListToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -319,7 +302,7 @@ export const TeachersCrudTable = () => {
         />
         <TableContainer sx={{ minwidth: 800 }}>
           <Table>
-            <TeacherListHead
+            <ClassListHead
               order={order}
               orderBy={orderBy}
               headLabel={TABLE_HEAD}
@@ -328,7 +311,7 @@ export const TeachersCrudTable = () => {
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllClick}
             />
-            {loadingTeachers ? (
+            {loadingClasses ? (
               <h1>loading</h1>
             ) : (
               <TableBody>
@@ -382,7 +365,7 @@ export const TeachersCrudTable = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={USERLIST.length}
+          count={10}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -393,4 +376,4 @@ export const TeachersCrudTable = () => {
   );
 };
 
-export default TeachersCrudTable;
+export default ClassesCrudTable;

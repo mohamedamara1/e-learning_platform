@@ -90,4 +90,89 @@ router.delete("/teacher", (req, res) => {
       });
     });
 });
+
+router.get("/get_students", (req, res) => {
+  // const { user_who_requested_id } = req.query;
+  //const { courseId } = req.params.courseId;
+  // let courseId = req.query.courseId;
+
+  userServices
+    .getStudents()
+    .then((students) => {
+      res.status(200).json(students);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem retrieving the teachers.",
+      });
+    });
+});
+
+// @route  GET api/v1/courses/get_courses
+// @desc   Get courses
+// @access Private
+
+router.get("/get_students_detailled", (req, res) => {
+  // const { user_who_requested_id } = req.query;
+  //const { courseId } = req.params.courseId;
+  // let courseId = req.query.courseId;
+
+  userServices
+    .getStudentsDetailled()
+    .then((students) => {
+      res.status(200).send(students);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem retrieving the teachers.",
+      });
+    });
+});
+
+// @route  GET api/v1/courses/get_courses
+// @desc   Get courses
+// @access Private
+
+router.put("/student", (req, res) => {
+  // const { user_who_requested_id } = req.query;
+  //const { courseId } = req.params.courseId;
+  let studentId = req.query.studentId;
+  console.log(studentId);
+  let data = req.body;
+  userServices
+    .updateStudent({ id: studentId }, data)
+    .then((teacher) => {
+      res.status(200).send(teacher);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem updating the teacher.",
+      });
+    });
+});
+
+// @route  GET api/v1/courses/get_courses
+// @desc   Get courses
+// @access Private
+
+router.delete("/student", (req, res) => {
+  // const { user_who_requested_id } = req.query;
+  //const { courseId } = req.params.courseId;
+  let studentId = req.query.studentId;
+  userServices
+    .deleteStudent({ id: studentId })
+    .then(() => {
+      res.status(200).send("deleted");
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem deleting the teacher.",
+      });
+    });
+});
+
 module.exports = router;

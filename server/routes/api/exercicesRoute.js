@@ -65,4 +65,33 @@ router.get("/get_exercices_by_practiceUnitId/", (req, res) => {
     });
 });
 
+router.post("/add_exercice", (req, res) => {
+  exerciceServices
+  .addExercice(req.exercice)
+  .then(() => { res.status(200); })
+  .catch((error) => {
+    console.log(error);
+    res.status(400).json({message: "There was a problem adding the exercice."});
+  });
+});
+
+router.put("/update_exercice", (req, res) => {
+  materialServices
+  .updateExercice({id: req.exerciceId}, req.exercice)
+  .then(() => { res.status(200); })
+  .catch((error) => {
+    console.log(error);
+    res.status(400).json({message: "There was a problem updating the exercice."})
+  });
+});
+
+router.delete("/delete_exercice", (req, res) => {
+  exerciceServices
+  .deleteExercice({id: req.ExerciceId})
+  .then(() => {res.status(200);})
+  .catch((error)=>{
+    console.log(error);
+    res.status(400).json({message: "There was a problem deleting the exercice."})
+  })
+});
 module.exports = router;
