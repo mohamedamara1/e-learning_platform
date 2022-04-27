@@ -13,8 +13,10 @@ async function getAllClasses() {
     select: {
       id: true,
       name: true,
+      population: true,
       courses: {
         select: {
+          id: true,
           name: true,
         },
       },
