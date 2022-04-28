@@ -27,6 +27,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
+import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";
+import CoursesCrudTable from "./views/admin/courses/CoursesCrudTable";
 
 async function getRole() {
   if (await Session.doesSessionExist()) {
@@ -205,6 +207,9 @@ function App() {
               <Route path="classes" element={<ClassesCrudTable />} />
 
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
+            </Route>
+            <Route path="courses" exact element={<CoursesManagementPage />}>
+              <Route index element={<CoursesCrudTable />} />
             </Route>
           </Route>
 
