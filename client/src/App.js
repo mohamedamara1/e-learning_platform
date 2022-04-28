@@ -29,6 +29,7 @@ import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
 import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";
 import CoursesCrudTable from "./views/admin/courses/CoursesCrudTable";
+import SubjectsCrudTable from "./views/admin/subjects/SubjectsCrudTable";
 
 async function getRole() {
   if (await Session.doesSessionExist()) {
@@ -209,7 +210,8 @@ function App() {
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
             </Route>
             <Route path="courses" exact element={<CoursesManagementPage />}>
-              <Route index element={<CoursesCrudTable />} />
+              <Route path="courses" element={<CoursesCrudTable />} />
+              <Route path="subjects" element={<SubjectsCrudTable />} />
             </Route>
           </Route>
 

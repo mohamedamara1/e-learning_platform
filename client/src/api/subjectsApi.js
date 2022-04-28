@@ -13,44 +13,44 @@ export function useGetSubjects() {
     { refetchOnWindowFocus: false }
   );
 }
-export function useAddClass() {
-  return useMutation(["classes"], (studentClass) => {
+export function useAddSubject() {
+  return useMutation(["subjects"], (subject) => {
     return axios({
-      url: "http://localhost:5000/api/v1/classes/add_class",
+      url: "http://localhost:5000/api/v1/subjects/add_subject",
       method: "POST",
-      data: studentClass,
+      data: subject,
     });
   });
 }
-export function useUpdateClass() {
+export function useUpdateSubject() {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ["classes"],
-    (updatedStudentClass) => {
+    ["subjects"],
+    (updatedSubject) => {
       return axios({
-        url: "http://localhost:5000/api/v1/classes/update_class",
+        url: "http://localhost:5000/api/v1/subjects/update_subject",
         method: "PUT",
-        data: updatedStudentClass,
+        data: updatedSubject,
         params: {
-          studentClassId: updatedStudentClass.id,
+          subjectId: updatedSubject.id,
         },
       });
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["classes"]);
+        queryClient.invalidateQueries(["subjects"]);
       },
     }
   );
 }
-export function useDeleteClass() {
-  return useMutation(["classes"], (studentClassId) => {
+export function useDeleteSubject() {
+  return useMutation(["subjects"], (subjectId) => {
     return axios({
-      url: "http://localhost:5000/api/v1/classes/delete_class",
+      url: "http://localhost:5000/api/v1/subjects/delete_subject",
       method: "DELETE",
       params: {
-        studentClassId,
+        subjectId,
       },
     });
   });
