@@ -29,6 +29,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
+import CalendarPage from "./views/admin/calendar/CalendarPage";
 
 async function getRole() {
   if (await Session.doesSessionExist()) {
@@ -208,6 +209,7 @@ function App() {
 
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
             </Route>
+            <Route path="calendar" element={<CalendarPage />} />
           </Route>
 
           <Route path="*" element={<div>404 not found</div>} />
