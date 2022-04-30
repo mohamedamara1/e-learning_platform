@@ -4,24 +4,29 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Attachment from "./Attachment";
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import SendIcon from '@mui/icons-material/Send';
+import Typography from "@mui/material/Typography";
 export default function PostForm(props) {
   const [expanded, setExpanded] = React.useState(false);
+  const [attachements, setAttachements] = React.useState([]);
   const Input = styled('input')({
     display: 'none',
   });
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const handleUpload = event => {
+    setAttachements(prevattachements => [...prevattachements, event.target.files[0]]);
+    console.log(attachements.attachements);
+
+  }
 
   return (
     
@@ -30,28 +35,38 @@ export default function PostForm(props) {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {props.teacherFullName}
+              {props.teacherFullName[0]}
             </Avatar>
           }
           title={props.teacherFullName}
         />
         <CardContent>
         <FormControl fullWidth sx={{ m: 1 }}>
-          <TextField
-          id="filled-multiline-flexible"
-          label="Write something..."
+        <TextField
+          id="standard-multiline-static"
+          label="Add A Post"
           multiline
-          maxRows={4}
-          variant="filled"
+          rows={4}
+          placeholder="Write Something..."
+          variant="standard"
         />
         </FormControl>
-
-        <div  className="flex flex-col items-end ">
-
-          </div>
+        <div className="flex flex-col items-end ">
+            <label htmlFor="contained-button-file">
+                <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleUpload}/>
+                <Button size="small" variant="contained" component="span">
+                     Upload
+                </Button>
+</label>
+        </div>
+        <div  className="flex flex-col items-end pt-2">
+            <Button size="small" variant="contained" endIcon={<SendIcon />}>
+                Post
+            </Button>
+        </div>
         </CardContent>
         <CardContent>
-
+        
         </CardContent>
       </Card>
     </div>
