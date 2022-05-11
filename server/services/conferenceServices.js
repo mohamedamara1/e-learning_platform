@@ -8,6 +8,13 @@ async function getConference(Criteria) {
   return Conference;
 }
 
+async function getCourseConferences(Criteria) {
+  const Conferences = await prisma.conference.findMany({
+    where: Criteria,
+  });
+  return Conferences;
+}
+
 async function getAllConferences() {
   const Conferences = await prisma.conference.findMany();
   return Conferences;
@@ -15,6 +22,7 @@ async function getAllConferences() {
 
 async function addConference(Conference) {
   const CreateConference = await prisma.conference.create({ data: Conference });
+  console.log(CreateConference);
 }
 
 async function updateConference(Criteria, ConferenceData) {
@@ -35,3 +43,4 @@ module.exports.getAllConferences = getAllConferences;
 module.exports.addConference = addConference;
 module.exports.updateConference = updateConference;
 module.exports.deleteConference = deleteConference;
+module.exports.getCourseConferences = getCourseConferences;
