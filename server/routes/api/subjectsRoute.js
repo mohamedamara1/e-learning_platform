@@ -1,13 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
+const verifySession =
+  require("supertokens-node/recipe/session/framework/express").verifySession;
 const subjectServices = require("../../services/subjectServices");
+const permit = require("../middlewares/authorization").permit;
 
 // @route  Post api/v1/subjects/add_subject
 // @desc   Add subject
 // @access Private
 
-router.post("/add_subject", (req, res) => {
+router.post("/add_subject", [verifySession(), permit("admin")], (req, res) => {
   const { name, coefficient } = req.body;
 
   subjectServices
