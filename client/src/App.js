@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SuperTokens, {
   getSuperTokensRoutesForReactRouterDom,
 } from "supertokens-auth-react";
@@ -10,9 +10,7 @@ import { EmailPasswordAuth } from "supertokens-auth-react/recipe/emailpassword";
 import * as reactRouterDom from "react-router-dom";
 
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
-import Session, {
-  useSessionContext,
-} from "supertokens-auth-react/recipe/session";
+import Session from "supertokens-auth-react/recipe/session";
 
 import CoursesPage from "./views/student/courses/CoursesPage";
 import StudentLayout from "./layouts/StudentLayout";
@@ -30,6 +28,8 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
 
+import BigbluebuttonManagementPage from "./views/admin/bigbluebutton/BigbluebuttonManagementPage";
+import ConferencesListPage from "./views/admin/bigbluebutton/conferences/ConferencesListPage";
 async function getRole() {
   if (await Session.doesSessionExist()) {
     // we use the key "role" here since that's what we
@@ -83,9 +83,9 @@ SuperTokens.init({
             return context.redirectToPath;
           }
           const path = await getRole().then((role) => {
-            if (role == "admin") {
+            if (role === "admin") {
               return "/admin";
-            } else if (role == "student") {
+            } else if (role === "student") {
               return "/student";
             } else {
               return undefined;
@@ -207,6 +207,13 @@ function App() {
               <Route path="classes" element={<ClassesCrudTable />} />
 
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
+            </Route>
+            <Route
+              path="bigbluebutton"
+              exact
+              element={<BigbluebuttonManagementPage />}
+            >
+              <Route path="conferences" element={<ConferencesListPage />} />
             </Route>
           </Route>
 

@@ -168,6 +168,7 @@ const exercices = require("./routes/api/exercicesRoute");
 const attachements = require("./routes/api/attachementsRoute");
 const users = require("./routes/api/usersRoute");
 const classes = require("./routes/api/classesRoute");
+const conferences = require("./routes/api/conferencesRoute");
 
 app.use("/api/v1/courses", courses);
 app.use("/api/v1/subjects", subjects);
@@ -177,6 +178,7 @@ app.use("/api/v1/exercices", exercices);
 app.use("/api/v1/attachements", attachements);
 app.use("/api/v1/users", users);
 app.use("/api/v1/classes", classes);
+app.use("/api/v1/conferences", conferences);
 
 app.use(errorHandler());
 
