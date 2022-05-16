@@ -10,6 +10,8 @@ import SchoolLogo from "../../assets/img/school_logo.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { TreeItem, TreeView } from "@mui/lab";
+import { styled } from "@mui/system";
+
 const sidebarNavItems = [
   {
     display: "Dashboard",
@@ -36,6 +38,18 @@ const sidebarNavItems = [
     section: "calendar",
   },
 ];
+
+const StyledTreeView = styled(TreeView)`
+  .MuiTreeItem-group {
+    margin-left: 0;
+  }
+`;
+
+const StyledTreeItem = styled(TreeItem)`
+  .MuiTreeItem-iconContainer {
+    display: none;
+  }
+`;
 const AdminSidebar = () => {
   // const [showSidebar, setShowSidebar] = useState(true);
 
@@ -107,54 +121,88 @@ const AdminSidebar = () => {
               {sidebarNavItems.map((item, index) => {
                 if (item.display === "Users") {
                   return (
-                    <li className="items-center" key={index}>
-                      <div
-                        className="flex items-center place-content-start p-4
-              font-medium text-xl  transition duration-300 ease-in-out
-              hover:bg-bluu-1"
+                    <li
+                      className="items-center flex  place-content-start p-4
+                    font-medium text-xl  transition duration-300 ease-in-out
+                    hover:bg-bluu-1"
+                      key={index}
+                    >
+                      <div className=" mr-4 text-white-kids">{item.icon}</div>
+                      <TreeView
+                        aria-label="file system navigator"
+                        defaultCollapseIcon={<ExpandMoreIcon />}
+                        defaultExpandIcon={<ChevronRightIcon />}
                       >
-                        <div className=" mr-4 text-white-kids">{item.icon}</div>
-                        <TreeView
-                          aria-label="file system navigator"
-                          defaultCollapseIcon={<ExpandMoreIcon />}
-                          defaultExpandIcon={<ChevronRightIcon />}
+                        <StyledTreeItem
+                          nodeId="1"
+                          label="Users"
                           sx={{
-                            height: 60,
-                            fontWeight: 500,
+                            color: "white",
+                            fontWeight: 600,
                             fontSize: "1.25rem",
                             lineHeight: "1.75rem",
-                            width: "100%",
                           }}
                         >
-                          <TreeItem
-                            nodeId="1"
-                            label="Users"
-                            className="text-white-kids font-medium text-xl "
+                          <Link
+                            to="/admin/users/teachers"
+                            key={index}
+                            onClick={() => setCollapseShow("hidden")}
                           >
-                            <Link
-                              to="/admin/users/teachers"
-                              key={index}
-                              onClick={() => setCollapseShow("hidden")}
-                            >
-                              <TreeItem nodeId="2" label="Teachers" />
-                            </Link>
-                            <Link
-                              to="/admin/users/students"
-                              key={index}
-                              onClick={() => setCollapseShow("hidden")}
-                            >
-                              <TreeItem nodeId="3" label="Students" />
-                            </Link>
-                            <Link
-                              to="/admin/users/classes"
-                              key={index}
-                              onClick={() => setCollapseShow("hidden")}
-                            >
-                              <TreeItem nodeId="4" label="Classes" />
-                            </Link>
-                          </TreeItem>
-                        </TreeView>
-                      </div>
+                            <TreeItem nodeId="2" label="Teachers" />
+                          </Link>
+                          <Link
+                            to="/admin/users/students"
+                            key={index}
+                            onClick={() => setCollapseShow("hidden")}
+                          >
+                            <TreeItem nodeId="3" label="Students" />
+                          </Link>
+                          <Link
+                            to="/admin/users/classes"
+                            key={index}
+                            onClick={() => setCollapseShow("hidden")}
+                          >
+                            <TreeItem nodeId="4" label="Classes" />
+                          </Link>
+                        </StyledTreeItem>
+                      </TreeView>
+                    </li>
+                  );
+                } else if (item.display === "Courses") {
+                  return (
+                    <li
+                      className="items-center flex place-content-start p-4
+                    font-medium text-xl  transition duration-300 ease-in-out
+                    hover:bg-bluu-1"
+                      key={index}
+                    >
+                      <div className=" mr-4 text-white-kids">{item.icon}</div>
+                      <TreeView
+                        aria-label="file system navigator"
+                        defaultCollapseIcon={<ExpandMoreIcon />}
+                        defaultExpandIcon={<ChevronRightIcon />}
+                      >
+                        <StyledTreeItem
+                          nodeId="1"
+                          label="Courses"
+                          className="text-white-kids font-medium text-xl "
+                        >
+                          <Link
+                            to="/admin/courses/courses"
+                            key={index}
+                            onClick={() => setCollapseShow("hidden")}
+                          >
+                            <TreeItem nodeId="2" label="Courses" />
+                          </Link>
+                          <Link
+                            to="/admin/courses/subjects"
+                            key={index}
+                            onClick={() => setCollapseShow("hidden")}
+                          >
+                            <TreeItem nodeId="3" label="Subjects" />
+                          </Link>
+                        </StyledTreeItem>
+                      </TreeView>
                     </li>
                   );
                 } else if (item.display === "Courses") {

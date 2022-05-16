@@ -19,7 +19,7 @@
     "express": "^4.17.3",
     "nodemon": "^2.0.15",
     "pg": "^8.7.3",
-    "supertokens-node": "^9.0.1"
+    "supertokens-node": "^9.2.0"
   },
   "devDependencies": {
     "prisma": "^3.10.0"

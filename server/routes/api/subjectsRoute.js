@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const verifySession =
+  require("supertokens-node/recipe/session/framework/express").verifySession;
 const subjectServices = require("../../services/subjectServices");
+const permit = require("../middlewares/authorization").permit;
 
 router.get("/get_subjects", (req, res) => {
   // const { user_who_requested_id } = req.query;
@@ -25,11 +28,12 @@ router.get("/get_subjects", (req, res) => {
 // @desc   Add subject
 // @access Private
 
-router.post("/add_subject", (req, res) => {
-  let subjectData = req.body;
 
+router.post("/add_subject", [verifySession(), permit("admin")], (req, res) => {
+  const { name, coefficient } = req.body;
+  
   subjectServices
-    .addSubject(subjectData)
+    .addSubject(name, coefficient)
     .then((added_subject) => {
       res.status(200).json(added_subject);
     })

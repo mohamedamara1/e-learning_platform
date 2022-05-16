@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import axios from "axios";
-
+import Session from "supertokens-auth-react/recipe/session";
+Session.addAxiosInterceptors(axios);
 export function useGetTeachers() {
   return useQuery(
     ["teachers"],
