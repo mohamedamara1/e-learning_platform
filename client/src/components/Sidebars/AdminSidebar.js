@@ -119,7 +119,7 @@ const AdminSidebar = () => {
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               {sidebarNavItems.map((item, index) => {
-                if (item.display == "Users") {
+                if (item.display === "Users") {
                   return (
                     <li
                       className="items-center flex  place-content-start p-4
@@ -203,6 +203,51 @@ const AdminSidebar = () => {
                           </Link>
                         </StyledTreeItem>
                       </TreeView>
+                    </li>
+                  );
+                } else if (item.display === "Courses") {
+                  return (
+                    <li className="items-center" key={index}>
+                      <div
+                        className="flex items-center place-content-start p-4
+              font-medium text-xl  transition duration-300 ease-in-out
+              hover:bg-bluu-1"
+                      >
+                        <div className=" mr-4 text-white-kids">{item.icon}</div>
+                        <TreeView
+                          aria-label="file system navigator"
+                          defaultCollapseIcon={<ExpandMoreIcon />}
+                          defaultExpandIcon={<ChevronRightIcon />}
+                          sx={{
+                            height: 60,
+                            fontWeight: 500,
+                            fontSize: "1.25rem",
+                            lineHeight: "1.75rem",
+                            width: "100%",
+                          }}
+                        >
+                          <TreeItem
+                            nodeId="1"
+                            label="Courses"
+                            className="text-white-kids font-medium text-xl "
+                          >
+                            <Link
+                              to="/admin/courses/courses"
+                              key={index}
+                              onClick={() => setCollapseShow("hidden")}
+                            >
+                              <TreeItem nodeId="2" label="Courses" />
+                            </Link>
+                            <Link
+                              to="/admin/courses/subjects"
+                              key={index}
+                              onClick={() => setCollapseShow("hidden")}
+                            >
+                              <TreeItem nodeId="3" label="Subjects" />
+                            </Link>
+                          </TreeItem>
+                        </TreeView>
+                      </div>
                     </li>
                   );
                 }
