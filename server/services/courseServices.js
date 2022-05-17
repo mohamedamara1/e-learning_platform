@@ -41,16 +41,19 @@ async function getAllCourses() {
       name: true,
       teacher: {
         select: {
+          id: true,
           fullName: true,
         },
       },
       class: {
         select: {
+          id: true,
           name: true,
         },
       },
       subject: {
         select: {
+          id: true,
           name: true,
         },
       },

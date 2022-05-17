@@ -27,6 +27,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
+import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";
+import CoursesCrudTable from "./views/admin/courses/CoursesCrudTable";
+import SubjectsCrudTable from "./views/admin/subjects/SubjectsCrudTable";
 
 import BigbluebuttonManagementPage from "./views/admin/bigbluebutton/BigbluebuttonManagementPage";
 import ConferencesListPage from "./views/admin/bigbluebutton/conferences/ConferencesListPage";
@@ -214,6 +217,10 @@ function App() {
               element={<BigbluebuttonManagementPage />}
             >
               <Route path="conferences" element={<ConferencesListPage />} />
+            </Route>
+            <Route path="courses" exact element={<CoursesManagementPage />}>
+              <Route path="courses" element={<CoursesCrudTable />} />
+              <Route path="subjects" element={<SubjectsCrudTable />} />
             </Route>
           </Route>
 

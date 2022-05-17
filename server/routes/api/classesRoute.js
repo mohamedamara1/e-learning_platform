@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
+const verifySession =
+  require("supertokens-node/recipe/session/framework/express").verifySession;
+const permit = require("../middlewares/authorization").permit;
 const classServices = require("../../services/classServices");
 
-router.get("/get_classes", (req, res) => {
+router.get("/get_classes", [verifySession(), permit("admin")], (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   // let courseId = req.query.courseId;
@@ -25,7 +28,7 @@ router.get("/get_classes", (req, res) => {
 // @desc   Get courses
 // @access Private
 
-router.post("/add_class", (req, res) => {
+router.post("/add_class", [verifySession(), permit("admin")], (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   let data = req.body;
@@ -47,7 +50,7 @@ router.post("/add_class", (req, res) => {
 // @desc   Get courses
 // @access Private
 
-router.put("/update_class", (req, res) => {
+router.put("/update_class", [verifySession(), permit("admin")], (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   let studentClassId = req.query.studentClassId;
@@ -69,21 +72,25 @@ router.put("/update_class", (req, res) => {
 // @desc   Get courses
 // @access Private
 
-router.delete("/delete_class", (req, res) => {
-  // const { user_who_requested_id } = req.query;
-  //const { courseId } = req.params.courseId;
-  let studentClassId = req.query.studentClassId;
-  classServices
-    .deleteClass({ id: studentClassId })
-    .then(() => {
-      res.status(200).send("deleted");
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({
-        message: "There was a problem deleting the teacher.",
+router.delete(
+  "/delete_class",
+  [verifySession(), permit("admin")],
+  (req, res) => {
+    // const { user_who_requested_id } = req.query;
+    //const { courseId } = req.params.courseId;
+    let studentClassId = req.query.studentClassId;
+    classServices
+      .deleteClass({ id: studentClassId })
+      .then(() => {
+        res.status(200).send("deleted");
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(400).json({
+          message: "There was a problem deleting the teacher.",
+        });
       });
-    });
-});
+  }
+);
 
 module.exports = router;

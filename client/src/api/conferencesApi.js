@@ -2,13 +2,13 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import Session from "supertokens-auth-react/recipe/session";
 Session.addAxiosInterceptors(axios);
-export function useGetPosts(args) {
-  const { courseId } = args;
+export function useGetConferences(args) {
+  const { userId } = args;
   return useQuery(
-    ["posts", courseId],
+    ["conferences", userId],
     async () => {
       const { data } = await axios.get(
-        `http://localhost:5000/api/v1/posts/get_posts`
+        `http://localhost:5000/api/v1/conferences/get_conferences`
       );
       return data;
     },
