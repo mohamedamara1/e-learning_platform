@@ -82,7 +82,7 @@ export default function TabComponent(props) {
               isLoading={isLoading}
               posts={!isLoading ? course.posts : null}
               courseId={props.courseId}
-              teacherFullName={!isLoading ? course.teacher.fullName : null}
+              teacherFullName={!isLoading ? course.teacher.fullName : ""}
             />
           </div>
         </div>

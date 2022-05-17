@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { ReactQueryDevtools } from "react-query/devtools";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SuperTokens, {
@@ -28,6 +28,8 @@ import TeacherCourse from "./views/teacher/course/TeacherCourse";
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
 import CreateUser from "./views/admin/users/CreateUser";
 import HomePage from "./components/HomePage";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 async function getRole() {
   if (await Session.doesSessionExist()) {
     // we use the key "role" here since that's what we
@@ -162,6 +164,7 @@ SuperTokens.init({
 
 function App() {
   return (
+    <QueryClientProvider client = { queryClient }>
     <BrowserRouter basename="/">
       <Routes>
         {/*This renders the login UI on the /auth route*/}
@@ -230,6 +233,8 @@ function App() {
         UI on this route. See the init function call above for how to do this*/}
       </Routes>
     </BrowserRouter>
+    <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
