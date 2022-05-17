@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-
-rootReducer = combineReducers({ courses: coursesReducer });
+import userReducer from "../slices/userSlice";
+const rootReducer = combineReducers({ user: userReducer });
 
 export default rootReducer;

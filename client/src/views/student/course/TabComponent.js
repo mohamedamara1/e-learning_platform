@@ -9,7 +9,6 @@ import practice_items from "../../../assets/json/assignments.json";
 import PracticeSection from "./PracticeSection";
 import Timeline from "./Timeline";
 import { useGetCourse } from "../../../api/coursesApi";
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -46,7 +45,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TabComponent(props) {
+export const TabComponent = (props) => {
   const {
     data: course,
     error,
@@ -77,7 +76,7 @@ export default function TabComponent(props) {
       </Box>
       <TabPanel value={value} index={0}>
         <div className="flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 gap-2 ">
+          <div className="w-full gap-2 lg:w-2/3 xl:w-1/2">
             <Timeline
               isLoading={isLoading}
               posts={!isLoading ? course.posts : null}
@@ -88,19 +87,19 @@ export default function TabComponent(props) {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div className=" flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
+        <div className="flex justify-center ">
+          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <MaterialsList courseId={props.courseId} />
           </div>
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <div className=" flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
+        <div className="flex justify-center ">
+          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <PracticeSection courseId={props.courseId} />
           </div>
         </div>
       </TabPanel>
     </Box>
   );
-}
+};

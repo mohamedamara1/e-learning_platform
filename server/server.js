@@ -40,6 +40,27 @@ supertokens.init({
           {
             id: "role",
           },
+          {
+            id: "firstName",
+          },
+          {
+            id: "lastName",
+          },
+          {
+            id: "phone",
+          },
+          {
+            id: "address",
+            optional: true,
+          },
+          {
+            id: "courses",
+            optional: true,
+          },
+          {
+            id: "class",
+            optional: true,
+          },
         ],
       },
       override: {
@@ -53,20 +74,51 @@ supertokens.init({
                 throw Error("Should never come here");
               }
               // TODO: some custom logic
-
-              // or call the default behaviour as show below
-              const response = await originalImplementation.signUpPOST(input);
+              let email = input.formFields.filter((f) => f.id === "email")[0]
+                .value;
+              let password = input.formFields.filter(
+                (f) => f.id === "password"
+              )[0].value;
+              let userContext = input.userContext;
+              let response = await input.options.recipeImplementation.signUp({
+                email,
+                password,
+                userContext,
+              });
               if (!response.user) {
                 return response;
               }
+              // or call the default behaviour as show below
+              //   const response = await originalImplementation.signUpPOST(input);
 
               // console.log("signUpPOST response: ", response.user.id);
               let userId = response.user.id;
               let role = input.formFields.filter((f) => f.id === "role")[0]
                 .value;
-              console.log(input.formFields);
-              const result = await userServices.assignRole(userId, role);
-              console.log(result);
+              console.log("role: ", role);
+
+              //  console.log(input.formFields);
+              await userServices.assignRole(userId, role);
+              if (role === "teacher") {
+                const createdTeacher = await userServices.createTeacher(
+                  input.formFields,
+                  userId
+                );
+                console.log("created Teacher: ", createdTeacher);
+                response.user = createdTeacher;
+
+                return response;
+              }
+              if (role === "student") {
+                const createdStudent = await userServices.createStudent(
+                  input.formFields,
+                  userId
+                );
+                console.log("created Teacher: ", createdStudent);
+                response.user = createdStudent;
+                return response;
+              }
+
               return response;
             },
             // ...
@@ -83,7 +135,6 @@ supertokens.init({
             createNewSession: async function (input) {
               let userId = input.userId;
               let role = await userServices.getRoleByUserId(userId); // TODO: fetch role based on userId
-              console.log(role);
 
               input.accessTokenPayload = {
                 ...input.accessTokenPayload,
@@ -115,6 +166,8 @@ const posts = require("./routes/api/postsRoute");
 const materials = require("./routes/api/materialsRoute");
 const exercices = require("./routes/api/exercicesRoute");
 const attachements = require("./routes/api/attachementsRoute");
+const users = require("./routes/api/usersRoute");
+const classes = require("./routes/api/classesRoute");
 
 app.use("/api/v1/courses", courses);
 app.use("/api/v1/subjects", subjects);
@@ -122,6 +175,8 @@ app.use("/api/v1/posts", posts);
 app.use("/api/v1/materials", materials);
 app.use("/api/v1/exercices", exercices);
 app.use("/api/v1/attachements", attachements);
+app.use("/api/v1/users", users);
+app.use("/api/v1/classes", classes);
 
 app.use(errorHandler());
 

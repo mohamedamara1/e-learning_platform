@@ -24,15 +24,12 @@ module.exports = [
   {
     text: "Cras eget mauris felis. Donec mauris ipsum, pharetra nec eleifend ut, fermentum non magna. Aliquam dui felis, lobortis quis magna ac, venenatis ornare elit. Cras ac efficitur purus. Quisque quis condimentum felis, in sagittis sem. Morbi eget congue erat. Sed vitae porttitor nibh. Pellentesque in feugiat turpis, in tempor massa. Sed accumsan, urna vitae faucibus auctor, quam arcu ultrices lacus, ut elementum",
   },
-  ,
   {
     text: "Cras eget mauris felis. Donec mauris ipsum, pharetra nec eleifend ut, fermentum non magna. Aliquam dui felis, lobortis quis magna ac, venenatis ornare elit. Cras ac efficitur purus. Quisque quis condimentum felis, in sagittis sem. Morbi eget congue erat. Sed vitae porttitor nibh. Pellentesque in feugiat turpis, in tempor massa. Sed accumsan, urna vitae faucibus auctor, quam arcu ultrices lacus, ut elementum",
   },
-  ,
   {
     text: "Cras eget mauris felis. Donec mauris ipsum, pharetra nec eleifend ut, fermentum non magna. Aliquam dui felis, lobortis quis magna ac, venenatis ornare elit. Cras ac efficitur purus. Quisque quis condimentum felis, in sagittis sem. Morbi eget congue erat. Sed vitae porttitor nibh. Pellentesque in feugiat turpis, in tempor massa. Sed accumsan, urna vitae faucibus auctor, quam arcu ultrices lacus, ut elementum",
   },
-  ,
   {
     text: "Cras eget mauris felis. Donec mauris ipsum, pharetra nec eleifend ut, fermentum non magna. Aliquam dui felis, lobortis quis magna ac, venenatis ornare elit. Cras ac efficitur purus. Quisque quis condimentum felis, in sagittis sem. Morbi eget congue erat. Sed vitae porttitor nibh. Pellentesque in feugiat turpis, in tempor massa. Sed accumsan, urna vitae faucibus auctor, quam arcu ultrices lacus, ut elementum",
   },

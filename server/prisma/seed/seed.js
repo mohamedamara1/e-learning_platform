@@ -15,71 +15,94 @@ const Attachements = require("./data/attachements");
 const PostAttachements = require("./data/postAttachements");
 
 async function runSeeders() {
+  await Promise.all(
+    Classes.map(async (students_class) =>
+      prisma.class.create({
+        data: students_class,
+      })
+    )
+  );
+  const classes = await prisma.class.findMany();
+  // Subjects
+  await Promise.all(
+    Subjects.map(async (subject) =>
+      prisma.subject.create({
+        data: subject,
+      })
+    )
+  );
+  const subjects = await prisma.subject.findMany();
+  /* // Teachers
+  await Promise.all(
+    Teachers.map(async (teacher) =>
+      prisma.teacher.create({
+        data: teacher,
+      })
+    )
+  );*/
+
+  const teachers = await prisma.teacher.findMany();
+
+  /* // Students
+  await Promise.all(
+    Students.map(async (student) =>
+      prisma.student.create({
+        data: student,
+      })
+    )
+  );
+  const classes = await prisma.class.findMany();*/
+
   // Courses
   await Promise.all(
-    Courses.map(async (course, index) =>
+    Subjects.map(async (subject, index) =>
       prisma.course.create({
         data: {
-          name: course.name,
-          imageUrl: course.imageUrl,
-          teacher: { create: Teachers[index] },
-          class: { create: Classes[index] },
-          subject: { create: Subjects[index] },
-          posts: {
-            create: [
-              {
-                text: Posts[index].text,
-                postAttachements: {
-                  create: [
-                    {
-                      attachement: {
-                        create: Attachements[0],
-                      },
-                    },
-                    {
-                      attachement: {
-                        create: Attachements[1],
-                      },
-                    },
-                    {
-                      attachement: {
-                        create: Attachements[2],
-                      },
-                    },
-                  ],
-                },
-              },
-              {
-                text: Posts[index].text,
-                postAttachements: {
-                  create: [
-                    {
-                      attachement: {
-                        create: Attachements[0],
-                      },
-                    },
-                    {
-                      attachement: {
-                        create: Attachements[1],
-                      },
-                    },
-                    {
-                      attachement: {
-                        create: Attachements[2],
-                      },
-                    },
-                  ],
-                },
-              },
-              {
-                text: Posts[index].text,
-              },
-              {
-                text: Posts[index].text,
-              },
-            ],
+          name:
+            subject.name.charAt(0).toUpperCase() +
+            subject.name.slice(1) +
+            " Course",
+          imageUrl: "",
+          teacher: {
+            connect: {
+              id: teachers[Math.floor(Math.random() * teachers.length)].id,
+            },
           },
-          materialUnits: {
+          class: {
+            connect: {
+              id: classes[Math.floor(Math.random() * classes.length)].id,
+            },
+          },
+          subject: {
+            connect: {
+              id: subjects[Math.floor(Math.random() * subjects.length)].id,
+            },
+          },
+          posts: {
+            create: Array.from(
+              { length: Math.floor(Math.random() * Posts.length) },
+              () => Math.floor(Math.random() * Posts.length)
+            ).map((randomInt, index) => {
+              return {
+                text: Posts[randomInt].text,
+                postAttachements: {
+                  create: Array.from(
+                    {
+                      length: Math.floor(Math.random() * Attachements.length),
+                    },
+                    () => Math.floor(Math.random() * Attachements.length)
+                  ).map((randomAttachementIndex, index) => {
+                    return {
+                      attachement: {
+                        create: Attachements[randomAttachementIndex],
+                      },
+                    };
+                  }),
+                },
+              };
+            }),
+          },
+          /*    materialUnits: {
             create: [
               {
                 title: MaterialUnits[0].title,
@@ -111,17 +134,9 @@ async function runSeeders() {
                   ],
                 },
               },
-              {
-                title: MaterialUnits[1].title,
-              },
-              {
-                title: MaterialUnits[2].title,
-              },
-              { title: MaterialUnits[3].title },
-              { title: MaterialUnits[4].title },
             ],
-          },
-          practiceUnits: {
+          },*/
+          /*      practiceUnits: {
             create: [
               {
                 title: PracticeUnits[0].title,
@@ -133,46 +148,15 @@ async function runSeeders() {
               { title: PracticeUnits[3].title },
               { title: PracticeUnits[4].title },
             ],
-          },
+          },*/
         },
       })
     )
   );
 
-  /*
   // Classes
-  await Promise.all(
-    Classes.map(async (students_class) =>
-      prisma.class.create({
-        data: students_class,
-      })
-    )
-  );
-  // Subjects
-  await Promise.all(
-    Subjects.map(async (subject) =>
-      prisma.subject.create({
-        data: subject,
-      })
-    )
-  );
-  // Teachers
-  await Promise.all(
-    Teachers.map(async (teacher) =>
-      prisma.teacher.create({
-        data: teacher,
-      })
-    )
-  );
-  // Students
-  await Promise.all(
-    Students.map(async (student) =>
-      prisma.student.create({
-        data: student,
-      })
-    )
-  );
 
+  /*
   // Posts
   await Promise.all(
     Posts.map(async (post) =>
