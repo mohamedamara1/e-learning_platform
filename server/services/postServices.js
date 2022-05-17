@@ -37,8 +37,26 @@ async function getPostsByCourseId(courseId) {
   });
   return Posts;
 }
-async function addPost(Post) {
-  const CreatePost = await prisma.post.create({ data: Post });
+async function addPost(postData,attachementData) {
+  const CreatePost = await prisma.post.create({ 
+    data: {
+      ...postData,
+    }
+
+  });
+  attachementData.map(async (attachement)=>{
+    const Createattachement = await prisma.attachement.create({
+      data : attachement,
+      select: {id:true}
+      });
+    console.log(Createattachement);
+    const CreatepostAttachement = await prisma.postAttachement.create({
+      data : {postId:CreatePost.id, attachementId:Createattachement.id}
+      });
+      console.log(CreatepostAttachement);
+  });
+
+  return CreatePost;
 }
 
 async function updatePost(Criteria, PostData) {
