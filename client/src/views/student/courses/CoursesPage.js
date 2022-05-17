@@ -2,10 +2,10 @@ import React from "react";
 import DefaultHeader from "../../../components/Headers/DefaultHeader";
 import CourseCard from "./CourseCard";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useGetCoursesQuery } from "../../../api/coursesApi";
+import { useGetCourses } from "../../../api/coursesApi";
 import CourseCardSkeleton from "../../../components/Skeletons/CourseCardSkeleton";
 function CoursesPage() {
-  const { data: courses, error, isLoading } = useGetCoursesQuery("userid");
+  const { data: courses, error, isLoading } = useGetCourses("userid");
 
   return (
     <div className=" flex flex-col min-h-screen bg-dark-electric-blue p-2">
