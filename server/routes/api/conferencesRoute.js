@@ -67,11 +67,19 @@ router.post("/join_conference_by_password", (req, res) => {
 // @desc   Add subject
 // @access Private
 
-router.post("/join_conference_by_role", (req, res) => {
-  const data = req.body;
+router.post("/join_conference", verifySession(), (req, res) => {
+  const { courseId } = req.body;
+  const { role, fullName } = req.session.getAccessTokenPayload();
+  console.log("by role", req.session.getAccessTokenPayload());
+  console.log(req.session.getUserId());
 
   conferenceServices
-    .joinUserByRole(data)
+    .joinUserByRole({
+      courseId,
+      role,
+      fullName,
+      userId: req.session.getUserId(),
+    })
     .then((result) => {
       res.status(200).json(result);
     })

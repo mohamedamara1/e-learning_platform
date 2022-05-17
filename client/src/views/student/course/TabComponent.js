@@ -60,8 +60,7 @@ export const TabComponent = (props) => {
   const joinConference = useJoinConference();
   const handleJoinConference = () => {
     joinConference.mutate({
-      userId,
-      fullName: accessTokenPayload.fullName,
+      courseId: props.courseId,
     });
   };
   console.log(userId);
@@ -74,7 +73,12 @@ export const TabComponent = (props) => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Button onClick={handleJoinConference}>join conference</Button>
+      <div className="flex justify-center mb-5">
+        <Button onClick={handleJoinConference} color="secondary">
+          join conference
+        </Button>
+      </div>
+
       <Box
         sx={{
           borderBottom: 1,

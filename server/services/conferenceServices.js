@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bbb = require("bigbluebutton-js-fork");
+const courseServices = require("./courseServices");
 
 async function getConferences() {
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
@@ -31,6 +32,8 @@ async function createConference(data) {
   return createdMeeting;
 }
 
+
+
 async function joinUserByPassword(data) {
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
   let http = bbb.http;
@@ -46,14 +49,29 @@ async function joinUserByPassword(data) {
 }
 
 async function joinUserByRole(data) {
+  if (!courseServices.isConferenceHappening(data.courseId)) {
+    throw new Error("Conference is not happening");
+  }
+
+  if (data.role === "student") {
+    let student = await prisma.student.findOne({
+      where: {
+        userId: data.userId,
+      },
+    });
+    if (!student) {
+      throw new Error("Student not found");
+    }
+  }
+
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
   let http = bbb.http;
-
-  const { fullName, meetingID, role } = data;
+  const meetingId = courseServices.getConferenceIdByCourseId(data.courseId);
+  const { fullName, role } = data;
   if (role === "student") {
     let joinMeetingUrl = api.administration.joinByRole(
       fullName,
-      meetingID,
+      meetingId,
       "attendee",
       {
         redirect: "false",

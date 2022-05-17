@@ -20,18 +20,22 @@ export function useGetCourses(args) {
 export function useGetCourse(args) {
   const { courseId } = args;
 
-  return useQuery(["courses", courseId], async () => {
-    const { data } = await axios.get(
-      `http://localhost:5000/api/v1/courses/get_course`,
-      {
-        params: {
-          courseId,
-        },
-      }
-    );
-    console.log("data : ", data);
-    return data;
-  });
+  return useQuery(
+    ["courses", courseId],
+    async () => {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/v1/courses/get_course`,
+        {
+          params: {
+            courseId,
+          },
+        }
+      );
+      console.log("data : ", data);
+      return data;
+    },
+    { refetchOnWindowFocus: false }
+  );
 }
 
 export function useAddCourse() {
