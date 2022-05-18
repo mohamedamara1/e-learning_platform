@@ -27,6 +27,35 @@ async function getCourse(Criteria) {
   return course;
 }
 
+async function getConferenceIdByCourseId(courseId) {
+  const course = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+    },
+    select: {
+      conferences: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+      },
+    },
+  });
+  return course.conferenceId;
+}
+
+async function isConferenceHappening(courseId) {
+  const course = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+    },
+    select: {
+      isConferenceHappening: true,
+    },
+  });
+  return course.isConferenceHappening;
+}
+
 async function getCoursesByCriteria(Criteria) {
   const Courses = await prisma.course.findMany({
     where: Criteria,
@@ -64,5 +93,7 @@ async function getAllCourses() {
 }
 
 module.exports.getCourse = getCourse;
+module.exports.getConferenceIdByCourseId = getConferenceIdByCourseId;
+module.exports.isConferenceHappening = isConferenceHappening;
 module.exports.getCoursesByCriteria = getCoursesByCriteria;
 module.exports.getAllCourses = getAllCourses;

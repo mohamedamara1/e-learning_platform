@@ -5,10 +5,14 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import MaterialsList from "./MaterialsList";
-import practice_items from "../../../assets/json/assignments.json";
 import PracticeSection from "./PracticeSection";
 import Timeline from "./Timeline";
+import Button from "@mui/material/Button";
+
 import { useGetCourse } from "../../../api/coursesApi";
+import { useJoinConference } from "../../../api/conferencesApi";
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -45,12 +49,21 @@ function a11yProps(index) {
   };
 }
 
+//gotta add bbb join button
+
 export const TabComponent = (props) => {
-  const {
-    data: course,
-    error,
-    isLoading,
-  } = useGetCourse({ courseId: props.courseId });
+  const { data: course, isLoading } = useGetCourse({
+    courseId: props.courseId,
+  });
+  let { userId, accessTokenPayload } = useSessionContext();
+  console.log(accessTokenPayload);
+  const joinConference = useJoinConference();
+  const handleJoinConference = () => {
+    joinConference.mutate({
+      courseId: props.courseId,
+    });
+  };
+  console.log(userId);
 
   const [value, setValue] = useState(0);
 
@@ -60,6 +73,12 @@ export const TabComponent = (props) => {
 
   return (
     <Box sx={{ width: "100%" }}>
+      <div className="flex justify-center mb-5">
+        <Button onClick={handleJoinConference} color="secondary">
+          join conference
+        </Button>
+      </div>
+
       <Box
         sx={{
           borderBottom: 1,

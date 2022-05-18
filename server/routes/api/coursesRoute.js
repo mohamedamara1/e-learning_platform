@@ -33,9 +33,6 @@ router.get("/get_courses", verifySession(), (req, res) => {
 // @access Private
 
 router.get("/get_course", verifySession(), (req, res) => {
-  console.log(req.session.getAccessTokenPayload());
-  console.log(req.session.getUserId());
-
   let courseId = req.query.courseId;
 
   courseServices

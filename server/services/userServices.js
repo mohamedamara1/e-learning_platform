@@ -49,6 +49,27 @@ async function getRoleByUserId(userId) {
   return user.role;
 }
 
+async function getFullNameByUserIdAndRole(userId, role) {
+  if (role === "teacher") {
+    const teacher = await prisma.teacher.findUnique({
+      where: {
+        user_id: userId,
+      },
+    });
+    return teacher.fullName;
+  }
+  if (role === "student") {
+    const student = await prisma.student.findUnique({
+      where: {
+        user_id: userId,
+      },
+    });
+    return student.fullName;
+  }
+
+  return null;
+}
+
 async function getTeachers() {
   const teachers = await prisma.teacher.findMany();
   return teachers;
@@ -331,6 +352,7 @@ module.exports.updateUser = updateUser;
 module.exports.deleteUser = deleteUser;
 module.exports.assignRole = assignRole;
 module.exports.getRoleByUserId = getRoleByUserId;
+module.exports.getFullNameByUserIdAndRole = getFullNameByUserIdAndRole;
 
 module.exports.getTeachers = getTeachers;
 module.exports.getTeachersDetailled = getTeachersDetailled;
