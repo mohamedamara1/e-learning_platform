@@ -5,6 +5,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import ExerciceAccordion from "./ExerciceAccordion";
 import { useGetExerciceUnitsByCourseIdIncludeExercices } from "../../../api/exercicesApi";
+import AddexerciceForm from "./AddExerciceForm";
 
 export default function PracticeSection(props) {
   useEffect(() => {
@@ -18,6 +19,11 @@ export default function PracticeSection(props) {
     courseId: props.courseId,
   });
   return (
+    <div>
+            <div className="flex flex-col items-end pt-2">
+        <AddexerciceForm/>
+      </div>
+
     <TreeView
       aria-label="file system navigator"
       defaultCollapseIcon={<ExpandMoreIcon />}
@@ -60,5 +66,6 @@ export default function PracticeSection(props) {
         })
       )}
     </TreeView>
+    </div>
   );
 }
