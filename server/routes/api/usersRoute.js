@@ -11,7 +11,7 @@ const permit = require("../middlewares/authorization").permit;
 // @desc   Get courses
 // @access Private
 
-router.get("/get_teachers", [verifySession(), permit("admin")], (req, res) => {
+router.get("/get_teachers", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   // let courseId = req.query.courseId;
@@ -35,7 +35,7 @@ router.get("/get_teachers", [verifySession(), permit("admin")], (req, res) => {
 
 router.get(
   "/get_teachers_detailled",
-  [verifySession(), permit("admin")],
+
   (req, res) => {
     // const { user_who_requested_id } = req.query;
     //const { courseId } = req.params.courseId;
@@ -59,7 +59,7 @@ router.get(
 // @desc   Get courses
 // @access Private
 
-router.put("/teacher", [verifySession(), permit("admin")], (req, res) => {
+router.put("/teacher", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   let teacherId = req.query.teacherId;
@@ -82,7 +82,7 @@ router.put("/teacher", [verifySession(), permit("admin")], (req, res) => {
 // @desc   Get courses
 // @access Private
 
-router.delete("/teacher", [verifySession(), permit("admin")], (req, res) => {
+router.delete("/teacher", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   let teacherId = req.query.teacherId;
@@ -99,7 +99,7 @@ router.delete("/teacher", [verifySession(), permit("admin")], (req, res) => {
     });
 });
 
-router.get("/get_students", [verifySession(), permit("admin")], (req, res) => {
+router.get("/get_students", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   // let courseId = req.query.courseId;
@@ -123,7 +123,7 @@ router.get("/get_students", [verifySession(), permit("admin")], (req, res) => {
 
 router.get(
   "/get_students_detailled",
-  [verifySession(), permit("admin")],
+
   (req, res) => {
     // const { user_who_requested_id } = req.query;
     //const { courseId } = req.params.courseId;
@@ -147,7 +147,7 @@ router.get(
 // @desc   Get courses
 // @access Private
 
-router.put("/student", [verifySession(), permit("admin")], (req, res) => {
+router.put("/student", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   let studentId = req.query.studentId;
@@ -170,7 +170,7 @@ router.put("/student", [verifySession(), permit("admin")], (req, res) => {
 // @desc   Get courses
 // @access Private
 
-router.delete("/student", [verifySession(), permit("admin")], (req, res) => {
+router.delete("/student", (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   let studentId = req.query.studentId;
