@@ -17,7 +17,6 @@ import StudentLayout from "./layouts/StudentLayout";
 import StudentDashboard from "./views/student/dashboard/StudentDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import Course from "./views/student/course/Course";
-import UsersPage from "./views/admin/users/UsersPage";
 import TeacherCoursesPage from "./views/teacher/courses/TeacherCoursesPage";
 import TeacherLayout from "./layouts/TeacherLayout";
 import TeacherDashboard from "./views/teacher/dashboard/TeacherDashboard";
@@ -29,7 +28,6 @@ import HomePage from "./components/HomePage";
 import TeachersCrudTable from "./views/admin/users/teachers/TeachersCrudTable";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
 import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";

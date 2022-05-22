@@ -4,7 +4,6 @@ import CourseCard from "./CourseCard";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useGetCourses } from "../../../api/coursesApi";
 import CourseCardSkeleton from "../../../components/Skeletons/CourseCardSkeleton";
-import { useGetCourses } from "../../../api/coursesApi";
 function CoursesPage() {
   const { data: courses, error, isLoading } = useGetCourses("userid");
 
