@@ -31,7 +31,6 @@ import {
   useUpdateTeacher,
 } from "../../../../api/usersApi";
 
-import CRUDTable, { CreateForm, Field, Fields } from "react-crud-table";
 //
 const TABLE_HEAD = [
   { id: "firstName", label: "First Name", align: "left" },

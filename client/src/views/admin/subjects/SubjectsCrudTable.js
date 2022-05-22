@@ -31,7 +31,6 @@ import {
   useUpdateSubject,
 } from "../../../api/subjectsApi";
 
-import CRUDTable, { CreateForm, Field, Fields } from "react-crud-table";
 //
 const TABLE_HEAD = [
   { id: "name", label: "Name", align: "left" },
