@@ -4,6 +4,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { useGetMaterialUnitsByCourseIdIncludeMaterials } from "../../../api/materialsApi";
+import AddmaterialForm from "./AddMaterialForm";
 
 export default function MaterialsList(props) {
   useEffect(() => {
@@ -18,6 +19,10 @@ export default function MaterialsList(props) {
   });
 
   return (
+    <div>
+      <div className="flex flex-col items-end pt-2">
+        <AddmaterialForm/>
+      </div>
     <TreeView
       aria-label="file system navigator"
       defaultCollapseIcon={<ExpandMoreIcon />}
@@ -60,5 +65,6 @@ export default function MaterialsList(props) {
         })
       )}
     </TreeView>
+    </div>
   );
 }
