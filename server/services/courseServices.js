@@ -13,6 +13,9 @@ async function getCourse(Criteria) {
         },
       },
       posts: {
+        orderBy : {
+          createdAt :"desc"
+        },
         include: {
           postAttachements: true,
           postAttachements: {

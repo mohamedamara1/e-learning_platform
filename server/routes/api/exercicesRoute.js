@@ -66,9 +66,10 @@ router.get("/get_exercices_by_practiceUnitId/", (req, res) => {
 });
 
 router.post("/add_exercice", (req, res) => {
+  console.log(req.body.ExerciceData);
   exerciceServices
-  .addExercice(req.exercice)
-  .then(() => { res.status(200); })
+  .addExercice(req.body.ExerciceData, req.body.attachements)
+  .then((exercice) => { res.status(200).json(exercice); })
   .catch((error) => {
     console.log(error);
     res.status(400).json({message: "There was a problem adding the exercice."});

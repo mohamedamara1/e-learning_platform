@@ -11,6 +11,7 @@ function Timeline(props) {
     <div>
       <PostForm
       teacherFullName={props.teacherFullName}
+      courseId={props.courseId}
       />
       {props.isLoading ? (
         <h1>Loading posts!</h1>
