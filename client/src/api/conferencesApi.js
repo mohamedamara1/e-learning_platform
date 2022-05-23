@@ -26,3 +26,13 @@ export function useJoinConference() {
     });
   });
 }
+
+export function useCreateConference() {
+  return useMutation((conferenceInfo) => {
+    return axios({
+      url: "http://localhost:5000/api/v1/conferences/create_conference",
+      method: "POST",
+      data: conferenceInfo,
+    });
+  });
+}

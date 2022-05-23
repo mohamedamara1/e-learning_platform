@@ -94,8 +94,11 @@ router.post("/join_conference", verifySession(), (req, res) => {
 // @desc   Add subject
 // @access Private
 
-router.post("/create_conference", (req, res) => {
+router.post("/create_conference", verifySession(), (req, res) => {
   const data = req.body;
+
+  // console.log(courseId);
+  console.log(data);
 
   conferenceServices
     .createConference(data)

@@ -2,6 +2,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bbb = require("bigbluebutton-js-fork");
 const courseServices = require("./courseServices");
+const { v4: uuidv4 } = require("uuid");
+const { format } = require("date-fns");
+const schedule = require("node-schedule");
 
 async function getConferences() {
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
@@ -20,19 +23,80 @@ async function getConferenceInfo(conferenceId) {
   return meetingInfo;
 }
 
+async function setConferenceStatus(conferenceId, status) {
+  const conference = await prisma.conference.update({
+    where: {
+      id: conferenceId,
+    },
+    data: {
+      status: status,
+    },
+  });
+  return conference;
+}
+
 async function createConference(data) {
+  if (data.instant == true) {
+    console.log("instant here");
+    await prisma.course.update({
+      where: {
+        id: data.courseId,
+      },
+      data: {
+        isConferenceHappening: true,
+      },
+    });
+    await prisma.conference.create({
+      data: {
+        course: {
+          connect: {
+            id: data.courseId,
+          },
+        },
+        title: data.title,
+        status: "happening",
+        scheduledStartTime: format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+        duration: parseInt(data.duration),
+      },
+    });
+    const createdMeetingBBB = await createMeetingBBB(data.title, uuidv4());
+    return createdMeetingBBB;
+  } else if (data.instant == "false") {
+    const createdConference = await prisma.conference.create({
+      data: {
+        course: {
+          connect: {
+            id: data.courseId,
+          },
+        },
+        title: data.title,
+        status: "scheduled",
+        scheduledStartTime: toISOLocal(new Date(data.datetime * 1000)),
+        duration: parseInt(data.duration),
+      },
+    });
+    console.log(createdConference);
+
+    const scheduledStartTime = toISOLocal(new Date(data.datetime * 1000));
+    console.log(scheduledStartTime);
+
+    const job = schedule.scheduleJob(
+      scheduledStartTime,
+      function (conference) {
+        console.log(conference);
+      }.bind(null, createdConference)
+    );
+  }
+}
+
+async function createMeetingBBB(name, meetingId) {
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
   let http = bbb.http;
-
-  const { name, meetingID } = data;
-
-  let createMeetingUrl = api.administration.create(name, meetingID);
+  let createMeetingUrl = api.administration.create(name, meetingId);
   console.log(createMeetingUrl);
   let createdMeeting = await http(createMeetingUrl);
   return createdMeeting;
 }
-
-
 
 async function joinUserByPassword(data) {
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
@@ -96,8 +160,38 @@ async function joinUserByRole(data) {
     return null;
   }
 }
+
+function toISOLocal(d) {
+  var z = (n) => ("0" + n).slice(-2);
+  var zz = (n) => ("00" + n).slice(-3);
+  var off = d.getTimezoneOffset();
+  var sign = off > 0 ? "-" : "+";
+  off = Math.abs(off);
+
+  return (
+    d.getFullYear() +
+    "-" +
+    z(d.getMonth() + 1) +
+    "-" +
+    z(d.getDate()) +
+    "T" +
+    z(d.getHours()) +
+    ":" +
+    z(d.getMinutes()) +
+    ":" +
+    z(d.getSeconds()) +
+    "." +
+    zz(d.getMilliseconds()) +
+    sign +
+    z((off / 60) | 0) +
+    ":" +
+    z(off % 60)
+  );
+}
 module.exports.getConferences = getConferences;
 module.exports.getConferenceInfo = getConferenceInfo;
 module.exports.joinUserByPassword = joinUserByPassword;
 module.exports.joinUserByRole = joinUserByRole;
 module.exports.createConference = createConference;
+module.exports.createMeetingBBB = createMeetingBBB;
+module.exports.setConferenceStatus = setConferenceStatus;

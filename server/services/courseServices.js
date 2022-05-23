@@ -63,6 +63,18 @@ async function getCoursesByCriteria(Criteria) {
   return Courses;
 }
 
+async function setIsConferenceHappening(courseId, isConferenceHappening) {
+  const course = await prisma.course.update({
+    where: {
+      id: courseId,
+    },
+    data: {
+      isConferenceHappening: isConferenceHappening,
+    },
+  });
+  return course;
+}
+
 async function getAllCourses() {
   const Courses = await prisma.course.findMany({
     select: {
@@ -97,3 +109,4 @@ module.exports.getConferenceIdByCourseId = getConferenceIdByCourseId;
 module.exports.isConferenceHappening = isConferenceHappening;
 module.exports.getCoursesByCriteria = getCoursesByCriteria;
 module.exports.getAllCourses = getAllCourses;
+module.exports.setIsConferenceHappening = setIsConferenceHappening;

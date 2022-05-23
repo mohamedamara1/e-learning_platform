@@ -143,14 +143,15 @@ model Conference {
   id                 String              @id @default(uuid())
   title              String
   status             String
-  scheduledStartTime DateTime
-  scheduledEndTime   DateTime
-  stats              Json
+  scheduledStartTime DateTime            @db.Timestamp()
+  duration           Int
+  endTime            DateTime?
+  stats              Json?
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   studentAttendances StudentAttendance[]
   course             Course              @relation(fields: [courseId], references: [id])
-  courseId           String              @unique
+  courseId           String
 }
 
 model AssignmentSubmission {

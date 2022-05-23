@@ -12,34 +12,36 @@ import DialogTitle from "@mui/material/DialogTitle";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 import * as Yup from "yup";
+import { useCreateConference } from "../../../api/conferencesApi";
+import { MenuItem } from "@mui/material";
+import { format, compareAsc } from "date-fns";
+import { getUnixTime } from "date-fns";
 
-export default function ScheduleConferenceForm() {
+const durations = [
+  { label: "15 mins", value: 15 },
+  { label: "30 mins", value: 30 },
+  { label: "45 mins", value: 45 },
+  { label: "1 hour", value: 60 },
+  { label: "1.5 hours", value: 90 },
+  { label: "2 hours", value: 120 },
+];
+
+export default function ScheduleConferenceForm(props) {
   const [value, setValue] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [isSubmitionCompleted, setSubmitionCompleted] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      welcomeMessage: "",
-      date: Date.now(),
-      time: "",
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-    validationSchema: Yup.object().shape({
-      title: Yup.string().required("Required"),
-      welcomeMessage: Yup.string().required("Required"),
-      //        comment: Yup.string().required("Required"),
-    }),
-  });
-
+  const [checkedInstant, setCheckedInstant] = useState(false);
+  const createConference = useCreateConference();
   const handleClickOpen = () => {
     setSubmitionCompleted(false);
     setOpen(true);
@@ -52,10 +54,36 @@ export default function ScheduleConferenceForm() {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleCreateConference = (e) => {
-    console.log(e.target);
+  const handleCreateConference = () => {
+    const data = {
+      ...formik.values,
+      courseId: props.courseId,
+    };
+    createConference.mutate(data, {
+      onSuccess: (resp) => {
+        console.log(resp);
+        setSubmitionCompleted(true);
+      },
+    });
     setOpen(false);
   };
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      welcomeMessage: "",
+      datetime: getUnixTime(Date.now()),
+      duration: "60",
+      instant: "false",
+    },
+    onSubmit: handleCreateConference,
+    validationSchema: Yup.object().shape({
+      title: Yup.string().required("Required"),
+      welcomeMessage: Yup.string().required("Required"),
+      //        comment: Yup.string().required("Required"),
+    }),
+  });
+
   return (
     <React.Fragment>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -122,24 +150,66 @@ export default function ScheduleConferenceForm() {
                     margin="dense"
                     size="small"
                   />
+
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={checkedInstant}
+                          onChange={() => {
+                            setCheckedInstant(!checkedInstant);
+                            formik.setFieldValue("instant", !checkedInstant);
+                          }}
+                        />
+                      }
+                      label="Create instant conference"
+                    />
+                  </FormGroup>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      size="small"
-                      fullWidth
-                      label="Conference Date"
-                      value={formik.values.date}
-                      onChange={(newDate) => {
-                        formik.setFieldValue("date", newDate);
+                    <DateTimePicker
+                      label="Data and time of the conference"
+                      ampm={false}
+                      defaultValue={formik.values.datetime}
+                      onChange={(newDateTime) => {
+                        console.log(new Date(newDateTime).getTime() / 1000);
+                        formik.setFieldValue(
+                          "datetime",
+                          new Date(newDateTime).getTime() / 1000
+                        );
                       }}
                       renderInput={(params) => <TextField {...params} />}
-                    />
-                    <TimePicker
-                      label="Conference Time"
-                      value={value}
-                      onChange={handleChange}
-                      renderInput={(params) => <TextField {...params} />}
+                      minDate={new Date()}
+                      disabled={checkedInstant}
                     />
                   </LocalizationProvider>
+                  <TextField
+                    error={formik.errors.duration && formik.touched.duration}
+                    label="Duration"
+                    name="duration"
+                    type="number"
+                    select
+                    defaultValue={formik.values.duration}
+                    onBlur={formik.handleBlur}
+                    helperText={
+                      formik.errors.duration &&
+                      formik.touched.duration &&
+                      formik.errors.duration
+                    }
+                    onChange={(newValue) => {
+                      formik.setFieldValue("duration", newValue.target.value);
+                    }}
+                    //   margin="nomal"
+                    fullWidth
+                    margin="dense"
+                    size="small"
+                    disabled={checkedInstant}
+                  >
+                    {durations.map((duration) => (
+                      <MenuItem key={duration.value} value={duration.value}>
+                        {duration.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </div>
 
                 <DialogActions>
