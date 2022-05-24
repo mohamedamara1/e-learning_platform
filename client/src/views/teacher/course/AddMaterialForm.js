@@ -77,6 +77,7 @@ export default function AddMaterialForm(props) {
           id="demo-simple-select"
           placeholder="Material Unit"
           fullWidth
+          onChange={handleSelect}
         >
           {props.materialUnits.map((materialUnit, index) => {
             return <MenuItem value={materialUnit.id}>{materialUnit.title}</MenuItem>

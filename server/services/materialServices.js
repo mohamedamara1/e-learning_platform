@@ -44,12 +44,12 @@ async function addMaterial(materialData,attachementData) {
   const CreateMaterial = await prisma.CourseMaterial.create({ 
     data: {
       name : materialData.name,
-      url :materialData.url
-      /*materialUnit : {
+      url :materialData.url,
+      materialUnit : {
         connect: {
           id: materialData.materialUnitId,
         },
-    }*/,
+    },
   }
 });
   attachementData.map(async (attachement)=>{
