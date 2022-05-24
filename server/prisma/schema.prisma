@@ -105,8 +105,8 @@ model CourseMaterial {
   name                 String
   url                  String
   materialAttachements MaterialAttachement[]
-  materialUnit         MaterialUnit?         @relation(fields: [materialUnitId], references: [id])
-  materialUnitId       String?
+  materialUnit         MaterialUnit         @relation(fields: [materialUnitId], references: [id])
+  materialUnitId       String
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
 }
