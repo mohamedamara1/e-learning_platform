@@ -21,10 +21,16 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 import * as Yup from "yup";
-import { useCreateConference } from "../../../api/conferencesApi";
+import {
+  useCreateConference,
+  useJoinConference,
+} from "../../../api/conferencesApi";
 import { MenuItem } from "@mui/material";
 import { format, compareAsc } from "date-fns";
 import { getUnixTime } from "date-fns";
+import Alert from "@mui/material/Alert";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const durations = [
   { label: "15 mins", value: 15 },
@@ -39,9 +45,14 @@ export default function ScheduleConferenceForm(props) {
   const [value, setValue] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [isSubmitionCompleted, setSubmitionCompleted] = useState(false);
-
   const [checkedInstant, setCheckedInstant] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState("");
   const createConference = useCreateConference();
+  const joinConference = useJoinConference();
+
+  let navigate = useNavigate();
+
   const handleClickOpen = () => {
     setSubmitionCompleted(false);
     setOpen(true);
@@ -62,10 +73,34 @@ export default function ScheduleConferenceForm(props) {
     createConference.mutate(data, {
       onSuccess: (resp) => {
         console.log(resp);
-        setSubmitionCompleted(true);
+        if (resp.status === 200) {
+          setSubmitionCompleted(true);
+          setAlert(true);
+          setAlertContent("Conference created successfully");
+        }
+
+        //    setSubmitionCompleted(true);
       },
     });
-    setOpen(false);
+    //  setOpen(false);
+  };
+
+  const handleJoinConference = () => {
+    const data = {
+      courseId: props.courseId,
+    };
+    joinConference.mutate(data, {
+      onSuccess: (response) => {
+        console.log("response", response);
+        let path = response.data.url;
+        // navigate(path);
+      //  window.location.href = path;
+        window.open(
+          path,
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      },
+    });
   };
 
   const formik = useFormik({
@@ -74,7 +109,7 @@ export default function ScheduleConferenceForm(props) {
       welcomeMessage: "",
       datetime: getUnixTime(Date.now()),
       duration: "60",
-      instant: "false",
+      instant: false,
     },
     onSubmit: handleCreateConference,
     validationSchema: Yup.object().shape({
@@ -100,7 +135,7 @@ export default function ScheduleConferenceForm(props) {
               Schedule Conference
             </DialogTitle>
             <DialogContent>
-              <DialogContentText>Send us a comment!</DialogContentText>
+              <DialogContentText>Conference Info</DialogContentText>
               <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-col items-center gap-4 mt-4 ">
                   <TextField
@@ -231,10 +266,17 @@ export default function ScheduleConferenceForm(props) {
         )}
         {isSubmitionCompleted && (
           <React.Fragment>
-            <DialogTitle id="form-dialog-title">Thanks!</DialogTitle>
+            <DialogTitle id="form-dialog-title">Success!</DialogTitle>
             <DialogContent>
-              <DialogContentText>Thanks</DialogContentText>
+              <DialogContentText>
+                {alert ? (
+                  <Alert severity="success">{alertContent}</Alert>
+                ) : (
+                  <></>
+                )}
+              </DialogContentText>
               <DialogActions>
+                <Button onClick={handleJoinConference}>Join Conference</Button>
                 <Button type="button" className="outline" onClick={handleClose}>
                   Back to app
                 </Button>

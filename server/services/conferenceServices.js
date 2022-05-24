@@ -36,18 +36,12 @@ async function setConferenceStatus(conferenceId, status) {
 }
 
 async function createConference(data) {
-  if (data.instant == true) {
+  if (data.instant) {
     console.log("instant here");
-    await prisma.course.update({
-      where: {
-        id: data.courseId,
-      },
+    let conferenceId = uuidv4();
+    const createdConference = await prisma.conference.create({
       data: {
-        isConferenceHappening: true,
-      },
-    });
-    await prisma.conference.create({
-      data: {
+        id: conferenceId,
         course: {
           connect: {
             id: data.courseId,
@@ -59,11 +53,17 @@ async function createConference(data) {
         duration: parseInt(data.duration),
       },
     });
-    const createdMeetingBBB = await createMeetingBBB(data.title, uuidv4());
+
+    courseServices.setIsConferenceHappening(createdConference.courseId, true);
+
+    const createdMeetingBBB = await createMeetingBBB(data.title, conferenceId);
     return createdMeetingBBB;
-  } else if (data.instant == "false") {
+  } else if (!data.instant) {
+    let conferenceId = uuidv4();
+
     const createdConference = await prisma.conference.create({
       data: {
+        id: conferenceId,
         course: {
           connect: {
             id: data.courseId,
@@ -83,9 +83,14 @@ async function createConference(data) {
     const job = schedule.scheduleJob(
       scheduledStartTime,
       function (conference) {
+        console.log("conference happening");
         console.log(conference);
+        setConferenceStatus(conference.id, "happening");
+        courseServices.setIsConferenceHappening(conference.courseId, true);
+        createMeetingBBB(data.title, createdConference.id);
       }.bind(null, createdConference)
     );
+    return "created meeting succesfully";
   }
 }
 
@@ -130,12 +135,15 @@ async function joinUserByRole(data) {
 
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
   let http = bbb.http;
-  const meetingId = courseServices.getConferenceIdByCourseId(data.courseId);
+  const meetingID = await courseServices.getConferenceIdByCourseId(
+    data.courseId
+  );
+  console.log("meeting id", meetingID);
   const { fullName, role } = data;
   if (role === "student") {
     let joinMeetingUrl = api.administration.joinByRole(
       fullName,
-      meetingId,
+      meetingID,
       "attendee",
       {
         redirect: "false",
@@ -161,6 +169,38 @@ async function joinUserByRole(data) {
   }
 }
 
+/*async function joinUserByRole(data) {
+  let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
+  let http = bbb.http;
+ // const meetingId = data.meetingId;
+ // console.log("meeting id", meetingId);
+  const { fullName, role, meetingID } = data;
+  if (role === "student") {
+    let joinMeetingUrl = api.administration.joinByRole(
+      fullName,
+      meetingID,
+      "attendee",
+      {
+        redirect: "false",
+      }
+    );
+    console.log("joinMeetingUrl", joinMeetingUrl);
+    let joinMeeting = await http(joinMeetingUrl);
+    return joinMeeting;
+  } else if (role === "teacher") {
+    let joinMeetingUrl = api.administration.joinByRole(
+      fullName,
+      meetingID,
+      "moderator"
+    );
+    console.log("joinMeetingUrl", joinMeetingUrl);
+    let joinMeeting = await http(joinMeetingUrl);
+    return joinMeeting;
+  } else {
+    return null;
+  }
+}
+*/
 function toISOLocal(d) {
   var z = (n) => ("0" + n).slice(-2);
   var zz = (n) => ("00" + n).slice(-3);

@@ -28,7 +28,7 @@ async function getCourse(Criteria) {
 }
 
 async function getConferenceIdByCourseId(courseId) {
-  const course = await prisma.course.findUnique({
+  const conference = await prisma.course.findUnique({
     where: {
       id: courseId,
     },
@@ -41,7 +41,8 @@ async function getConferenceIdByCourseId(courseId) {
       },
     },
   });
-  return course.conferenceId;
+  console.log("conf", conference);
+  return conference.conferences[0].id;
 }
 
 async function isConferenceHappening(courseId) {

@@ -9,6 +9,8 @@ import practice_items from "../../../assets/json/assignments.json";
 import PracticeSection from "./PracticeSection";
 import Timeline from "./Timeline";
 import { useGetCourse } from "../../../api/coursesApi";
+import Button from "@mui/material/Button";
+import { useJoinConference } from "../../../api/conferencesApi";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,6 +54,24 @@ export default function TabComponent(props) {
     error,
     isLoading,
   } = useGetCourse({ courseId: props.courseId });
+  const joinConference = useJoinConference();
+  const handleJoinConference = () => {
+    const data = {
+      courseId: props.courseId,
+    };
+    joinConference.mutate(data, {
+      onSuccess: (response) => {
+        console.log("response", response);
+        let path = response.data.url;
+        // navigate(path);
+      //  window.location.href = path;
+        window.open(
+          path,
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      },
+    });
+  };
 
   const [value, setValue] = useState(0);
 
@@ -61,6 +81,14 @@ export default function TabComponent(props) {
 
   return (
     <Box sx={{ width: "100%" }}>
+      {!isLoading && course.isConferenceHappening && (
+        <div className="flex justify-center mb-5">
+          <Button onClick={handleJoinConference} color="secondary">
+            Join Conference
+          </Button>
+        </div>
+      )}
+
       <Box
         sx={{
           borderBottom: 1,
@@ -77,7 +105,7 @@ export default function TabComponent(props) {
       </Box>
       <TabPanel value={value} index={0}>
         <div className="flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 gap-2 ">
+          <div className="w-full gap-2  lg:w-2/3 xl:w-1/2">
             <Timeline
               isLoading={isLoading}
               posts={!isLoading ? course.posts : null}
@@ -88,15 +116,15 @@ export default function TabComponent(props) {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div className=" flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
+        <div className="flex justify-center ">
+          <div className="w-full p-6  lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <MaterialsList courseId={props.courseId} />
           </div>
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <div className=" flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
+        <div className="flex justify-center ">
+          <div className="w-full p-6  lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <PracticeSection courseId={props.courseId} />
           </div>
         </div>

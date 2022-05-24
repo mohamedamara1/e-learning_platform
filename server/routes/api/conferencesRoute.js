@@ -90,6 +90,28 @@ router.post("/join_conference", verifySession(), (req, res) => {
       });
     });
 });
+
+router.post("/join_conference_bbb", (req, res) => {
+  const { role, fullName } = req.body;
+  console.log("by role", req.session.getAccessTokenPayload());
+  console.log(req.session.getUserId());
+
+  conferenceServices
+    .joinUserByRole({
+      courseId,
+      role,
+      fullName,
+    })
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem joining the conference.",
+      });
+    });
+});
 // @route  Post api/v1/subjects/add_subject
 // @desc   Add subject
 // @access Private
