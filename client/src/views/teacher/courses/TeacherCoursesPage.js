@@ -4,14 +4,14 @@ import CourseCard from "./CourseCard";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useGetCourses } from "../../../api/coursesApi";
 import CourseCardSkeleton from "../../../components/Skeletons/CourseCardSkeleton";
-function CoursesPage() {
+function TeacherCoursesPage() {
   const { data: courses, error, isLoading } = useGetCourses("userid");
 
   return (
-    <div className="flex flex-col min-h-screen p-2 bg-dark-electric-blue">
+    <div className=" flex flex-col min-h-screen bg-dark-electric-blue p-2">
       <DefaultHeader title="My courses" background="bg-white-kids" />
-      <div className="flex-grow min-h-full p-3 m-2 rounded-xl">
-        <div className="grid grid-cols-3 gap-6 p-5 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5">
+      <div className=" min-h-full  m-2 flex-grow rounded-xl p-3">
+        <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 gap-6  p-5">
           {isLoading
             ? [...Array(10)].map((el, index) => <CourseCardSkeleton />)
             : courses
@@ -33,4 +33,4 @@ function CoursesPage() {
   );
 }
 
-export default CoursesPage;
+export default TeacherCoursesPage;

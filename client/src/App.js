@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { ReactQueryDevtools } from "react-query/devtools";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SuperTokens, {
@@ -17,6 +17,10 @@ import StudentLayout from "./layouts/StudentLayout";
 import StudentDashboard from "./views/student/dashboard/StudentDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import Course from "./views/student/course/Course";
+import TeacherCoursesPage from "./views/teacher/courses/TeacherCoursesPage";
+import TeacherLayout from "./layouts/TeacherLayout";
+import TeacherDashboard from "./views/teacher/dashboard/TeacherDashboard";
+import TeacherCourse from "./views/teacher/course/TeacherCourse";
 import UsersManagementPage from "./views/admin/users/UsersManagementPage";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
@@ -24,7 +28,6 @@ import HomePage from "./components/HomePage";
 import TeachersCrudTable from "./views/admin/users/teachers/TeachersCrudTable";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
 import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";
@@ -88,6 +91,8 @@ SuperTokens.init({
               return "/admin";
             } else if (role === "student") {
               return "/student";
+            } else if (role === "teacher") {
+              return "/teacher";
             } else {
               return undefined;
             }
@@ -190,6 +195,19 @@ function App() {
             <Route path="dashboard" element={<StudentDashboard />} />
             <Route path="courses" exact element={<CoursesPage />} />
             <Route path="course/:courseId" element={<Course />} />
+          </Route>
+          <Route
+            path="teacher"
+            element={
+              <EmailPasswordAuth>
+                <TeacherLayout />
+              </EmailPasswordAuth>
+            }
+          >
+            <Route index element={<TeacherDashboard />} />
+            <Route path="dashboard" element={<TeacherDashboard />} />
+            <Route path="courses" exact element={<TeacherCoursesPage />} />
+            <Route path="course/:courseId" element={<TeacherCourse />} />
           </Route>
 
           <Route

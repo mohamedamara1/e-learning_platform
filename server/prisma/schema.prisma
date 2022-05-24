@@ -52,18 +52,21 @@ model Class {
 }
 
 model Course {
-  id            String         @id @default(uuid())
-  name          String
-  teacherId     String
-  classId       String
-  subjectId     String
-  imageUrl      String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  class         Class          @relation(fields: [classId], references: [id])
-  subject       Subject        @relation(fields: [subjectId], references: [id])
-  teacher       Teacher        @relation(fields: [teacherId], references: [id])
-  conferences   Conference[]
+  id                    String       @id @default(uuid())
+  name                  String
+  teacherId             String
+  classId               String
+  subjectId             String
+  imageUrl              String?
+  isConferenceHappening Boolean      @default(false)
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  class                 Class        @relation(fields: [classId], references: [id])
+  subject               Subject      @relation(fields: [subjectId], references: [id])
+  teacher               Teacher      @relation(fields: [teacherId], references: [id])
+  conferences           Conference[]
+
+  // conferences   Conference[]
   materialUnits MaterialUnit[]
   posts         Post[]
   practiceUnits PracticeUnit[]
@@ -106,10 +109,10 @@ model CourseMaterial {
   id                   String                @id @default(uuid())
   name                 String
   url                  String
-  materialUnitId       String?
+  materialUnitId       String
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
-  materialUnit         MaterialUnit?         @relation(fields: [materialUnitId], references: [id])
+  materialUnit         MaterialUnit          @relation(fields: [materialUnitId], references: [id])
   materialAttachements MaterialAttachement[]
 }
 
@@ -140,14 +143,15 @@ model Conference {
   id                 String              @id @default(uuid())
   title              String
   status             String
-  scheduledStartTime DateTime
-  scheduledEndTime   DateTime
-  courseId           String
-  stats              Json
+  scheduledStartTime DateTime            @db.Timestamp()
+  duration           Int
+  endTime            DateTime?
+  stats              Json?
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
-  course             Course              @relation(fields: [courseId], references: [id])
   studentAttendances StudentAttendance[]
+  course             Course              @relation(fields: [courseId], references: [id])
+  courseId           String
 }
 
 model AssignmentSubmission {

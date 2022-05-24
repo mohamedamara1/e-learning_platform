@@ -14,12 +14,16 @@
   "dependencies": {
     "@prisma/client": "^3.10.0",
     "bcrypt": "^5.0.1",
+    "bigbluebutton-js-fork": "mohamedamara1/bigbluebutton-js",
     "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "node-schedule": "^2.1.0",
     "nodemon": "^2.0.15",
     "pg": "^8.7.3",
-    "supertokens-node": "^9.2.0"
+    "supertokens-node": "^9.2.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "prisma": "^3.10.0"

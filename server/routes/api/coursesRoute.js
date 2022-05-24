@@ -12,7 +12,7 @@ const permit = require("../middlewares/authorization").permit;
 // @desc   Get courses
 // @access Private
 
-router.get("/get_courses", verifySession(), (req, res) => {
+router.get("/get_courses", (req, res) => {
   // const { user_who_requested_id } = req.query;
 
   courseServices
@@ -33,9 +33,6 @@ router.get("/get_courses", verifySession(), (req, res) => {
 // @access Private
 
 router.get("/get_course", verifySession(), (req, res) => {
-  console.log(req.session.getAccessTokenPayload());
-  console.log(req.session.getUserId());
-
   let courseId = req.query.courseId;
 
   courseServices

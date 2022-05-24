@@ -1,10 +1,9 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import DefaultHeader from "../../../components/Headers/DefaultHeader";
-import { TabComponent } from "./TabComponent";
-const Course = () => {
+import TabComponent from "./TabComponent";
+const TeacherCourse = () => {
   const { state } = useLocation();
-  console.log(state.courseId);
   //const { data: course, error, isLoading } = useGetCourseQuery(state.courseId);
 
   /*
@@ -15,12 +14,13 @@ const Course = () => {
   }*/
 
   return (
+
     <div className="">
-      <DefaultHeader title={state.courseName} background="bg-white-kids" />
-      
+
+      <DefaultHeader name={state.courseName} background="bg-white-kids" />
       <TabComponent courseId={state.courseId} />
     </div>
   );
 };
 
-export default Course;
+export default TeacherCourse;

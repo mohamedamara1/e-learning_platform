@@ -15,3 +15,18 @@ export function useGetPosts(args) {
     { refetchOnWindowFocus: false }
   );
 }
+
+export function useAddPost(args) {
+  const {postData, attachements} = args;
+  return useQuery(
+    ["post", postData, attachements],
+    async () => {
+      axios.post(`http://localhost:5000/api/v1/posts/add_post`, {
+        postData: postData,
+        attachements: attachements
+      })
+      .then(function (response){console.log(response)})
+      .then(function (error){console.log(error)})
+    }
+  )
+}

@@ -5,13 +5,12 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import MaterialsList from "./MaterialsList";
+import practice_items from "../../../assets/json/assignments.json";
 import PracticeSection from "./PracticeSection";
 import Timeline from "./Timeline";
-import Button from "@mui/material/Button";
-
 import { useGetCourse } from "../../../api/coursesApi";
+import Button from "@mui/material/Button";
 import { useJoinConference } from "../../../api/conferencesApi";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,21 +48,30 @@ function a11yProps(index) {
   };
 }
 
-//gotta add bbb join button
-
-export const TabComponent = (props) => {
-  const { data: course, isLoading } = useGetCourse({
-    courseId: props.courseId,
-  });
-  let { userId, accessTokenPayload } = useSessionContext();
-  console.log(accessTokenPayload);
+export default function TabComponent(props) {
+  const {
+    data: course,
+    error,
+    isLoading,
+  } = useGetCourse({ courseId: props.courseId });
   const joinConference = useJoinConference();
   const handleJoinConference = () => {
-    joinConference.mutate({
+    const data = {
       courseId: props.courseId,
+    };
+    joinConference.mutate(data, {
+      onSuccess: (response) => {
+        console.log("response", response);
+        let path = response.data.url;
+        // navigate(path);
+      //  window.location.href = path;
+        window.open(
+          path,
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      },
     });
   };
-  console.log(userId);
 
   const [value, setValue] = useState(0);
 
@@ -73,11 +81,13 @@ export const TabComponent = (props) => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <div className="flex justify-center mb-5">
-        <Button onClick={handleJoinConference} color="secondary">
-          join conference
-        </Button>
-      </div>
+      {!isLoading && course.isConferenceHappening && (
+        <div className="flex justify-center mb-5">
+          <Button onClick={handleJoinConference} color="secondary">
+            Join Conference
+          </Button>
+        </div>
+      )}
 
       <Box
         sx={{
@@ -95,30 +105,30 @@ export const TabComponent = (props) => {
       </Box>
       <TabPanel value={value} index={0}>
         <div className="flex justify-center">
-          <div className="w-full gap-2 lg:w-2/3 xl:w-1/2">
+          <div className="w-full gap-2  lg:w-2/3 xl:w-1/2">
             <Timeline
               isLoading={isLoading}
               posts={!isLoading ? course.posts : null}
               courseId={props.courseId}
-              teacherFullName={!isLoading ? course.teacher.fullName : null}
+              teacherFullName={!isLoading ? course.teacher.fullName : ""}
             />
           </div>
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <div className="flex justify-center ">
-          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
+          <div className="w-full p-6  lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <MaterialsList courseId={props.courseId} />
           </div>
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <div className="flex justify-center ">
-          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
+          <div className="w-full p-6  lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <PracticeSection courseId={props.courseId} />
           </div>
         </div>
       </TabPanel>
     </Box>
   );
-};
+}

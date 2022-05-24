@@ -30,8 +30,9 @@ export function useGetCourse(args) {
       }
     );
     console.log("data : ", data);
-    return data;
-  });
+    return data;},
+    { refetchOnWindowFocus: false }
+  );
 }
 
 export function useAddCourse() {

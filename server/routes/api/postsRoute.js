@@ -14,7 +14,6 @@ router.get("/get_posts/", verifySession(), (req, res) => {
   // const { user_who_requested_id } = req.query;
   //const { courseId } = req.params.courseId;
   let courseId = req.query.courseId;
-
   postServices
     .getPostsByCourseId(courseId)
     .then((posts) => {
@@ -28,13 +27,12 @@ router.get("/get_posts/", verifySession(), (req, res) => {
     });
 });
 
-router.post("/add_post", [verifySession(), permit("teacher")], (req, res) => {
+router.post("/add_post", (req, res) => {
+  console.log(req.body.postData);
   postServices
-    .addPost(req.post)
-    .then(() => {
-      res.status(200);
-    })
-    .catch((error) => {
+    .addPost(req.body.postData,req.body.attachements)
+    .then((post) => { res.status(200).json(post); })
+    .catch((error) =>{
       console.log(error);
       res.status(400).json({ message: "There was a problem adding the post." });
     });

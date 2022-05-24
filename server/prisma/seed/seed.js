@@ -102,7 +102,7 @@ async function runSeeders() {
               };
             }),
           },
-          /*    materialUnits: {
+          materialUnits: {
             create: [
               {
                 title: MaterialUnits[0].title,
@@ -135,7 +135,7 @@ async function runSeeders() {
                 },
               },
             ],
-          },*/
+          },
           /*      practiceUnits: {
             create: [
               {
