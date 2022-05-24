@@ -11,9 +11,25 @@ import { styled } from "@mui/material/styles";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import { useAddMaterial } from '../../../api/materialsApi';
 
-export default function AddMaterialForm() {
+export default function AddMaterialForm(props) {
 
+  const [attachements, setAttachements] = React.useState([]);
+  const[name, setname] = React.useState("");
+  const [selectedUnit, setselectedUnit] = React.useState('');
+
+  const handleSelect = (event) => {
+    setselectedUnit(event.target.value);
+  };
+
+  const handleNameChange = event =>{
+    setname(event.target.value);
+  }
+  const handleUpload = event => {
+    setAttachements(prevattachements => [...prevattachements, ...event.target.files]);
+    console.log(attachements);
+  }
     const Input = styled('input')({
         display: 'none',
       });
@@ -26,6 +42,16 @@ export default function AddMaterialForm() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const mutation = useAddMaterial(
+    {
+          name: name,
+          courseId: props.courseId,
+          url : "https://justtesting.com",
+          materialUnitId: selectedUnit
+     },
+      attachements
+    );
 
   return (
     <div>
@@ -42,6 +68,8 @@ export default function AddMaterialForm() {
             label="Material Name"
             fullWidth
             variant="standard"
+            value={name}
+            onChange={handleNameChange}
           />
           <div className="flex flex-col items-center pt-2">
         <Select
@@ -50,14 +78,14 @@ export default function AddMaterialForm() {
           placeholder="Material Unit"
           fullWidth
         >
-          <MenuItem value={10}>Material Unit N°1</MenuItem>
-          <MenuItem value={20}>Material Unit N°2</MenuItem>
-          <MenuItem value={30}>Material Unit N°3</MenuItem>
+          {props.materialUnits.map((materialUnit, index) => {
+            return <MenuItem value={materialUnit.id}>{materialUnit.title}</MenuItem>
+          })}
         </Select>
         </div>
           <div className="flex flex-col items-center pt-2">
             <label htmlFor="contained-button-file">
-                <Input accept="image/*" id="contained-button-file" multiple type="file" />
+                <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleUpload}/>
                 <Button size="small" variant="contained" endIcon={<UploadFileIcon />} component="span">
                   Upload
                 </Button>
@@ -66,7 +94,9 @@ export default function AddMaterialForm() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={() => {
+           mutation.mutate()
+         }}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

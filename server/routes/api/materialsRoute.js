@@ -66,8 +66,8 @@ router.get("/get_materials_by_materialUnitId/", (req, res) => {
 
 router.post("/add_material", (req, res) => {
   materialServices
-  .addMaterial(req.Material)
-  .then(() => { res.status(200); })
+  .addMaterial(req.body.materialData, req.body.attachements)
+  .then((material) => { res.status(200).json(material); })
   .catch((error) => {
     console.log(error);
     res.status(400).json({message: "There was a problem adding the material."});

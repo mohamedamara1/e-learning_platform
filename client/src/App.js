@@ -88,8 +88,10 @@ SuperTokens.init({
             } else if (role == "student") {
               return "/student";
             } else if (role === "teacher"){
+              console.log(role);
               return "/teacher"
             } else {
+              
               return undefined;
             }
           });
