@@ -58,8 +58,38 @@ async function getExercicesByCriteria(Criteria, Includes) {
   return Exercices;
 }
 
-async function addExercice(Exercice) {
-  const CreateExercice = await prisma.exercice.create({ data: Exercice });
+async function addExercice(exerciceData,attachementData) {
+  const CreateExercice = await prisma.exercice.create({ 
+    data: {
+      name : exerciceData.name,
+      description : exerciceData.description,
+      isAssignment : exerciceData.isAssignment,
+      deadlineTimestamp : exerciceData.deadlineTimeStamp,
+      practiceUnit : {
+        connect: {
+          id: exerciceData.practiceUnitId,
+        },
+    },
+  }
+});
+  attachementData.map(async (attachement)=>{
+    console.log(attachement);
+    const Createattachement = await prisma.attachement.create({
+      data : {
+        name : attachement.name,
+        fileExtension : attachement.type,
+        size : attachement.size.toString()
+      },
+      select: {id:true}
+      });
+    console.log(Createattachement);
+    const CreateExerciceAttachement = await prisma.exerciceAttachement.create({
+      data : {exerciceId:CreateExercice.id, attachementId:Createattachement.id}
+      });
+      console.log(CreateExerciceAttachement);
+  });
+
+  return CreateExercice;
 }
 
 async function updateExercice(Criteria, ExerciceData) {

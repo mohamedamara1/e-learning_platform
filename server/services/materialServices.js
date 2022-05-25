@@ -40,8 +40,36 @@ async function getAllMaterials() {
   return Materials;
 }
 
-async function addMaterial(Material) {
-  const CreateMaterial = await prisma.coursematerial.create({ data: Material });
+async function addMaterial(materialData,attachementData) {
+  const CreateMaterial = await prisma.CourseMaterial.create({ 
+    data: {
+      name : materialData.name,
+      url :materialData.url,
+      materialUnit : {
+        connect: {
+          id: materialData.materialUnitId,
+        },
+    },
+  }
+});
+  attachementData.map(async (attachement)=>{
+    console.log(attachement);
+    const Createattachement = await prisma.attachement.create({
+      data : {
+        name : "test",//attachement.name,
+        fileExtension : "pdf",//attachement.type,
+        size :"2" //attachement.size.toString()
+      },
+      select: {id:true}
+      });
+    console.log(Createattachement);
+    const CreateMaterialAttachement = await prisma.MaterialAttachement.create({
+      data : {materialId:CreateMaterial.id, attachementId:Createattachement.id}
+      });
+      console.log(CreateMaterialAttachement);
+  });
+
+  return CreateMaterial;
 }
 
 async function updateMaterial(Criteria, MaterialData) {

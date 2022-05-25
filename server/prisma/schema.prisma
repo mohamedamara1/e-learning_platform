@@ -161,6 +161,7 @@ model AssignmentSubmission {
   exerciceId                String
   firstSubmissionTimestamp  DateTime
   latestSubmissionTimestamp DateTime?
+  submissionsCount          Int
   createdAt                 DateTime                @default(now())
   updatedAt                 DateTime                @updatedAt
   exercice                  Exercice                @relation(fields: [exerciceId], references: [id])

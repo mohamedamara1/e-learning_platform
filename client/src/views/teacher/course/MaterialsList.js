@@ -21,7 +21,9 @@ export default function MaterialsList(props) {
   return (
     <div>
       <div className="flex flex-col items-end pt-2">
-        <AddmaterialForm/>
+        <AddmaterialForm
+        courseId = {props.courseId}
+        materialUnits = {!isLoading ? materialUnits : []}/>
       </div>
     <TreeView
       aria-label="file system navigator"

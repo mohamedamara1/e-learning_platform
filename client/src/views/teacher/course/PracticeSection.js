@@ -6,6 +6,7 @@ import TreeItem from "@mui/lab/TreeItem";
 import ExerciceAccordion from "./ExerciceAccordion";
 import { useGetExerciceUnitsByCourseIdIncludeExercices } from "../../../api/exercicesApi";
 import AddexerciceForm from "./AddExerciceForm";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 export default function PracticeSection(props) {
   useEffect(() => {
@@ -18,10 +19,14 @@ export default function PracticeSection(props) {
   } = useGetExerciceUnitsByCourseIdIncludeExercices({
     courseId: props.courseId,
   });
+  console.log(practiceUnits)
   return (
     <div>
             <div className="flex flex-col items-end pt-2">
-        <AddexerciceForm/>
+        <AddexerciceForm
+        practiceUnits={!isLoading ? practiceUnits : []}
+        courseId={props.courseId}
+        />
       </div>
 
     <TreeView

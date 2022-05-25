@@ -28,7 +28,7 @@ router.get("/get_posts/", verifySession(), (req, res) => {
 });
 
 router.post("/add_post", (req, res) => {
-  console.log(req.body.postData);
+  console.log(req.body.attachements);
   postServices
     .addPost(req.body.postData,req.body.attachements)
     .then((post) => { res.status(200).json(post); })

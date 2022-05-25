@@ -10,12 +10,22 @@ import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SendIcon from '@mui/icons-material/Send';
+import Typography from "@mui/material/Typography";
+import { useAddPost } from "../../../api/postsApi";
 export default function PostForm(props) {
   const[postText, setpostText] = React.useState("");
   const [attachements, setAttachements] = React.useState([]);
   const Input = styled('input')({
     display: 'none',
   });
+
+ const mutation = useAddPost(
+{
+      text: postText,
+      courseId: props.courseId
+ }/*,
+  attachements*/
+);
 
   const handleTextChange = event =>{
     setpostText(event.target.value);
@@ -24,8 +34,8 @@ export default function PostForm(props) {
 
   const handleUpload = event => {
     setAttachements(prevattachements => [...prevattachements, ...event.target.files]);
+    console.log(attachements)
   }
-  const handlePost = () => {    console.log(attachements);}
 
   return (
     
@@ -61,7 +71,9 @@ export default function PostForm(props) {
             </label>
         </div>
         <div className="flex flex-col items-end pt-2">
-          <Button size="small" variant="contained" endIcon={<SendIcon />} onClick={handlePost}>
+          <Button size="small" variant="contained" endIcon={<SendIcon />} onClick={() => {
+           mutation.mutate()
+         }}>
             Post
           </Button>
         </div>

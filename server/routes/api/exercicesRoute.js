@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
 
 const verifySession =
   require("supertokens-node/recipe/session/framework/express").verifySession;
@@ -72,18 +73,15 @@ router.get("/get_exercices_by_practiceUnitId/", verifySession(), (req, res) => {
     });
 });
 
-router.post("/add_exercice", verifySession(), (req, res) => {
+router.post("/add_exercice", (req, res) => {
+  console.log(req.body.ExerciceData);
   exerciceServices
-    .addExercice(req.exercice)
-    .then(() => {
-      res.status(200);
-    })
-    .catch((error) => {
-      console.log(error);
-      res
-        .status(400)
-        .json({ message: "There was a problem adding the exercice." });
-    });
+  .addExercice(req.body.ExerciceData, req.body.attachements)
+  .then((exercice) => { res.status(200).json(exercice); })
+  .catch((error) => {
+    console.log(error);
+    res.status(400).json({message: "There was a problem adding the exercice."});
+  });
 });
 
 router.put("/update_exercice", verifySession(), (req, res) => {
