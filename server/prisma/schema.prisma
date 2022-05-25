@@ -35,7 +35,6 @@ model Teacher {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   courses   Course[]
-
   account emailpassword_users @relation(fields: [user_id], references: [user_id])
   user_id String              @unique
 
@@ -162,7 +161,6 @@ model AssignmentSubmission {
   exerciceId                String
   firstSubmissionTimestamp  DateTime
   latestSubmissionTimestamp DateTime?
-  submissionsCount          Int
   createdAt                 DateTime                @default(now())
   updatedAt                 DateTime                @updatedAt
   exercice                  Exercice                @relation(fields: [exerciceId], references: [id])
