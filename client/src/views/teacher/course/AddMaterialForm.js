@@ -15,6 +15,7 @@ import { useAddMaterial } from '../../../api/materialsApi';
 
 export default function AddMaterialForm(props) {
 
+  const formData = new FormData();
   const [attachements, setAttachements] = React.useState([]);
   const[name, setname] = React.useState("");
   const [selectedUnit, setselectedUnit] = React.useState('');
@@ -27,8 +28,9 @@ export default function AddMaterialForm(props) {
     setname(event.target.value);
   }
   const handleUpload = event => {
-    setAttachements(prevattachements => [...prevattachements, ...event.target.files]);
-    console.log(attachements);
+    setAttachements(event.target.files);
+    /*console.log(attachements);
+    console.log(formData);*/
   }
     const Input = styled('input')({
         display: 'none',
@@ -50,7 +52,7 @@ export default function AddMaterialForm(props) {
           url : "https://justtesting.com",
           materialUnitId: selectedUnit
      },
-      attachements
+      formData
     );
 
   return (
@@ -86,7 +88,7 @@ export default function AddMaterialForm(props) {
         </div>
           <div className="flex flex-col items-center pt-2">
             <label htmlFor="contained-button-file">
-                <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleUpload}/>
+                <Input accept="image/*" id="contained-button-file" multiple enctype="multipart/form-data" type="file" onChange={handleUpload}/>
                 <Button size="small" variant="contained" endIcon={<UploadFileIcon />} component="span">
                   Upload
                 </Button>
@@ -96,6 +98,7 @@ export default function AddMaterialForm(props) {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={() => {
+    formData.append('file', attachements[0]); 
            mutation.mutate()
          }}>Add</Button>
         </DialogActions>

@@ -108,6 +108,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const courses = require("./routes/api/coursesRoute");
 const subjects = require("./routes/api/subjectsRoute");

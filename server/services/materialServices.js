@@ -56,9 +56,9 @@ async function addMaterial(materialData,attachementData) {
     console.log(attachement);
     const Createattachement = await prisma.attachement.create({
       data : {
-        name : attachement.name,
-        fileExtension : attachement.type,
-        size : attachement.size.toString()
+        name : "test",//attachement.name,
+        fileExtension : "pdf",//attachement.type,
+        size :"2" //attachement.size.toString()
       },
       select: {id:true}
       });

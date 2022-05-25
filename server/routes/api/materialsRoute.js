@@ -1,5 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/materials')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+var upload = multer({ storage: storage })
 
 const materialServices = require("../../services/materialServices");
 
@@ -64,7 +76,8 @@ router.get("/get_materials_by_materialUnitId/", (req, res) => {
 });
 
 
-router.post("/add_material", (req, res) => {
+router.post("/add_material", upload.any(), (req, res) => {
+  console.log(req.files);
   materialServices
   .addMaterial(req.body.materialData, req.body.attachements)
   .then((material) => { res.status(200).json(material); })
