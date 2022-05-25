@@ -1,20 +1,13 @@
 import React from "react";
 import MoreMenu from "./MoreMenu";
 import {
-  Card,
-  Table,
   Stack,
   Chip,
-  Avatar,
-  Button,
   Checkbox,
   TableRow,
-  TableBody,
   TableCell,
-  Container,
   Typography,
-  TableContainer,
-  TablePagination,
+
 } from "@mui/material";
 const RegularRow = ({
   index,

@@ -9,9 +9,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -19,18 +17,15 @@ import Checkbox from "@mui/material/Checkbox";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   useCreateConference,
   useJoinConference,
 } from "../../../api/conferencesApi";
 import { MenuItem } from "@mui/material";
-import { format, compareAsc } from "date-fns";
 import { getUnixTime } from "date-fns";
 import Alert from "@mui/material/Alert";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 const durations = [
   { label: "15 mins", value: 15 },
@@ -42,7 +37,6 @@ const durations = [
 ];
 
 export default function ScheduleConferenceForm(props) {
-  const [value, setValue] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [isSubmitionCompleted, setSubmitionCompleted] = useState(false);
   const [checkedInstant, setCheckedInstant] = useState(false);
@@ -51,16 +45,12 @@ export default function ScheduleConferenceForm(props) {
   const createConference = useCreateConference();
   const joinConference = useJoinConference();
 
-  let navigate = useNavigate();
 
   const handleClickOpen = () => {
     setSubmitionCompleted(false);
     setOpen(true);
   };
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
 
   const handleClose = () => {
     setOpen(false);

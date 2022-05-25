@@ -5,23 +5,17 @@ import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
-import Attachment from "./Attachment";
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SendIcon from '@mui/icons-material/Send';
-import Typography from "@mui/material/Typography";
 export default function PostForm(props) {
   const[postText, setpostText] = React.useState("");
-  const [expanded, setExpanded] = React.useState(false);
   const [attachements, setAttachements] = React.useState([]);
   const Input = styled('input')({
     display: 'none',
   });
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   const handleTextChange = event =>{
     setpostText(event.target.value);

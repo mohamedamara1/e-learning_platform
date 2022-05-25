@@ -4,9 +4,7 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -20,7 +18,6 @@ import { AiOutlinePlus } from "react-icons/ai";
 import ClassListHead from "./ClassListHead";
 
 import ClassListToolbar from "./ClassListToolbar";
-import MoreMenu from "./MoreMenu";
 import RegularRow from "./RegularRow";
 import fieldsArr from "./fields";
 import EditableRow from "./EditableRow";
@@ -72,13 +69,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export const ClassesCrudTable = () => {
-  const {
-    status,
-    data: classes,
-    error,
-    isFetching,
-    isLoading: loadingClasses,
-  } = useGetClasses();
+  const { data: classes, isLoading: loadingClasses } = useGetClasses();
   /* const {
     data: classes,
     error,

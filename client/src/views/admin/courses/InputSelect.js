@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FormControl, InputLabel, MenuItem } from "@mui/material";
 import Select from "@mui/material/Select";
 
-import { useGetCourses } from "../../../api/coursesApi";
 import { useGetTeachers } from "../../../api/usersApi";
 import { useGetClasses } from "../../../api/classesApi";
 import { useGetSubjects } from "../../../api/subjectsApi";
@@ -41,14 +40,14 @@ const InputSelect = ({
 }) => {
   const {
     data: items,
-    error: itemsError,
+    //  error: itemsError,
     isLoading: loadingItems,
   } = useGetItems(name);
   console.log(items);
 
-  const [hasError, setError] = useState(false);
+  // const [hasError, setError] = useState(false);
 
-  const [itemId, setItemId] = React.useState("");
+  const [itemId, setItemId] = useState("");
 
   const handleSelectChange = (event) => {
     console.log(event);

@@ -2,7 +2,6 @@ import React from "react";
 import MoreMenu from "./MoreMenu";
 import {
   Stack,
-  Chip,
   Checkbox,
   TableRow,
   TableCell,

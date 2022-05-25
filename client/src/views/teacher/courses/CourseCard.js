@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import NotebookPic from "../../../assets/img/notebook_page.jpg";
-import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ScheduleConferenceForm from "./ScheduleConferenceForm";
 
