@@ -12,11 +12,13 @@ const permit = require("../middlewares/authorization").permit;
 // @desc   Get courses
 // @access Private
 
-router.get("/get_courses", (req, res) => {
-  // const { user_who_requested_id } = req.query;
+router.get("/get_courses", verifySession(), (req, res) => {
+  const { role } = req.session.getAccessTokenPayload();
+  let userId = req.session.getUserId();
+  console.log(userId);
 
   courseServices
-    .getAllCourses()
+    .getCoursesByRole(role, userId)
     .then((courses) => {
       res.status(200).json(courses);
     })
@@ -26,17 +28,14 @@ router.get("/get_courses", (req, res) => {
         message: "There was a problem retrieving the courses.",
       });
     });
-}); // @route  GET api/v1/courses/get_courses
+});
+// @route  GET api/v1/courses/get_courses
 // @desc   Get courses
 // @access Private
 
-router.get("/get_courses_by_role", (req, res) => {
-  // const { user_who_requested_id } = req.query;
-
-  let { userId, role } = req.body;
-
+router.get("/get_courses_old", (req, res) => {
   courseServices
-    .getCoursesByRole(role, userId)
+    .getAllCourses()
     .then((courses) => {
       res.status(200).json(courses);
     })

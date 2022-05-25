@@ -13,8 +13,8 @@ async function getCourse(Criteria) {
         },
       },
       posts: {
-        orderBy : {
-          createdAt :"desc"
+        orderBy: {
+          createdAt: "desc",
         },
         include: {
           postAttachements: true,
@@ -28,6 +28,12 @@ async function getCourse(Criteria) {
     },
   });
   return course;
+}
+
+async function getAllCourses() {
+  const Courses = await prisma.course.findMany({});
+  // return courses_json;
+  return Courses;
 }
 
 async function getConferenceIdByCourseId(courseId) {
@@ -79,7 +85,7 @@ async function setIsConferenceHappening(courseId, isConferenceHappening) {
   return course;
 }
 
-async function getAllCourses() {
+/*async function getAllCourses() {
   const Courses = await prisma.course.findMany({
     select: {
       id: true,
@@ -106,40 +112,42 @@ async function getAllCourses() {
   });
   // return courses_json;
   return Courses;
-}
+}*/
 
 async function getCoursesByRole(role, userId) {
   if (role === "teacher") {
-    const teacherId = await prisma.teacher.findUnique({
+    const teacher = await prisma.teacher.findUnique({
       where: {
-        userId: userId,
+        user_id: userId,
+      },
+      select: {
+        id: true,
       },
     });
+    console.log(teacher);
     const courses = await prisma.course.findMany({
       where: {
-        teacherId: teacherId,
+        teacherId: teacher.id,
       },
-      data: {
-        select: {
-          id: true,
-          name: true,
-          teacher: {
-            select: {
-              id: true,
-              fullName: true,
-            },
+      select: {
+        id: true,
+        name: true,
+        teacher: {
+          select: {
+            id: true,
+            fullName: true,
           },
-          class: {
-            select: {
-              id: true,
-              name: true,
-            },
+        },
+        class: {
+          select: {
+            id: true,
+            name: true,
           },
-          subject: {
-            select: {
-              id: true,
-              name: true,
-            },
+        },
+        subject: {
+          select: {
+            id: true,
+            name: true,
           },
         },
       },
@@ -161,12 +169,31 @@ async function getCoursesByRole(role, userId) {
         classId: student.classId,
       },
     });*/
-    const courses = await prisma.class.findUnique({
+    const courses = await prisma.course.findMany({
       where: {
-        id: student.classId,
+        classId: student.classId,
       },
-      include: {
-        courses: true,
+      select: {
+        id: true,
+        name: true,
+        teacher: {
+          select: {
+            id: true,
+            fullName: true,
+          },
+        },
+        class: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        subject: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
     console.log(courses);
