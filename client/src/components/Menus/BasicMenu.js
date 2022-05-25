@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { signOut } from "supertokens-auth-react/recipe/thirdpartyemailpassword"
 
 export default function BasicMenu(props) {
   var classNames = require("classnames");
@@ -15,6 +16,11 @@ export default function BasicMenu(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = async () =>{
+    await signOut();
+    window.location.href = "/";
+  }
 
   return (
     <div>
@@ -38,7 +44,7 @@ export default function BasicMenu(props) {
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>
   );
