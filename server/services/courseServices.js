@@ -108,9 +108,77 @@ async function getAllCourses() {
   return Courses;
 }
 
+async function getCoursesByRole(role, userId) {
+  if (role === "teacher") {
+    const teacherId = await prisma.teacher.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    const courses = await prisma.course.findMany({
+      where: {
+        teacherId: teacherId,
+      },
+      data: {
+        select: {
+          id: true,
+          name: true,
+          teacher: {
+            select: {
+              id: true,
+              fullName: true,
+            },
+          },
+          class: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          subject: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    });
+    return courses;
+  } else if (role === "student") {
+    const student = await prisma.student.findUnique({
+      where: {
+        user_id: userId,
+      },
+      select: {
+        classId: true,
+      },
+    });
+    console.log(student);
+    console.log(student.classId);
+    /*  const courses = await prisma.course.findMany({
+      where: {
+        classId: student.classId,
+      },
+    });*/
+    const courses = await prisma.class.findUnique({
+      where: {
+        id: student.classId,
+      },
+      include: {
+        courses: true,
+      },
+    });
+    console.log(courses);
+    return courses;
+  }
+  // return courses_json;
+}
+
 module.exports.getCourse = getCourse;
 module.exports.getConferenceIdByCourseId = getConferenceIdByCourseId;
 module.exports.isConferenceHappening = isConferenceHappening;
 module.exports.getCoursesByCriteria = getCoursesByCriteria;
 module.exports.getAllCourses = getAllCourses;
+module.exports.getCoursesByRole = getCoursesByRole;
 module.exports.setIsConferenceHappening = setIsConferenceHappening;

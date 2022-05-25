@@ -26,6 +26,26 @@ router.get("/get_courses", (req, res) => {
         message: "There was a problem retrieving the courses.",
       });
     });
+}); // @route  GET api/v1/courses/get_courses
+// @desc   Get courses
+// @access Private
+
+router.get("/get_courses_by_role", (req, res) => {
+  // const { user_who_requested_id } = req.query;
+
+  let { userId, role } = req.body;
+
+  courseServices
+    .getCoursesByRole(role, userId)
+    .then((courses) => {
+      res.status(200).json(courses);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem retrieving the courses.",
+      });
+    });
 });
 
 // @route  GET api/v1/courses/get_courses
