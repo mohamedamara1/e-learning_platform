@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-
+import { ReactQueryDevtools } from "react-query/devtools";
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SuperTokens, {
   getSuperTokensRoutesForReactRouterDom,
 } from "supertokens-auth-react";
@@ -10,15 +10,17 @@ import { EmailPasswordAuth } from "supertokens-auth-react/recipe/emailpassword";
 import * as reactRouterDom from "react-router-dom";
 
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
-import Session, {
-  useSessionContext,
-} from "supertokens-auth-react/recipe/session";
+import Session from "supertokens-auth-react/recipe/session";
 
 import CoursesPage from "./views/student/courses/CoursesPage";
 import StudentLayout from "./layouts/StudentLayout";
 import StudentDashboard from "./views/student/dashboard/StudentDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import Course from "./views/student/course/Course";
+import TeacherCoursesPage from "./views/teacher/courses/TeacherCoursesPage";
+import TeacherLayout from "./layouts/TeacherLayout";
+import TeacherDashboard from "./views/teacher/dashboard/TeacherDashboard";
+import TeacherCourse from "./views/teacher/course/TeacherCourse";
 import UsersManagementPage from "./views/admin/users/UsersManagementPage";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
@@ -26,11 +28,15 @@ import HomePage from "./components/HomePage";
 import TeachersCrudTable from "./views/admin/users/teachers/TeachersCrudTable";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
 import CalendarPage from "./views/admin/calendar/CalendarPage";
+import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";
+import CoursesCrudTable from "./views/admin/courses/CoursesCrudTable";
+import SubjectsCrudTable from "./views/admin/subjects/SubjectsCrudTable";
 
+import BigbluebuttonManagementPage from "./views/admin/bigbluebutton/BigbluebuttonManagementPage";
+import ConferencesListPage from "./views/admin/bigbluebutton/conferences/ConferencesListPage";
 async function getRole() {
   if (await Session.doesSessionExist()) {
     // we use the key "role" here since that's what we
@@ -84,10 +90,12 @@ SuperTokens.init({
             return context.redirectToPath;
           }
           const path = await getRole().then((role) => {
-            if (role == "admin") {
+            if (role === "admin") {
               return "/admin";
-            } else if (role == "student") {
+            } else if (role === "student") {
               return "/student";
+            } else if (role === "teacher") {
+              return "/teacher";
             } else {
               return undefined;
             }
@@ -191,6 +199,19 @@ function App() {
             <Route path="courses" exact element={<CoursesPage />} />
             <Route path="course/:courseId" element={<Course />} />
           </Route>
+          <Route
+            path="teacher"
+            element={
+              <EmailPasswordAuth>
+                <TeacherLayout />
+              </EmailPasswordAuth>
+            }
+          >
+            <Route index element={<TeacherDashboard />} />
+            <Route path="dashboard" element={<TeacherDashboard />} />
+            <Route path="courses" exact element={<TeacherCoursesPage />} />
+            <Route path="course/:courseId" element={<TeacherCourse />} />
+          </Route>
 
           <Route
             path="admin"
@@ -209,7 +230,21 @@ function App() {
 
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
             </Route>
+
             <Route path="calendar" element={<CalendarPage />} />
+
+            <Route
+              path="bigbluebutton"
+              exact
+              element={<BigbluebuttonManagementPage />}
+            >
+              <Route path="conferences" element={<ConferencesListPage />} />
+            </Route>
+            <Route path="courses" exact element={<CoursesManagementPage />}>
+              <Route path="courses" element={<CoursesCrudTable />} />
+              <Route path="subjects" element={<SubjectsCrudTable />} />
+            </Route>
+
           </Route>
 
           <Route path="*" element={<div>404 not found</div>} />

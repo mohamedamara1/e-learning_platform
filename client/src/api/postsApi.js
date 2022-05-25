@@ -1,21 +1,32 @@
-// Need to use the React-specific entry point to import createApi
-import { mainApi } from "./mainApi";
-// Define a service using a base URL and expected endpoints
-export const postsApi = mainApi.injectEndpoints({
-  reducerPath: "postsApi",
-  endpoints: (builder) => ({
-    getPosts: builder.query({
-      query: (args) => {
-        const { courseId } = args;
-        return {
-          url: `posts/get_posts/`,
-          params: { courseId },
-        };
-      },
-    }),
-  }),
-});
+import { useQuery } from "react-query";
+import axios from "axios";
+import Session from "supertokens-auth-react/recipe/session";
+Session.addAxiosInterceptors(axios);
+export function useGetPosts(args) {
+  const { courseId } = args;
+  return useQuery(
+    ["posts", courseId],
+    async () => {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/v1/posts/get_posts`
+      );
+      return data;
+    },
+    { refetchOnWindowFocus: false }
+  );
+}
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useGetPostsQuery } = postsApi;
+export function useAddPost(args) {
+  const {postData, attachements} = args;
+  return useQuery(
+    ["post", postData, attachements],
+    async () => {
+      axios.post(`http://localhost:5000/api/v1/posts/add_post`, {
+        postData: postData,
+        attachements: attachements
+      })
+      .then(function (response){console.log(response)})
+      .then(function (error){console.log(error)})
+    }
+  )
+}

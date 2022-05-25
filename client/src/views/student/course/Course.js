@@ -16,7 +16,8 @@ const Course = () => {
 
   return (
     <div className="">
-      <DefaultHeader name={state.courseName} background="bg-white-kids" />
+      <DefaultHeader title={state.courseName} background="bg-white-kids" />
+      
       <TabComponent courseId={state.courseId} />
     </div>
   );

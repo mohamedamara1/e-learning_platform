@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import MaterialsList from "./MaterialsList";
-import practice_items from "../../../assets/json/assignments.json";
 import PracticeSection from "./PracticeSection";
 import Timeline from "./Timeline";
+import Button from "@mui/material/Button";
+
 import { useGetCourse } from "../../../api/coursesApi";
+import { useJoinConference } from "../../../api/conferencesApi";
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  useEffect(() => {
-    console.log("panel number " + index + "mounted");
-  }, []);
   return (
     <div
       role="tabpanel"
@@ -45,14 +46,21 @@ function a11yProps(index) {
   };
 }
 
+//gotta add bbb join button
+
 export const TabComponent = (props) => {
-  const {
-    data: course,
-    error,
-    isLoading,
-  } = useGetCourse({ courseId: props.courseId });
-  console.log(course);
-  console.log("courseId", props.courseId);
+  const { data: course, isLoading } = useGetCourse({
+    courseId: props.courseId,
+  });
+  let { userId, accessTokenPayload } = useSessionContext();
+  console.log(accessTokenPayload);
+  const joinConference = useJoinConference();
+  const handleJoinConference = () => {
+    joinConference.mutate({
+      courseId: props.courseId,
+    });
+  };
+  console.log(userId);
 
   const [value, setValue] = useState(0);
 
@@ -62,6 +70,12 @@ export const TabComponent = (props) => {
 
   return (
     <Box sx={{ width: "100%" }}>
+      <div className="flex justify-center mb-5">
+        <Button onClick={handleJoinConference} color="secondary">
+          join conference
+        </Button>
+      </div>
+
       <Box
         sx={{
           borderBottom: 1,
@@ -78,7 +92,7 @@ export const TabComponent = (props) => {
       </Box>
       <TabPanel value={value} index={0}>
         <div className="flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 gap-2 ">
+          <div className="w-full gap-2 lg:w-2/3 xl:w-1/2">
             <Timeline
               isLoading={isLoading}
               posts={!isLoading ? course.posts : null}
@@ -89,15 +103,15 @@ export const TabComponent = (props) => {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div className=" flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
+        <div className="flex justify-center ">
+          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <MaterialsList courseId={props.courseId} />
           </div>
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <div className=" flex justify-center">
-          <div className=" w-full lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids p-6   ">
+        <div className="flex justify-center ">
+          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <PracticeSection courseId={props.courseId} />
           </div>
         </div>

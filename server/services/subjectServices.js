@@ -9,26 +9,51 @@ async function getSubject(Criteria) {
 }
 
 async function getAllSubjects() {
-  const Subjects = await prisma.subject.findMany();
-  return Subjects;
+  const subjects = await prisma.subject.findMany();
+  return subjects;
 }
 
-async function addSubject(name, coefficient) {
-  const CreatedSubject = await prisma.subject.create({
-    data: { name, coefficient },
+async function addSubject(subjectData) {
+  const createdSubject = await prisma.subject.create({
+    data: {
+      name: subjectData.name,
+      coefficient: parseFloat(subjectData.coefficient),
+    },
+    include: {
+      courses: true,
+      courses: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   });
-  return CreatedSubject;
+  return createdSubject;
 }
 
-async function updateSubject(Criteria, SubjectData) {
-  const updateSubject = prisma.subject.update({
+async function updateSubject(Criteria, subjectData) {
+  const updatedSubject = prisma.subject.update({
     where: Criteria,
-    data: SubjectData,
+    data: {
+      ...subjectData,
+      coefficient: parseFloat(subjectData.coefficient),
+    },
+    include: {
+      courses: true,
+      courses: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   });
+  return updatedSubject;
 }
 
 async function deleteSubject(Criteria) {
-  const DeleteSubject = prisma.subject.delete({
+  const deletedSubject = prisma.subject.delete({
     where: Criteria,
   });
 }

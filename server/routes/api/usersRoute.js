@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 require("./patch");
+
+const verifySession =
+  require("supertokens-node/recipe/session/framework/express").verifySession;
 const userServices = require("../../services/userServices");
+const permit = require("../middlewares/authorization").permit;
 
 // @route  GET api/v1/courses/get_courses
 // @desc   Get courses
@@ -29,23 +33,27 @@ router.get("/get_teachers", (req, res) => {
 // @desc   Get courses
 // @access Private
 
-router.get("/get_teachers_detailled", (req, res) => {
-  // const { user_who_requested_id } = req.query;
-  //const { courseId } = req.params.courseId;
-  // let courseId = req.query.courseId;
+router.get(
+  "/get_teachers_detailled",
 
-  userServices
-    .getTeachersDetailled()
-    .then((teachers) => {
-      res.status(200).send(teachers);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({
-        message: "There was a problem retrieving the teachers.",
+  (req, res) => {
+    // const { user_who_requested_id } = req.query;
+    //const { courseId } = req.params.courseId;
+    // let courseId = req.query.courseId;
+
+    userServices
+      .getTeachersDetailled()
+      .then((teachers) => {
+        res.status(200).send(teachers);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(400).json({
+          message: "There was a problem retrieving the teachers.",
+        });
       });
-    });
-});
+  }
+);
 
 // @route  GET api/v1/courses/get_courses
 // @desc   Get courses
@@ -113,23 +121,27 @@ router.get("/get_students", (req, res) => {
 // @desc   Get courses
 // @access Private
 
-router.get("/get_students_detailled", (req, res) => {
-  // const { user_who_requested_id } = req.query;
-  //const { courseId } = req.params.courseId;
-  // let courseId = req.query.courseId;
+router.get(
+  "/get_students_detailled",
 
-  userServices
-    .getStudentsDetailled()
-    .then((students) => {
-      res.status(200).send(students);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({
-        message: "There was a problem retrieving the teachers.",
+  (req, res) => {
+    // const { user_who_requested_id } = req.query;
+    //const { courseId } = req.params.courseId;
+    // let courseId = req.query.courseId;
+
+    userServices
+      .getStudentsDetailled()
+      .then((students) => {
+        res.status(200).send(students);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(400).json({
+          message: "There was a problem retrieving the teachers.",
+        });
       });
-    });
-});
+  }
+);
 
 // @route  GET api/v1/courses/get_courses
 // @desc   Get courses
