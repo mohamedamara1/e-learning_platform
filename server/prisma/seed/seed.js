@@ -102,7 +102,43 @@ async function runSeeders() {
               };
             }),
           },
-          materialUnits: {
+          class: {
+            connect: {
+              id: classes[Math.floor(Math.random() * classes.length)].id,
+            },
+          },
+          subject: {
+            connect: {
+              id: subjects[Math.floor(Math.random() * subjects.length)].id,
+            },
+          },
+          posts: {
+            create: Array.from(
+              { length: Math.floor(Math.random() * Posts.length) },
+              () => Math.floor(Math.random() * Posts.length)
+            ).map((randomInt, index) => {
+              console.log(randomInt);
+              console.log(Posts[randomInt]);
+              return {
+                text: Posts[randomInt].text === undefined ? "hi" : Posts[randomInt].text,
+                postAttachements: {
+                  create: Array.from(
+                    {
+                      length: Math.floor(Math.random() * Attachements.length),
+                    },
+                    () => Math.floor(Math.random() * Attachements.length)
+                  ).map((randomAttachementIndex, index) => {
+                    return {
+                      attachement: {
+                        create: Attachements[randomAttachementIndex],
+                      },
+                    };
+                  }),
+                },
+              };
+            }),
+          },
+          /*    materialUnits: {
             create: [
               {
                 title: MaterialUnits[0].title,
@@ -165,7 +201,8 @@ async function runSeeders() {
       })
     )
   );
-  // PracticeUnits
+  */
+  //PracticeUnits
   await Promise.all(
     PracticeUnits.map(async (practiceUnit) =>
       prisma.practiceUnit.create({
@@ -173,6 +210,7 @@ async function runSeeders() {
       })
     )
   );
+  /*
   // Exercices
   await Promise.all(
     Exercices.map(async (exercice) =>
@@ -181,7 +219,8 @@ async function runSeeders() {
       })
     )
   );
-  // MaterialUnits
+  */ 
+ // MaterialUnits
   await Promise.all(
     MaterialUnits.map(async (materialUnit) =>
       prisma.materialUnit.create({
@@ -189,6 +228,7 @@ async function runSeeders() {
       })
     )
   );
+  /*
   // CourseMaterials
   await Promise.all(
     CourseMaterials.map(async (courseMaterial) =>

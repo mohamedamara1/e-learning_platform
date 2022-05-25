@@ -97,6 +97,7 @@ SuperTokens.init({
             } else if (role === "teacher") {
               return "/teacher";
             } else {
+              
               return undefined;
             }
           });

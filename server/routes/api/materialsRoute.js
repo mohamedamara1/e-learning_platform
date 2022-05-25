@@ -1,5 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/materials')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+var upload = multer({ storage: storage })
 
 const verifySession =
   require("supertokens-node/recipe/session/framework/express").verifySession;
@@ -70,18 +82,16 @@ router.get("/get_materials_by_materialUnitId/", verifySession(), (req, res) => {
     });
 });
 
-router.post("/add_material", verifySession(), (req, res) => {
+
+router.post("/add_material", upload.any(), (req, res) => {
+  console.log(req.files);
   materialServices
-    .addMaterial(req.Material)
-    .then(() => {
-      res.status(200);
-    })
-    .catch((error) => {
-      console.log(error);
-      res
-        .status(400)
-        .json({ message: "There was a problem adding the material." });
-    });
+  .addMaterial(req.body.materialData, req.body.attachements)
+  .then((material) => { res.status(200).json(material); })
+  .catch((error) => {
+    console.log(error);
+    res.status(400).json({message: "There was a problem adding the material."});
+  });
 });
 
 router.put("/update_material", verifySession(), (req, res) => {

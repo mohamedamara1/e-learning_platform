@@ -34,13 +34,22 @@ async function getPostsByCourseId(courseId) {
         },
       },
     },
+    orderBy:{
+      createdAt :"desc"
+    }
   });
   return Posts;
 }
 async function addPost(postData,attachementData) {
+  console.log(postData);
   const CreatePost = await prisma.post.create({ 
     data: {
-      ...postData,
+      text: postData.text,
+      course : {
+        connect: {
+          id: postData.courseId,
+        },
+      },
     }
 
   });
