@@ -136,19 +136,108 @@ async function runSeeders() {
               },
             ],
           },
-          /*      practiceUnits: {
+          practiceUnits: {
             create: [
               {
                 title: PracticeUnits[0].title,
+                exercices: {
+                  create: [
+                    {
+                      name: Exercices[0].name,
+                      description: Exercices[0].description,
+                      isAssignment: Exercices[0].isAssignment,
+                      name: Exercices[0].name,
+
+                      exerciceAttachements: {
+                        create: [
+                          {
+                            attachement: {
+                              create: Attachements[0],
+                            },
+                          },
+                          {
+                            attachement: {
+                              create: Attachements[1],
+                            },
+                          },
+                          {
+                            attachement: {
+                              create: Attachements[2],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
               },
               {
                 title: PracticeUnits[1].title,
+                exercices: {
+                  create: [
+                    {
+                      name: Exercices[0].name,
+                      description: Exercices[0].description,
+                      isAssignment: Exercices[0].isAssignment,
+                      name: Exercices[0].name,
+                      exerciceAttachements: {
+                        create: [
+                          {
+                            attachement: {
+                              create: Attachements[0],
+                            },
+                          },
+                          {
+                            attachement: {
+                              create: Attachements[1],
+                            },
+                          },
+                          {
+                            attachement: {
+                              create: Attachements[2],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
               },
-              { title: PracticeUnits[2].title },
-              { title: PracticeUnits[3].title },
-              { title: PracticeUnits[4].title },
+              {
+                title: PracticeUnits[2].title,
+                exercices: {
+                  create: [
+                    {
+                      name: Exercices[0].name,
+                      description: Exercices[0].description,
+                      isAssignment: Exercices[0].isAssignment,
+                      name: Exercices[0].name,
+
+                      exerciceAttachements: {
+                        create: [
+                          {
+                            attachement: {
+                              create: Attachements[0],
+                            },
+                          },
+                          {
+                            attachement: {
+                              create: Attachements[1],
+                            },
+                          },
+                          {
+                            attachement: {
+                              create: Attachements[2],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
             ],
-          },*/
+          },
         },
       })
     )
