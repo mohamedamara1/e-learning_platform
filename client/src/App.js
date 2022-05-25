@@ -34,6 +34,8 @@ import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";
 import CoursesCrudTable from "./views/admin/courses/CoursesCrudTable";
 import SubjectsCrudTable from "./views/admin/subjects/SubjectsCrudTable";
 
+import BigbluebuttonManagementPage from "./views/admin/bigbluebutton/BigbluebuttonManagementPage";
+import ConferencesListPage from "./views/admin/bigbluebutton/conferences/ConferencesListPage";
 async function getRole() {
   if (await Session.doesSessionExist()) {
     // we use the key "role" here since that's what we
@@ -226,6 +228,13 @@ function App() {
               <Route path="classes" element={<ClassesCrudTable />} />
 
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
+            </Route>
+            <Route
+              path="bigbluebutton"
+              exact
+              element={<BigbluebuttonManagementPage />}
+            >
+              <Route path="conferences" element={<ConferencesListPage />} />
             </Route>
             <Route path="courses" exact element={<CoursesManagementPage />}>
               <Route path="courses" element={<CoursesCrudTable />} />

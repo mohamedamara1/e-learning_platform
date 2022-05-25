@@ -37,6 +37,12 @@ const sidebarNavItems = [
     to: "/admin/calendar",
     section: "calendar",
   },
+  {
+    display: "BigBlueButton",
+    icon: <BsFillCalendarDateFill size={"28"} />,
+    to: "/admin/bigbluebutton",
+    section: "bigbluebutton",
+  },
 ];
 
 const StyledTreeView = styled(TreeView)`
@@ -57,11 +63,11 @@ const AdminSidebar = () => {
 
   return (
     <>
-      <nav className="md:left-0 md:bg-red-300 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap  shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
-        <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
+      <nav className="relative z-10 flex flex-wrap items-center justify-between px-6 py-4 bg-white shadow-xl md:left-0 md:bg-red-300 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:w-64">
+        <div className="flex flex-wrap items-center justify-between w-full px-0 mx-auto md:flex-col md:items-stretch md:min-h-full md:flex-nowrap">
           {/* Toggler */}
           <button
-            className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
+            className="px-3 py-1 text-xl leading-none text-black bg-transparent border border-transparent border-solid rounded opacity-50 cursor-pointer md:hidden"
             type="button"
             onClick={() => setCollapseShow("bg-white m-2 py-3 px-6")}
           >
@@ -69,19 +75,19 @@ const AdminSidebar = () => {
           </button>
           {/* Logo */}
           <Link
-            className="md:block text-center md:pb-2 text-white-kids mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+            className="inline-block p-4 px-0 mr-0 text-sm font-bold text-center uppercase md:block md:pb-2 text-white-kids whitespace-nowrap"
             to="/"
           >
             <img
               src={SchoolLogo}
-              className=" max-w-full h-auto hidden  md:block  "
+              className="hidden h-auto max-w-full md:block"
               alt="img"
             />
           </Link>
           {/* User */}
-          <ul className="md:hidden items-center flex flex-wrap list-none">
-            <li className="inline-block relative"></li>
-            <li className="inline-block relative"></li>
+          <ul className="flex flex-wrap items-center list-none md:hidden">
+            <li className="relative inline-block"></li>
+            <li className="relative inline-block"></li>
           </ul>
           {/* Collapse */}
           <div
@@ -91,20 +97,20 @@ const AdminSidebar = () => {
             }
           >
             {/* Collapse header */}
-            <div className="md:min-w-full  md:hidden block pb-4 mb-4 border-b border-solid border-blueGray-200">
+            <div className="block pb-4 mb-4 border-b border-solid md:min-w-full md:hidden border-blueGray-200">
               <div className="flex flex-wrap ">
                 {/*     <div className="w-6/12 ">
                   <Link
-                    className="md:block text-center md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+                    className="inline-block p-4 px-0 mr-0 text-sm font-bold text-center uppercase md:block md:pb-2 text-blueGray-600 whitespace-nowrap"
                     to="/"
                   >
                     Notus Reactt
                   </Link>
                 </div>*/}
-                <div className="w-full flex justify-end">
+                <div className="flex justify-end w-full">
                   <button
                     type="button"
-                    className="cursor-pointer text-white opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
+                    className="px-3 py-1 text-xl leading-none text-white bg-transparent border border-transparent border-solid rounded opacity-50 cursor-pointer md:hidden"
                     onClick={() => setCollapseShow("hidden")}
                   >
                     <AiOutlineClose size={40} />
@@ -117,17 +123,15 @@ const AdminSidebar = () => {
 
             {/* Navigation */}
 
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full">
               {sidebarNavItems.map((item, index) => {
                 if (item.display === "Users") {
                   return (
                     <li
-                      className="items-center flex  place-content-start p-4
-                    font-medium text-xl  transition duration-300 ease-in-out
-                    hover:bg-bluu-1"
+                      className="flex items-center p-4 text-xl font-medium transition duration-300 ease-in-out place-content-start hover:bg-bluu-1"
                       key={index}
                     >
-                      <div className=" mr-4 text-white-kids">{item.icon}</div>
+                      <div className="mr-4 text-white-kids">{item.icon}</div>
                       <TreeView
                         aria-label="file system navigator"
                         defaultCollapseIcon={<ExpandMoreIcon />}
@@ -171,12 +175,10 @@ const AdminSidebar = () => {
                 } else if (item.display === "Courses") {
                   return (
                     <li
-                      className="items-center flex place-content-start p-4
-                    font-medium text-xl  transition duration-300 ease-in-out
-                    hover:bg-bluu-1"
+                      className="flex items-center p-4 text-xl font-medium transition duration-300 ease-in-out place-content-start hover:bg-bluu-1"
                       key={index}
                     >
-                      <div className=" mr-4 text-white-kids">{item.icon}</div>
+                      <div className="mr-4 text-white-kids">{item.icon}</div>
                       <TreeView
                         aria-label="file system navigator"
                         defaultCollapseIcon={<ExpandMoreIcon />}
@@ -185,7 +187,7 @@ const AdminSidebar = () => {
                         <StyledTreeItem
                           nodeId="1"
                           label="Courses"
-                          className="text-white-kids font-medium text-xl "
+                          className="text-xl font-medium text-white-kids "
                         >
                           <Link
                             to="/admin/courses/courses"
@@ -258,12 +260,8 @@ const AdminSidebar = () => {
                       key={index}
                       onClick={() => setCollapseShow("hidden")}
                     >
-                      <div
-                        className="flex items-center place-content-start p-4
-              font-medium text-xl  transition duration-300 ease-in-out
-              hover:bg-bluu-1"
-                      >
-                        <div className=" mr-4 text-white-kids">{item.icon}</div>
+                      <div className="flex items-center p-4 text-xl font-medium transition duration-300 ease-in-out place-content-start hover:bg-bluu-1">
+                        <div className="mr-4 text-white-kids">{item.icon}</div>
                         <div className="text-white-kids">{item.display}</div>
                       </div>
                     </Link>
