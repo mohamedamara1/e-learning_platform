@@ -124,7 +124,6 @@ async function getCoursesByRole(role, userId) {
         id: true,
       },
     });
-    console.log(teacher);
     const courses = await prisma.course.findMany({
       where: {
         teacherId: teacher.id,
@@ -162,13 +161,7 @@ async function getCoursesByRole(role, userId) {
         classId: true,
       },
     });
-    console.log(student);
-    console.log(student.classId);
-    /*  const courses = await prisma.course.findMany({
-      where: {
-        classId: student.classId,
-      },
-    });*/
+
     const courses = await prisma.course.findMany({
       where: {
         classId: student.classId,
@@ -196,7 +189,6 @@ async function getCoursesByRole(role, userId) {
         },
       },
     });
-    console.log(courses);
     return courses;
   }
   // return courses_json;
