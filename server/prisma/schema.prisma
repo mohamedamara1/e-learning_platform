@@ -129,6 +129,7 @@ model MaterialUnit {
 model Attachement {
   id                     String                  @id @default(uuid())
   name                   String
+  url                    String
   fileExtension          String
   size                   String
   createdAt              DateTime                @default(now())
