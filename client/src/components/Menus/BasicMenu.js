@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { signOut } from "supertokens-auth-react/recipe/thirdpartyemailpassword"
+import { signOut } from "supertokens-auth-react/recipe/emailpassword"
 
 export default function BasicMenu(props) {
   var classNames = require("classnames");
