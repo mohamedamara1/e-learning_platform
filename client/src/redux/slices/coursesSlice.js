@@ -1,9 +1,9 @@
-const coursesSlice = createSlice({
+/*const coursesSlice = createSlice({
   name: "courses",
   initialState: { items: [] },
 
   reducers: {},
-});
+});*/
 /* reducers: {
     usersLoading(state, action) {
       // Use a "state machine" approach for loading state instead of booleans

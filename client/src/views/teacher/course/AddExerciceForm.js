@@ -4,13 +4,11 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { styled } from "@mui/material/styles";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 import CheckIcon from '@mui/icons-material/Check';
 import ToggleButton from '@mui/material/ToggleButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -41,7 +39,7 @@ export default function AddExerciceForm() {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Exercice</DialogTitle>
         <DialogContent>
-          <div className="flex  items-center pt-2">
+          <div className="flex items-center pt-2">
           <TextField
             size="small"
             autoFocus

@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   TableRow,
   TableCell,
   Button,
   Checkbox,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Chip,
-  Box,
-  OutlinedInput,
+
 } from "@mui/material";
 
 import { merge } from "lodash";
 
-import { useGetCourses } from "../../../api/coursesApi";
 import InputSelect from "./InputSelect";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+
 
 const Input = ({
   name,

@@ -4,9 +4,7 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -20,7 +18,6 @@ import { AiOutlinePlus } from "react-icons/ai";
 import SubjectListHead from "./SubjectListHead";
 
 import SubjectsListToolbar from "./SubjectsListToolbar";
-import MoreMenu from "./MoreMenu";
 import RegularRow from "./RegularRow";
 import fieldsArr from "./fields";
 import EditableRow from "./EditableRow";
@@ -72,13 +69,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export const SubjectsCrudTable = () => {
-  const {
-    status,
-    data: subjects,
-    error,
-    isFetching,
-    isLoading: loadingSubjects,
-  } = useGetSubjects();
+  const { data: subjects, isLoading: loadingSubjects } = useGetSubjects();
   /* const {
     data: teachers,
     error,

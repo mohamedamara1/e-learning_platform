@@ -12,9 +12,7 @@ import {
   Box,
   OutlinedInput,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { useGetCourses } from "../../../../api/coursesApi";
-import { maxWidth } from "@mui/system";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -39,22 +37,11 @@ const Input = ({
   setRowData,
   ...props
 }) => {
-  function getStyles(name, coursesId, theme) {
-    return {
-      fontWeight:
-        coursesId.indexOf(name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
-  const {
-    data: courses,
-    error: coursesError,
-    isLoading: loadingCourses,
-  } = useGetCourses({ userId: "test" });
+  const { data: courses, isLoading: loadingCourses } = useGetCourses({
+    userId: "test",
+  });
 
   const [hasError, setError] = useState(false);
-  const theme = useTheme();
 
   const [coursesId, setCoursesId] = React.useState([]);
 

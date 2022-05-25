@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import MaterialsList from "./MaterialsList";
-import practice_items from "../../../assets/json/assignments.json";
 import PracticeSection from "./PracticeSection";
 import Timeline from "./Timeline";
 import { useGetCourse } from "../../../api/coursesApi";
@@ -15,9 +14,7 @@ import { useJoinConference } from "../../../api/conferencesApi";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  useEffect(() => {
-    console.log("panel number " + index + "mounted");
-  }, []);
+
   return (
     <div
       role="tabpanel"
@@ -51,7 +48,7 @@ function a11yProps(index) {
 export default function TabComponent(props) {
   const {
     data: course,
-    error,
+    
     isLoading,
   } = useGetCourse({ courseId: props.courseId });
   const joinConference = useJoinConference();
@@ -105,7 +102,7 @@ export default function TabComponent(props) {
       </Box>
       <TabPanel value={value} index={0}>
         <div className="flex justify-center">
-          <div className="w-full gap-2  lg:w-2/3 xl:w-1/2">
+          <div className="w-full gap-2 lg:w-2/3 xl:w-1/2">
             <Timeline
               isLoading={isLoading}
               posts={!isLoading ? course.posts : null}
@@ -117,14 +114,14 @@ export default function TabComponent(props) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <div className="flex justify-center ">
-          <div className="w-full p-6  lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
+          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <MaterialsList courseId={props.courseId} />
           </div>
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <div className="flex justify-center ">
-          <div className="w-full p-6  lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
+          <div className="w-full p-6 lg:w-2/3 xl:w-1/2 bg-bluu-3 rounded-2xl text-white-kids">
             <PracticeSection courseId={props.courseId} />
           </div>
         </div>

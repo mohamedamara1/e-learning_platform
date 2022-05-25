@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useNavigate } from "react-router-dom";
 const HomePage = () => {
-  let { userId, accessTokenPayload } = useSessionContext();
+  let { accessTokenPayload } = useSessionContext();
   let role = accessTokenPayload.role;
   let navigate = useNavigate();
   useEffect(() => {
+    
     if (role === "admin") {
       navigate("/admin", { replace: true });
     } else if (role === "student") {

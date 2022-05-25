@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -16,9 +16,6 @@ import { useSessionContext } from "supertokens-auth-react/recipe/session";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  useEffect(() => {
-    console.log("panel number " + index + "mounted");
-  }, []);
   return (
     <div
       role="tabpanel"
