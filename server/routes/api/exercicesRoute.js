@@ -2,6 +2,18 @@ const express = require("express");
 const router = express.Router();
 const multer = require('multer');
 
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'materials')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+var upload = multer({ storage: storage })
+router.use(express.urlencoded({ extended: true }));
+
 const verifySession =
   require("supertokens-node/recipe/session/framework/express").verifySession;
 const exerciceServices = require("../../services/exerciceServices");
@@ -73,10 +85,9 @@ router.get("/get_exercices_by_practiceUnitId/", verifySession(), (req, res) => {
     });
 });
 
-router.post("/add_exercice", (req, res) => {
-  console.log(req.body.ExerciceData);
+router.post("/add_exercice", upload.single("file"),(req, res) => {
   exerciceServices
-  .addExercice(req.body.ExerciceData, req.body.attachements)
+  .addExercice(req.body, [req.file])
   .then((exercice) => { res.status(200).json(exercice); })
   .catch((error) => {
     console.log(error);

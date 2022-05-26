@@ -44,7 +44,7 @@ async function addMaterial(materialData,attachementData) {
   const CreateMaterial = await prisma.CourseMaterial.create({ 
     data: {
       name : materialData.name,
-      url :materialData.url,
+      url :"testing",
       materialUnit : {
         connect: {
           id: materialData.materialUnitId,
@@ -56,9 +56,10 @@ async function addMaterial(materialData,attachementData) {
     console.log(attachement);
     const Createattachement = await prisma.attachement.create({
       data : {
-        name : "test",//attachement.name,
-        fileExtension : "pdf",//attachement.type,
-        size :"2" //attachement.size.toString()
+        name : attachement.originalname,
+        url: attachement.path,
+        fileExtension : attachement.mimetype,
+        size :attachement.size.toString()
       },
       select: {id:true}
       });

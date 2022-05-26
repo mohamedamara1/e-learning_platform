@@ -22,15 +22,11 @@ export function useGetExerciceUnitsByCourseIdIncludeExercices(args) {
   );
 }
 
-export function useAddExercice(ExerciceData, attachements) {
-  console.log(ExerciceData)
+export function useAddExercice(formData) {
   return useMutation(
     async () => {
-      console.log(ExerciceData);
-      axios.post(`http://localhost:5000/api/v1/exercices/add_exercice`, {
-        ExerciceData: ExerciceData,
-        attachements: attachements
-      })
+      axios.post(`http://localhost:5000/api/v1/exercices/add_exercice`, formData,
+      {headers: {'Content-Type': 'multipart/form-data' }})
       .then(function (response){console.log(response)})
       .then(function (error){console.log(error)})
     },

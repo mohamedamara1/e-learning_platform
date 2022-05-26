@@ -15,7 +15,7 @@ import { useAddMaterial } from '../../../api/materialsApi';
 export default function AddMaterialForm(props) {
 
   const formData = new FormData();
-  const [attachements, setAttachements] = React.useState([]);
+  const [file, setfile] = React.useState([]);
   const[name, setname] = React.useState("");
   const [selectedUnit, setselectedUnit] = React.useState('');
 
@@ -27,7 +27,7 @@ export default function AddMaterialForm(props) {
     setname(event.target.value);
   }
   const handleUpload = event => {
-    setAttachements(event.target.files);
+    setfile(event.target.files[0]);
     /*console.log(attachements);
     console.log(formData);*/
   }
@@ -45,12 +45,6 @@ export default function AddMaterialForm(props) {
   };
 
   const mutation = useAddMaterial(
-    {
-          name: name,
-          courseId: props.courseId,
-          url : "https://justtesting.com",
-          materialUnitId: selectedUnit
-     },
       formData
     );
 
@@ -62,6 +56,7 @@ export default function AddMaterialForm(props) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Material</DialogTitle>
         <DialogContent>
+        <form action="/profile" method="post" enctype="multipart/form-data">
           <TextField
             autoFocus
             margin="dense"
@@ -87,17 +82,25 @@ export default function AddMaterialForm(props) {
         </div>
           <div className="flex flex-col items-center pt-2">
             <label htmlFor="contained-button-file">
-                <Input accept="image/*" id="contained-button-file" multiple enctype="multipart/form-data" type="file" onChange={handleUpload}/>
+            
+                <Input name="file" accept="image/*" id="contained-button-file" type="file" onChange={handleUpload}/>
+             
                 <Button size="small" variant="contained" endIcon={<UploadFileIcon />} component="span">
                   Upload
                 </Button>
             </label>
             </div>
+            </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={() => {
-    formData.append('file', attachements[0]); 
+            formData.append('file', file);
+            formData.append('name', name);
+            formData.append('courseId', props.courseId);
+            formData.append('url', "");
+            formData.append('materialUnitId', selectedUnit);
+
            mutation.mutate()
          }}>Add</Button>
         </DialogActions>

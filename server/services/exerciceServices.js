@@ -59,12 +59,13 @@ async function getExercicesByCriteria(Criteria, Includes) {
 }
 
 async function addExercice(exerciceData,attachementData) {
+  console.log(exerciceData);
   const CreateExercice = await prisma.exercice.create({ 
     data: {
       name : exerciceData.name,
       description : exerciceData.description,
-      isAssignment : exerciceData.isAssignment,
-      deadlineTimestamp : exerciceData.deadlineTimeStamp,
+      isAssignment : exerciceData.isAssignment ? true : false,
+      deadlineTimestamp : new Date(exerciceData.deadlineTimeStamp),
       practiceUnit : {
         connect: {
           id: exerciceData.practiceUnitId,
@@ -76,8 +77,9 @@ async function addExercice(exerciceData,attachementData) {
     console.log(attachement);
     const Createattachement = await prisma.attachement.create({
       data : {
-        name : attachement.name,
-        fileExtension : attachement.type,
+        name : attachement.originalname,
+        fileExtension : attachement.mimetype,
+        url: attachement.path,
         size : attachement.size.toString()
       },
       select: {id:true}

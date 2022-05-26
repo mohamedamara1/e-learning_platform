@@ -17,6 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useAddExercice } from '../../../api/exercicesApi';
 
 export default function AddExerciceForm(props) {
+
+  const formData = new FormData();
   const [attachements, setAttachements] = React.useState([]);
   const [selectedUnit, setselectedUnit] = React.useState('');
 
@@ -36,7 +38,7 @@ export default function AddExerciceForm(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleUpload = event => {
-    setAttachements(prevattachements => [...prevattachements, ...event.target.files]);
+    setAttachements(event.target.files[0]);
     console.log(attachements);
   }
 
@@ -53,15 +55,7 @@ export default function AddExerciceForm(props) {
   }
 
   const mutation = useAddExercice(
-    {
-          name: name,
-          description: description,
-          isAssignment : selected,
-          deadlineTimeStamp : deadline,
-          courseId: props.courseId,
-          practiceUnitId: selectedUnit
-     },
-      attachements
+formData
     );
   const handleClose = () => {
     setOpen(false);
@@ -161,6 +155,14 @@ export default function AddExerciceForm(props) {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={() => {
+            formData.append('file', attachements);
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('isAssignment', selected)
+            formData.append('courseId', props.courseId);
+            formData.append('deadlineTimeStamp', deadline);
+            formData.append('url', "");
+            formData.append('practiceUnitId', selectedUnit);
            mutation.mutate()
          }}>Add</Button>
         </DialogActions>

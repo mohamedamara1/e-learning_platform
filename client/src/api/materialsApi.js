@@ -18,15 +18,12 @@ export function useGetMaterialUnitsByCourseIdIncludeMaterials(args) {
   );
 }
 
-export function useAddMaterial(materialData, attachements) {
-  console.log(materialData)
+export function useAddMaterial(formData) {
   return useMutation(
     async () => {
-      console.log(materialData);
-      axios.post(`http://localhost:5000/api/v1/materials/add_material`, {
-        materialData: materialData,
-        attachements: attachements
-      })
+      axios.post(`http://localhost:5000/api/v1/materials/add_material`,
+      formData,
+      {headers: {'Content-Type': 'multipart/form-data' }})
       .then(function (response){console.log(response)})
       .then(function (error){console.log(error)})
     },
