@@ -22,6 +22,7 @@ import TeacherLayout from "./layouts/TeacherLayout";
 import TeacherDashboard from "./views/teacher/dashboard/TeacherDashboard";
 import TeacherCourse from "./views/teacher/course/TeacherCourse";
 import UsersManagementPage from "./views/admin/users/UsersManagementPage";
+import CalendarPage from "./views/student/Calendar/CalendarPage";
 
 import AdminDashboard from "./views/admin/dashboard/AdminDashboard";
 import HomePage from "./components/HomePage";
@@ -199,6 +200,7 @@ function App() {
             <Route path="dashboard" element={<StudentDashboard />} />
             <Route path="courses" exact element={<CoursesPage />} />
             <Route path="course/:courseId" element={<Course />} />
+            <Route path="calendar" element={<CalendarPage />} />
           </Route>
           <Route
             path="teacher"
