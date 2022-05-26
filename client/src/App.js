@@ -31,7 +31,7 @@ import TeachersCrudTable from "./views/admin/users/teachers/TeachersCrudTable";
 import { QueryClient, QueryClientProvider } from "react-query";
 import StudentsCrudTable from "./views/admin/users/students/StudentsCrudTable";
 import ClassesCrudTable from "./views/admin/users/classes/ClassesCrudTable";
-import CalendarPage from "./views/admin/calendar/CalendarPage";
+//import CalendarPage from "./views/admin/calendar/CalendarPage";
 import CoursesManagementPage from "./views/admin/courses/CoursesManagementPage";
 import CoursesCrudTable from "./views/admin/courses/CoursesCrudTable";
 import SubjectsCrudTable from "./views/admin/subjects/SubjectsCrudTable";
@@ -98,7 +98,6 @@ SuperTokens.init({
             } else if (role === "teacher") {
               return "/teacher";
             } else {
-              
               return undefined;
             }
           });
@@ -234,7 +233,7 @@ function App() {
               {/*          <Route path=":userId" element={<UsersPage />} />*/}
             </Route>
 
-            <Route path="calendar" element={<CalendarPage />} />
+            {/* <Route path="calendar" element={<CalendarPage />} />*/}
 
             <Route
               path="bigbluebutton"
@@ -247,7 +246,6 @@ function App() {
               <Route path="courses" element={<CoursesCrudTable />} />
               <Route path="subjects" element={<SubjectsCrudTable />} />
             </Route>
-
           </Route>
 
           <Route path="*" element={<div>404 not found</div>} />
