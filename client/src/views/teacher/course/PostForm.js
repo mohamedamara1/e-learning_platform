@@ -5,6 +5,7 @@ import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
+import Attachment from "./Attachment";
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
@@ -36,6 +37,8 @@ export default function PostForm(props) {
     setAttachements(prevattachements => [...prevattachements, ...event.target.files]);
     console.log(attachements)
   }
+
+
 
   return (
     
@@ -79,7 +82,7 @@ export default function PostForm(props) {
         </div>
         </CardContent>
         <CardContent>
-
+        
         </CardContent>
       </Card>
     </div>

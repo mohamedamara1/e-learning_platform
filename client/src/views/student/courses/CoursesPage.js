@@ -5,7 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useGetCourses } from "../../../api/coursesApi";
 import CourseCardSkeleton from "../../../components/Skeletons/CourseCardSkeleton";
 function CoursesPage() {
-  const { data: courses, error, isLoading } = useGetCourses("userid");
+  const { data: courses, error, isLoading } = useGetCourses();
 
   return (
     <div className="flex flex-col min-h-screen p-2 bg-dark-electric-blue">

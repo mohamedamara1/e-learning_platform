@@ -13,8 +13,8 @@ async function getCourse(Criteria) {
         },
       },
       posts: {
-        orderBy : {
-          createdAt :"desc"
+        orderBy: {
+          createdAt: "desc",
         },
         include: {
           postAttachements: true,
@@ -28,6 +28,12 @@ async function getCourse(Criteria) {
     },
   });
   return course;
+}
+
+async function getAllCourses() {
+  const Courses = await prisma.course.findMany({});
+  // return courses_json;
+  return Courses;
 }
 
 async function getConferenceIdByCourseId(courseId) {
@@ -79,7 +85,7 @@ async function setIsConferenceHappening(courseId, isConferenceHappening) {
   return course;
 }
 
-async function getAllCourses() {
+/*async function getAllCourses() {
   const Courses = await prisma.course.findMany({
     select: {
       id: true,
@@ -106,6 +112,86 @@ async function getAllCourses() {
   });
   // return courses_json;
   return Courses;
+}*/
+
+async function getCoursesByRole(role, userId) {
+  if (role === "teacher") {
+    const teacher = await prisma.teacher.findUnique({
+      where: {
+        user_id: userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+    const courses = await prisma.course.findMany({
+      where: {
+        teacherId: teacher.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        teacher: {
+          select: {
+            id: true,
+            fullName: true,
+          },
+        },
+        class: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        subject: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    return courses;
+  } else if (role === "student") {
+    const student = await prisma.student.findUnique({
+      where: {
+        user_id: userId,
+      },
+      select: {
+        classId: true,
+      },
+    });
+
+    const courses = await prisma.course.findMany({
+      where: {
+        classId: student.classId,
+      },
+      select: {
+        id: true,
+        name: true,
+        teacher: {
+          select: {
+            id: true,
+            fullName: true,
+          },
+        },
+        class: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        subject: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    return courses;
+  }
+  // return courses_json;
 }
 
 module.exports.getCourse = getCourse;
@@ -113,4 +199,5 @@ module.exports.getConferenceIdByCourseId = getConferenceIdByCourseId;
 module.exports.isConferenceHappening = isConferenceHappening;
 module.exports.getCoursesByCriteria = getCoursesByCriteria;
 module.exports.getAllCourses = getAllCourses;
+module.exports.getCoursesByRole = getCoursesByRole;
 module.exports.setIsConferenceHappening = setIsConferenceHappening;

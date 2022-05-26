@@ -97,7 +97,21 @@ async function createConference(data) {
 async function createMeetingBBB(name, meetingId) {
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
   let http = bbb.http;
-  let createMeetingUrl = api.administration.create(name, meetingId);
+  console.log(
+    `http://localhost:5000/api/v1/conferences/end_conference_callback/?meetingID=${meetingId}`
+  );
+  let createMeetingUrl = api.administration.create(name, meetingId, {
+    meta_endCallbackUrl: encodeURI(
+      '(`http://localhost:5000/api/v1/conferences/end_conference_callback`)'
+    ),
+  });
+  /*  let createMeetingUrl = api.administration.createWithEndCallback(
+    name,
+    meetingId,
+    encodeURI(
+      `${process.env.HOST}/api/v1/conferences/end_conference_callback/?meetingID=${meetingId}`
+    )
+  );*/
   console.log(createMeetingUrl);
   let createdMeeting = await http(createMeetingUrl);
   return createdMeeting;
@@ -122,7 +136,7 @@ async function joinUserByRole(data) {
     throw new Error("Conference is not happening");
   }
 
-  if (data.role === "student") {
+  /* if (data.role === "student") {
     let student = await prisma.student.findOne({
       where: {
         userId: data.userId,
@@ -131,7 +145,7 @@ async function joinUserByRole(data) {
     if (!student) {
       throw new Error("Student not found");
     }
-  }
+  }*/
 
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
   let http = bbb.http;
@@ -144,7 +158,7 @@ async function joinUserByRole(data) {
     let joinMeetingUrl = api.administration.joinByRole(
       fullName,
       meetingID,
-      "attendee",
+      "viewer",
       {
         redirect: "false",
       }
@@ -169,38 +183,30 @@ async function joinUserByRole(data) {
   }
 }
 
-/*async function joinUserByRole(data) {
+async function endConference(meetingID, password) {
+  console.log(meetingID);
+  console.log(password);
   let api = bbb.api(process.env.BBB_URL, process.env.BBB_SECRET);
   let http = bbb.http;
- // const meetingId = data.meetingId;
- // console.log("meeting id", meetingId);
-  const { fullName, role, meetingID } = data;
-  if (role === "student") {
-    let joinMeetingUrl = api.administration.joinByRole(
-      fullName,
-      meetingID,
-      "attendee",
-      {
-        redirect: "false",
-      }
-    );
-    console.log("joinMeetingUrl", joinMeetingUrl);
-    let joinMeeting = await http(joinMeetingUrl);
-    return joinMeeting;
-  } else if (role === "teacher") {
-    let joinMeetingUrl = api.administration.joinByRole(
-      fullName,
-      meetingID,
-      "moderator"
-    );
-    console.log("joinMeetingUrl", joinMeetingUrl);
-    let joinMeeting = await http(joinMeetingUrl);
-    return joinMeeting;
-  } else {
-    return null;
-  }
+  let endMeetingURL = api.administration.end(meetingID, password);
+  let meeetingEnded = await http(endMeetingURL);
+  return meeetingEnded;
 }
-*/
+
+async function endConferenceCallback(meetingID) {
+  /*await courseServices.setIsConferenceHappening(meetingID, false);
+  const conference = await prisma.conference.update({
+    where: {
+      id: meetingID,
+    },
+    data: {
+      status: "ended",
+    },
+  });
+  return conference;*/
+  return "callback";
+}
+
 function toISOLocal(d) {
   var z = (n) => ("0" + n).slice(-2);
   var zz = (n) => ("00" + n).slice(-3);
@@ -235,3 +241,5 @@ module.exports.joinUserByRole = joinUserByRole;
 module.exports.createConference = createConference;
 module.exports.createMeetingBBB = createMeetingBBB;
 module.exports.setConferenceStatus = setConferenceStatus;
+module.exports.endConference = endConference;
+module.exports.endConferenceCallback = endConferenceCallback;

@@ -42,7 +42,7 @@ router.get("/get_conference_info", (req, res) => {
       });
     });
 });
-
+/*
 // @route  Post api/v1/subjects/add_subject
 // @desc   Add subject
 // @access Private
@@ -62,7 +62,7 @@ router.post("/join_conference_by_password", (req, res) => {
       });
     });
 });
-
+*/
 // @route  Post api/v1/subjects/add_subject
 // @desc   Add subject
 // @access Private
@@ -134,4 +134,50 @@ router.post("/create_conference", verifySession(), (req, res) => {
       });
     });
 });
+
+// @route  Post api/v1/subjects/add_subject
+// @desc   Add subject
+// @access Private
+
+router.get("/end_conference_callback", (req, res) => {
+  // const data = req.body;
+  console.log("end conference call back called");
+  // console.log(req.query);
+  // console.log(courseId);
+  // console.log(data);
+  let meetingID = req.query.meetingId;
+  conferenceServices
+    .endConferenceCallback(meetingID)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem creating the conference.",
+      });
+    });
+});
+
+// @route  Post api/v1/subjects/add_subject
+// @desc   Add subject
+// @access Private
+
+router.post("/end_conference", (req, res) => {
+  // const data = req.body;
+  console.log("end conference endpoint called");
+
+  conferenceServices
+    .endConference(req.body.meetingID, req.body.password)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem creating the conference.",
+      });
+    });
+});
+
 module.exports = router;

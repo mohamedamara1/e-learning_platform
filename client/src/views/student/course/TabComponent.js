@@ -56,8 +56,20 @@ export const TabComponent = (props) => {
   console.log(accessTokenPayload);
   const joinConference = useJoinConference();
   const handleJoinConference = () => {
-    joinConference.mutate({
+    const data = {
       courseId: props.courseId,
+    };
+    joinConference.mutate(data, {
+      onSuccess: (response) => {
+        console.log("response", response);
+        let path = response.data.url;
+        // navigate(path);
+        //  window.location.href = path;
+        window.open(
+          path,
+          "_blank" // <- This is what makes it open in a new window.
+        );
+      },
     });
   };
   console.log(userId);
@@ -70,11 +82,13 @@ export const TabComponent = (props) => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <div className="flex justify-center mb-5">
-        <Button onClick={handleJoinConference} color="secondary">
-          join conference
-        </Button>
-      </div>
+      {!isLoading && course.isConferenceHappening && (
+        <div className="flex justify-center mb-5">
+          <Button onClick={handleJoinConference} color="secondary">
+            Join Conference
+          </Button>
+        </div>
+      )}
 
       <Box
         sx={{
