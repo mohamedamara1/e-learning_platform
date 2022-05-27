@@ -15,12 +15,30 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useAddExercice } from '../../../api/exercicesApi';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 export default function AddExerciceForm(props) {
 
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
   const formData = new FormData();
   const [attachements, setAttachements] = React.useState([]);
   const [selectedUnit, setselectedUnit] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleClick = () => {
+    setOpenAlert(true);
+  };
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
 
   const handleSelect = (event) => {
     setselectedUnit(event.target.value);
@@ -163,10 +181,17 @@ formData
             formData.append('deadlineTimeStamp', deadline);
             formData.append('url', "");
             formData.append('practiceUnitId', selectedUnit);
+            handleClick();
+            handleClose();
            mutation.mutate()
          }}>Add</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+          Material Added Succesfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

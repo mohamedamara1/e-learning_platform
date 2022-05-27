@@ -45,12 +45,6 @@ export default function ExerciceAccordion(props) {
                 ) : null}
               </div>
             </div>
-            <div className="flex justify-center items-center gap-4">
-              <div className={handleSubmissionState()}>
-                {props.submissionState}
-              </div>
-              {props.isAssignment ? <UploadButton /> : null}
-            </div>
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

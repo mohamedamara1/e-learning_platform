@@ -11,13 +11,23 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useAddMaterial } from '../../../api/materialsApi';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 export default function AddMaterialForm(props) {
 
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
   const formData = new FormData();
   const [file, setfile] = React.useState([]);
   const[name, setname] = React.useState("");
   const [selectedUnit, setselectedUnit] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleClick = () => {
+    setOpenAlert(true);
+  };
 
   const handleSelect = (event) => {
     setselectedUnit(event.target.value);
@@ -40,10 +50,17 @@ export default function AddMaterialForm(props) {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleCloseForm = () => {
     setOpen(false);
   };
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
   const mutation = useAddMaterial(
       formData
     );
@@ -53,7 +70,8 @@ export default function AddMaterialForm(props) {
       <Button variant="outlined" onClick={handleClickOpen}>
         Add Material
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+
+      <Dialog open={open} onClose={handleCloseForm}>
         <DialogTitle>Add Material</DialogTitle>
         <DialogContent>
         <form action="/profile" method="post" enctype="multipart/form-data">
@@ -93,18 +111,24 @@ export default function AddMaterialForm(props) {
             </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleCloseForm}>Cancel</Button>
           <Button onClick={() => {
             formData.append('file', file);
             formData.append('name', name);
             formData.append('courseId', props.courseId);
             formData.append('url', "");
             formData.append('materialUnitId', selectedUnit);
-
+            handleClick();
+            handleCloseForm();
            mutation.mutate()
          }}>Add</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+          Material Added Succesfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
