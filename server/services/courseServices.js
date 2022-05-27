@@ -190,10 +190,64 @@ async function getCoursesByRole(role, userId) {
       },
     });
     return courses;
+  } else if (role === "admin") {
+    const courses = await prisma.course.findMany({
+      select: {
+        id: true,
+        name: true,
+        teacher: {
+          select: {
+            id: true,
+            fullName: true,
+          },
+        },
+        class: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        subject: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    return courses;
   }
   // return courses_json;
 }
+async function createCourse(body) {
+  const createdStudent = await prisma.course.create({
+    data: {
+      name: body.name,
 
+      teacher: {
+        connect: {
+          id: body.teacher,
+        },
+      },
+      class: {
+        connect: {
+          id: body.class,
+        },
+      },
+      subject: {
+        connect: {
+          id: body.subject,
+        },
+      },
+    },
+    include: {
+      teacher: true,
+      class: true,
+      subject: true,
+    },
+  });
+  return createdStudent;
+}
 module.exports.getCourse = getCourse;
 module.exports.getConferenceIdByCourseId = getConferenceIdByCourseId;
 module.exports.isConferenceHappening = isConferenceHappening;
@@ -201,3 +255,4 @@ module.exports.getCoursesByCriteria = getCoursesByCriteria;
 module.exports.getAllCourses = getAllCourses;
 module.exports.getCoursesByRole = getCoursesByRole;
 module.exports.setIsConferenceHappening = setIsConferenceHappening;
+module.exports.createCourse = createCourse;

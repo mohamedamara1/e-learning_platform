@@ -32,7 +32,9 @@ async function addClass(classData) {
       ...classData,
       population: parseInt(classData.population),
       courses: {
-        connect: classData.courses.map((courseId) => ({ id: courseId })),
+        connect: classData.courses
+          ? classData.courses.map((courseId) => ({ id: courseId }))
+          : [],
       },
     },
     include: {

@@ -20,7 +20,7 @@ const fieldsArr = [
     type: "text",
     validation: (e) => {
       const name = e.target.value;
-      if (name.length < 6) {
+      if (name.length > 1) {
         return false;
       } else {
         return true;

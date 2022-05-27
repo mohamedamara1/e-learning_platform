@@ -92,7 +92,7 @@ SuperTokens.init({
           }
           const path = await getRole().then((role) => {
             if (role === "admin") {
-              return "/admin";
+              return "/admin/users/teachers";
             } else if (role === "student") {
               return "/student";
             } else if (role === "teacher") {
@@ -223,7 +223,7 @@ function App() {
               </EmailPasswordAuth>
             }
           >
-            <Route index element={<AdminDashboard />} />
+           {/**/ } <Route  element={<AdminDashboard />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="users" exact element={<UsersManagementPage />}>
               <Route path="teachers" element={<TeachersCrudTable />} />

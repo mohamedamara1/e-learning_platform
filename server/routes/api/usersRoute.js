@@ -187,4 +187,25 @@ router.delete("/student", (req, res) => {
     });
 });
 
+// @route  GET api/v1/courses/get_courses
+// @desc   Get courses
+// @access Private
+
+router.get("/email_user", (req, res) => {
+  // const { user_who_requested_id } = req.query;
+  //const { courseId } = req.params.courseId;
+  // let courseId = req.query.courseId;
+
+  userServices
+    .sendEmail()
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({
+        message: "There was a problem retrieving the teachers.",
+      });
+    });
+});
 module.exports = router;

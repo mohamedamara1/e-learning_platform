@@ -28,12 +28,13 @@ router.get("/get_subjects", (req, res) => {
 // @desc   Add subject
 // @access Private
 
-
 router.post("/add_subject", [verifySession(), permit("admin")], (req, res) => {
   const { name, coefficient } = req.body;
-  
+  console.log(name);
+  console.log(coefficient);
+
   subjectServices
-    .addSubject(name, coefficient)
+    .addSubject({ name, coefficient })
     .then((added_subject) => {
       res.status(200).json(added_subject);
     })
